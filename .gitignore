@@ -1,5 +1,5 @@
 node_modules
 dist/
-evidence/vitest.json
+evidence/
 .DS_Store
 *.log

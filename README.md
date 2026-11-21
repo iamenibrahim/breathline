@@ -27,7 +27,7 @@ npm run build          # → dist/index.html (single self-contained file)
 | `npm run preview` | Serve the production build at http://localhost:4173 |
 | `npm test` | Engine tests: reference conditions, edits, focused checks, validator, negative cases, interruptions, agreement gate, export/replay, requests, generated batch, seeded variations, stress |
 | `npm run evidence` | Everything above **in order**, plus the replay command, the production build and a network-disabled browser run. Writes `EVIDENCE.md`, `evidence/report.json`, `evidence/batch.json`, `evidence/runs/*.json`. Exits **non-zero** if any required check fails or did not run |
-| `npm run replay -- <export.json> [...]` | Import a run exported from the app (or `evidence/runs/*.json`), re-execute it from its initial snapshot, independently replay its event history and reconcile the final counts with the saved result |
+| `npm run replay -- <export.json> [...]` | Import a run exported from the app (or `evidence/runs/*.json`, created locally by `npm run evidence`), re-execute it from its initial snapshot, independently replay its event history and reconcile the final counts with the saved result |
 | `npm run batch -- 20871120` | Reproduce the generated tiny-case batch from its seed |
 | `npm run offline-check` | Network-disabled browser check of `dist/index.html` (needs Chrome or Chromium; set `CHROME_PATH` if it is not found) |
 
@@ -122,7 +122,7 @@ See **EVIDENCE.md** for the recorded results, commands, build identifier, input 
 
 ## Reproducing a reported run
 
-Export JSON from the app (or use `evidence/runs/*.json`). Each export contains the initial snapshot, the input revision and hash, the knowledge snapshot and, separately, the simulator truth; reports; confirmed deliveries and their actual delivery events; shelter confirmations; the resource ledger; fallback protection and protected minutes; assumptions; search budget and status; the selected schedule or policy with branch reservations and objective components; observation history; the activated branch; and the full event history. Then run:
+Export JSON from the app (or use `evidence/runs/*.json` after running `npm run evidence`). Each export contains the initial snapshot, the input revision and hash, the knowledge snapshot and, separately, the simulator truth; reports; confirmed deliveries and their actual delivery events; shelter confirmations; the resource ledger; fallback protection and protected minutes; assumptions; search budget and status; the selected schedule or policy with branch reservations and objective components; observation history; the activated branch; and the full event history. Then run:
 
 ```bash
 npm run replay -- path/to/export.json
