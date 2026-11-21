@@ -40,19 +40,28 @@ npm run build          # → dist/index.html (single self-contained file)
 3. Disable the network and open `dist/index.html` directly from disk (`file://…/dist/index.html`). `npm run preview` also works offline, since it serves from localhost.
 4. The session (scenario edits, input revision, plan, approval, and a run checkpoint after every clock boundary) is kept in `localStorage` under the versioned key `breathline.session.v2`. On reload the run restores **paused at its last completed boundary** and waits for an explicit **Resume**. No time passes during the interruption, and no battery, delivery, protection effect, admission or inspection is applied twice.
 
-`npm run offline-check` verifies this route in headless Chrome. DevTools offline mode is on and every non-`file:` request is refused and counted. The check computes and plays A to 24 arrivals, reloads mid-run, confirms the paused restore, resumes to 24, edits a constraint and recomputes, runs D in both hidden states, and runs E. This checks browser interruption recovery. It does not show uninterrupted service through a real power loss.
+`npm run offline-check` verifies this route in headless Chrome. DevTools offline mode is on and every non-`file:` request is refused and counted. The check finds, approves and runs A (forecast 24, then a simulation result of 24 against 12), reloads mid-run and resumes from the paused restore, edits during a run (the new-run explanation appears), shows that a changed condition blocks the old plan, shows that a missing confirmation blocks approval, runs D in both hidden states with both outcomes shown, runs E with protection kept separate from arrivals, and checks the mobile ordering. This checks browser interruption recovery. It does not show uninterrupted service through a real power loss.
 
-## Using it (the coordinator's workflow)
+## Using it
 
-1. **Who needs assistance** (left): 24 residents in three indivisible groups, their needs, instruction minute and status. These are *unresolved, conditional, assigned, traveling, arrived*, plus an *unsafe* flag.
-2. **Compute response** (right): one recommendation plus the executed-from-the-same-snapshot no-intervention baseline. The explanation names the people helped and the barriers removed, using computed numbers, for example: *"Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refuge."*
-3. **Confirmations this plan depends on**: shelter places, the suitability items each assigned group needs, instruction acknowledgements and relied-on deliveries. Anything unconfirmed blocks approval and is listed as the reason. **Approve and reserve** revalidates against the current input revision. A stale plan cannot be approved.
-4. **Play / Step 1 minute**: the response, the baseline and, where relevant, a comparison run (D: *confirmed routes only*; E: *without temporary ventilation*) execute in lockstep, each with its own ledger. Crew travel takes time. Repairs change hazard growth at completion. Gates open at completion. Residents arrive only when their journeys finish.
-5. **Counters**: arrived (executed), assigned-not-yet-arrived, conditional, unresolved, the baseline's arrivals and the additional arrivals once both runs finish. **"Still waiting — conditions improved"** shows protected person-minutes separately and never adds them to arrivals.
-6. **Unresolved needs and what could still help**: blockers from actual constraint checks, plus a validated **resource request** for each stranded group: what, how much, where, by when and for whom, with the binding reason. Example: *"Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A … Delivery at 15 is too late."*
-7. **Panels**: outcome and per-group benefit from executed runs, setup edits, reports and steward confirmations, the test controller for hidden truth and late deliveries, the stress check with *Recompute under these conditions*, exposure detail, the event log, search diagnostics, the evidence panel, assumptions, and the dispatch preview. **Print dispatch** prints the crew sheet and the resident instructions. **Export JSON** saves a reproducible run.
+The **Operations** view is built for a first-time coordinator and has one main action at each stage: **Find a plan → Confirm and approve → Run simulation → View results**.
 
-Keyboard focus is visible, `prefers-reduced-motion` turns off marker animation, and below 1150 px wide the layout becomes a single column.
+- **Top:** a short situation summary and three counters. Before a run they are labeled **Forecast**: can reach shelter, still needing help, and without crew intervention. During and after a run they show the **Simulation result**. In the uncertain-passage case the forecast is a range (for example 20–24), and the people whose route depends on the inspection are counted separately.
+- **Left:** the neighborhood map and a compact roster beneath it. Each group shows a word and an icon as well as a color: *Arrived*, *On the way*, *Has a route*, *Waiting for inspection*, *Still needs help*, *Still needs help · temporary protection*. Below the roster, **People still needing help** gives the reasons from the planner's constraint checks and a tested request (what, where, by when, for whom) when one exists.
+- **Right:** the recommended plan:
+  - an outcome headline, e.g. *Help all 24 residents reach shelter*
+  - a short numbered checklist, e.g. *Repair Fan 3 so Pump Quarter can pass. Open Gate B. Escort the Deep Homes residents…*
+  - one forecast sentence, e.g. *24 can reach shelter; 12 without crew intervention*
+  - the important dependencies and uncertainty
+  - for the uncertain passage, both modeled outcomes side by side
+  - for temporary protection, *"4 residents gain 6 minutes each below the hazard limit. They still need a route."*
+
+  Exact timings, battery allocations, routes and the full explanation are under **Plan details**. Below the plan, required confirmations appear as instructions such as *"Confirm Lower Refuge has 12 places."*, each with **Mark confirmed**. Then comes the next action, and **Pause** stays visible during playback.
+- Every number and step comes from the engine's results; nothing about a scenario's outcome is written into the interface.
+- **Secondary actions:** Print dispatch, Export, Copy record, How it works. **Update conditions and confirmations** holds the setup editor and steward reports. Any change marks the current plan as needing to be found again. If a simulation is running, the panel says beforehand that a change starts a **new run** from the updated starting conditions; it does not replan from where people are.
+- **Demo & testing** view: scenario switching (A–E), hidden simulator conditions (never passed to the planner), playback stepping and speed, stress tests with recomputation, search diagnostics, the evidence panel, the event log, exposure detail, and assumptions.
+
+Place names are used throughout. Location codes appear only in Plan details, tooltips, the testing view and the printed dispatch. Keyboard focus is visible and contrast follows the dark palette. Under `prefers-reduced-motion` the markers and scrolling don't animate. Below 1050 px the plan and next action move above the map.
 
 ## The model
 

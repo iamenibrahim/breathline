@@ -31,6 +31,7 @@ export interface Session {
   runCounter: number;
   requests: Partial<Record<'confirmed' | PassageState, RequestReport>> | null;
   notice: string | null;
+  lastRunNote?: string | null;
   observations: { at: string; text: string }[];
 }
 
@@ -59,7 +60,10 @@ export function applyEdit(sess: Session, text: string, f: (s: Scenario) => void)
   return {
     ...sess, scenario, revision, edits: [...sess.edits, { revision, text }], approved: null, approvalErrors: [],
     run: startedNew ? null : sess.run && null, requests: null,
-    notice: sess.plan ? `Input revision ${revision}: ${text}. The current plan is stale — recompute.${startedNew ? ' Execution had begun, so the next approval starts a new run from the edited initial setup (not replanning from in-transit positions).' : ''}` : `Input revision ${revision}: ${text}.`,
+    notice: startedNew
+      ? `Conditions updated (${text}). The simulation that was running has stopped. Find a plan again: approving it starts a new run from the updated starting conditions — Breathline does not replan from where people are now.`
+      : sess.plan ? `Conditions updated (${text}). The current plan no longer matches — find a plan again before approving.` : `Conditions updated (${text}).`,
+    lastRunNote: startedNew ? `Run ${sess.run!.number} was stopped at minute ${Math.max(0, sess.run!.main.state.processedThrough)} by a change of conditions.` : sess.lastRunNote ?? null,
   };
 }
 
@@ -108,8 +112,8 @@ export function approve(sess: Session): Session {
 }
 
 export function discardApproval(sess: Session): Session {
-  if (sess.run && sess.run.main.state.processedThrough >= 0) return { ...sess, notice: 'Execution has begun; reset the run or edit the setup to start a new run.' };
-  return { ...sess, approved: null, run: null, notice: 'Approved plan discarded before execution; its reservations were released.' };
+  if (sess.run && sess.run.main.state.processedThrough >= 0) return { ...sess, notice: 'The simulation has started; use Run again to restart it, or update conditions to start a new run.' };
+  return { ...sess, approved: null, run: null, notice: 'Approval withdrawn before the simulation started; its reservations were released.' };
 }
 
 export function stepRun(sess: Session): Session {
@@ -162,7 +166,7 @@ export function loadSession(): Session | null {
       const fix = (x: any) => ({ ...x, state: restore(typeof x.state === 'string' ? x.state : JSON.stringify(x.state)) });
       d.run = { ...d.run, main: fix(d.run.main), baseline: fix(d.run.baseline), comparison: d.run.comparison ? fix(d.run.comparison) : null };
       const st = d.run.main.state as SimState;
-      d.notice = st.done ? null : `Restored after reload at minute ${st.processedThrough} (last checkpoint). Paused — no time passed during the interruption; press Resume to continue.`;
+      d.notice = st.done ? null : `Restored after reload at minute ${Math.max(0, st.processedThrough)} (the last saved minute). Paused — no time passed while the page was closed. Press Resume to continue.`;
     }
     return d as Session;
   } catch { return null; }

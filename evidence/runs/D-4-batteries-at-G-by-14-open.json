@@ -9,7 +9,7 @@
   "id": "D",
   "label": "D",
   "title": "Decide whether checking the bypass is worth the time",
-  "summary": "Gate B and Fan 3 each need the whole battery pack. A bypass to Deep Homes may be open, but only an inspection at X3 can tell.",
+  "summary": "Gate B and Fan 3 each need the whole battery pack. A bypass to Deep Homes may be open, but only an inspection at the bypass can tell.",
   "horizon": 20,
   "threshold": 100,
   "locations": [
@@ -818,7 +818,7 @@
   "status": "exhaustive",
   "explored": 168,
   "assignments": 330,
-  "elapsedMs": 22,
+  "elapsedMs": 26,
   "budget": {
    "maxPlans": 20000,
    "timeLimitMs": 8000
@@ -1416,7 +1416,7 @@
    "status": "exhaustive",
    "explored": 168,
    "assignments": 330,
-   "elapsedMs": 22,
+   "elapsedMs": 26,
    "budget": {
     "maxPlans": 20000,
     "timeLimitMs": 8000

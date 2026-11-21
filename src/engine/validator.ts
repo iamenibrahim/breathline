@@ -218,28 +218,29 @@ export function validateSchedule(s: Scenario, sc: Schedule, opts: ValidateOption
 
 /** Confirmations the plan depends on. Unconfirmed essential items block ordinary approval. */
 export function essentialConfirmations(s: Scenario, sc: Schedule) {
-  const items: { item: string; confirmed: boolean; source: string; detail: string }[] = [];
+  // kind/ref are structured references for the interface (additive; validation uses item/confirmed only)
+  const items: { item: string; confirmed: boolean; source: string; detail: string; kind: 'places' | 'checklist' | 'instructions' | 'delivery'; ref: { shelter?: string; key?: string; group?: string; delivery?: string } }[] = [];
   const shelters = new Set(sc.journeys.map((j) => j.shelter));
   for (const shId of [...shelters].sort()) {
     const sh = s.shelters.find((x) => x.location === shId)!;
-    items.push({ item: `${sh.name}: ${sh.places} places`, confirmed: sh.placesConfirmed, source: sh.steward, detail: 'shelter places' });
+    items.push({ item: `${sh.name}: ${sh.places} places`, confirmed: sh.placesConfirmed, source: sh.steward, detail: 'shelter places', kind: 'places', ref: { shelter: shId } });
     const needed = new Set<string>();
     for (const j of sc.journeys.filter((x) => x.shelter === shId)) for (const k of requiredChecklist(s.groups.find((g) => g.id === j.groupId)!)) needed.add(k);
     for (const k of [...needed].sort()) {
       const st = sh.checklist[k as keyof typeof sh.checklist];
-      items.push({ item: `${sh.name}: ${k === 'accessibleEntry' ? 'accessible entry' : k === 'assistanceOnArrival' ? 'assistance on arrival' : 'ventilation operating'}`, confirmed: st === 'present', source: sh.steward, detail: st });
+      items.push({ item: `${sh.name}: ${k === 'accessibleEntry' ? 'accessible entry' : k === 'assistanceOnArrival' ? 'assistance on arrival' : 'ventilation operating'}`, confirmed: st === 'present', source: sh.steward, detail: st, kind: 'checklist', ref: { shelter: shId, key: k } });
     }
   }
   for (const j of sc.journeys.slice().sort((a, b) => (a.groupId < b.groupId ? -1 : 1))) {
     const g = s.groups.find((x) => x.id === j.groupId)!;
-    items.push({ item: `Departure instructions for ${g.name} available by minute ${g.instructionsAvailableAt}`, confirmed: !!s.instructionsConfirmed[g.id], source: 'resident representative', detail: 'instructions' });
+    items.push({ item: `Departure instructions for ${g.name} available by minute ${g.instructionsAvailableAt}`, confirmed: !!s.instructionsConfirmed[g.id], source: 'resident representative', detail: 'instructions', kind: 'instructions', ref: { group: g.id } });
   }
   const used = new Set<string>();
   for (const a of sc.crew) for (const b of a.batteries ?? []) if (b.deliveryId) used.add(b.deliveryId);
   for (const d of s.deliveries) if (d.resource === 'places' && shelters.has(d.location)) used.add(d.id);
   for (const id of [...used].sort()) {
     const d = s.deliveries.find((x) => x.id === id)!;
-    items.push({ item: `Expected delivery: ${d.quantity} ${d.resource} at ${d.location} by minute ${d.minute}`, confirmed: d.confirmed, source: d.source, detail: 'delivery' });
+    items.push({ item: `Expected delivery: ${d.quantity} ${d.resource} at ${d.location} by minute ${d.minute}`, confirmed: d.confirmed, source: d.source, detail: 'delivery', kind: 'delivery', ref: { delivery: d.id } });
   }
   return items;
 }

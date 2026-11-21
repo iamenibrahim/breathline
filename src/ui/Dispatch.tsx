@@ -78,7 +78,7 @@ export function DispatchSheet({ s, plan, revision, requests }: { s: Scenario; pl
           {!unresolved.length && <li>None in this plan.</li>}
         </ul>
         <h3>Acknowledgement checklist (relay by radio or messenger)</h3>
-        <ul className="checklist">
+        <ul className="checklist-print">
           <li>{'☐'} Crew has read the order of work and the stop rules</li>
           {s.groups.map((g) => <li key={g.id}>{'☐'} {g.name} representative acknowledged departure instructions</li>)}
           {shelters.map((sh) => <li key={sh}>{'☐'} {s.shelters.find((x) => x.location === sh)!.steward} reconfirmed places and checklist</li>)}
