@@ -1,7 +1,7 @@
 // Network-disabled browser check of the installed single-file build (dist/index.html).
 // Chrome runs offline (DevTools offline mode) and every non-file/data request is refused and counted.
 // Drives the real interface through the operations workflow and the Demo & testing view:
-//  A full evacuation + baseline; reload restores paused; changed conditions invalidate the plan;
+//  A full evacuation + baseline; the map scene (time bar, selection card, zoom/pan/reset, layers); reload restores paused; changed conditions invalidate the plan;
 //  editing during execution explains that it starts a new run; missing confirmations block approval;
 //  D shows both inspection outcomes and executes both hidden states; E shows protection separately;
 //  on a narrow screen the recommendation and next action come before the map.
@@ -40,7 +40,7 @@ async function ops(page: Page) { await click(page, 'Operations'); }
 async function scenario(page: Page, id: string) { await demo(page); const [b] = await page.$$(`xpath/.//div[@class='scen-list']/button[b[normalize-space(.)='${id}']]`); await b.click(); await sleep(150); await ops(page); }
 async function stepToEnd(page: Page) { await demo(page); for (let i = 0; i < 30; i++) { if (!(await enabled(page, 'Step 1 minute'))) break; await click(page, 'Step 1 minute'); } await ops(page); }
 async function stepN(page: Page, n: number) { await demo(page); for (let i = 0; i < n; i++) await click(page, 'Step 1 minute'); await ops(page); }
-async function openConditions(page: Page) { const [s] = await page.$$('xpath/.//summary[contains(., "Update conditions")]'); const open = await s.evaluate((x) => (x.parentElement as HTMLDetailsElement).open); if (!open) { await s.click(); await sleep(100); } }
+async function openConditions(page: Page) { if (!(await page.$('.drawer-conditions'))) { await click(page, 'Update conditions'); await sleep(120); } must(!!(await page.$('.drawer-conditions')), 'conditions drawer did not open'); }
 async function setNumber(page: Page, label: string, value: string) {
   const [inp] = await page.$$(`xpath/.//label[span[contains(., "${label}")]]/input`);
   await inp.click({ clickCount: 3 }); await inp.type(value);
@@ -80,10 +80,36 @@ async function setNumber(page: Page, label: string, value: string) {
     const res = await counter(page, 'Reached shelter');
     const base = await counter(page, 'Without crew');
     must(res?.n === '24' && res.tag === 'Simulation result' && base?.n === '12', `A result ${JSON.stringify(res)} base ${JSON.stringify(base)}`);
+    // scene: time bar, selection card, zoom and pan, layer toggle
+    const mode = await page.$eval('.timebar .tb-mode', (e) => e.textContent ?? ''); // textContent: the pill is uppercased by CSS
+    const minute = await text(page, '.timebar .tb-minute b');
+    const marks = await page.$$eval('.timebar .tb-mark', (x) => x.length);
+    must(mode === 'Simulation result' && minute === '20' && marks > 0, `time bar: ${mode} ${minute} ${marks}`);
+    await page.click('.crew-marker'); await sleep(150);
+    const card = await text(page, '.infocard');
+    must(card.toLowerCase().startsWith('crew') && card.includes('batteries in the pack'), `selection card: ${card}`);
+    must(!(await body(page)).match(/\b(RA|RB|RC|J1|J2|J3|X1|X2|X3)\b/), 'technical location ids visible in the selection card');
+    await page.keyboard.press('Escape'); await sleep(80);
+    must(!(await page.$('.infocard')), 'Escape closes the selection card');
+    const camT = () => page.$eval('.cam', (g) => (g as SVGGElement).style.transform);
+    const c0 = await camT();
+    const [zin] = await page.$$('xpath/.//button[@aria-label="Zoom in"]'); await zin.click(); await sleep(80);
+    const c1 = await camT();
+    await page.$eval('svg.scene', (e) => (e as SVGSVGElement).focus()); await page.keyboard.press('ArrowLeft'); await sleep(80);
+    const c2 = await camT();
+    await page.keyboard.press('0'); await sleep(80);
+    must(c0 !== c1 && c1 !== c2 && (await camT()) === c0, `zoom/pan/reset: ${c0} | ${c1} | ${c2}`);
+    const nRoutes = await page.$$eval('.route', (x) => x.length);
+    const [rl] = await page.$$('xpath/.//button[@aria-pressed and contains(., "routes")]'); await rl.click(); await sleep(80);
+    const nOff = await page.$$eval('.route', (x) => x.length);
+    await rl.click(); await sleep(80);
+    must(nRoutes > 0 && nOff === 0 && (await page.$$eval('.route', (x) => x.length)) === nRoutes, `routes layer: ${nRoutes} → ${nOff}`);
+    const sceneStep = (`scene: time bar "${mode}" at minute ${minute} with ${marks} planned-event markers; selecting the crew opened a details card (place names only); zoom, arrow-key pan and reset changed and restored the view; the routes layer hid ${nRoutes} route segments and restored them`);
     must(await enabled(page, 'View results'), 'View results action');
     await click(page, 'View results');
     must((await text(page, '#results')).startsWith('Simulation result'), 'results section');
     steps.push(`A: "${head}"; checklist of ${checklist.split('\n').length} steps; Forecast 24 \u2192 Simulation result 24 vs 12 without crew; Pause shown during playback`);
+    steps.push(sceneStep);
 
     // reload restores paused
     await click(page, 'Run again from the start');
@@ -172,7 +198,7 @@ async function setNumber(page: Page, label: string, value: string) {
     must(order, 'mobile order');
     steps.push('narrow screen (390 px): plan and next action appear above the map; printable dispatch present');
     if (errors.length) throw new Error('page errors: ' + errors.join('; '));
-    out(external === 0 ? 'passed' : 'failed', `offline (DevTools offline + all non-file requests refused: ${external} attempted); A forecast 24 \u2192 simulation result 24 vs 12; reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection shown separately (20 arrived, 4 protected); mobile order`, steps);
+    out(external === 0 ? 'passed' : 'failed', `offline (DevTools offline + all non-file requests refused: ${external} attempted); A forecast 24 \u2192 simulation result 24 vs 12; scene controls (time bar, selection, zoom/pan, layers); reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection shown separately (20 arrived, 4 protected); mobile order`, steps);
   } catch (e) {
     out('failed', `${(e as Error).message} (external requests attempted: ${external})`, steps);
   } finally { await browser.close(); }

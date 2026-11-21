@@ -780,7 +780,7 @@
   "status": "exhaustive",
   "explored": 4,
   "assignments": 4,
-  "elapsedMs": 2,
+  "elapsedMs": 1,
   "budget": {
    "maxPlans": 20000,
    "timeLimitMs": 8000
@@ -929,7 +929,7 @@
    "status": "exhaustive",
    "explored": 4,
    "assignments": 4,
-   "elapsedMs": 2,
+   "elapsedMs": 1,
    "budget": {
     "maxPlans": 20000,
     "timeLimitMs": 8000
