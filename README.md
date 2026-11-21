@@ -13,7 +13,7 @@ Built for the **Life Underground** track. It runs entirely on one laptop: no acc
 ## Quick start
 
 ```bash
-npm install            # once (needs network)
+npm install            # once 
 npm run dev            # http://localhost:5173
 npm test               # engine test suite (vitest), ~6 s
 npm run evidence       # one-command evidence report → EVIDENCE.md, evidence/report.json
