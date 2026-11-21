@@ -117,6 +117,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <div className={view === 'ops' ? 'stage' : 'page-head'}>
       <header className="top">
         <div className="brand"><h1>Breathline</h1><span className="tag">Community rescue planner</span></div>
         <div className="banner" role="note">Simulation — illustrative conditions and assumptions</div>
@@ -139,21 +140,25 @@ export default function App() {
 
       <Alerts sess={sess} stale={stale} run={run} onResume={() => setSess((x) => ({ ...resumeRun(x), notice: null }))} onFind={doCompute} />
 
+      {view === 'ops' && (
+        <main className="ops-grid">
+          {mapEl}
+          <section className="col-map" aria-label="Residents">
+            <Roster sess={sess} statusOf={statusOf} schedule={schedule} />
+            <StillNeedHelp sess={sess} stale={stale} />
+          </section>
+          <section className="col-plan" aria-label="Plan">
+            <PlanCard sess={sess} stale={stale} view_={view_} run={run} />
+            {plan && !stale && <Confirmations sess={sess} edit={edit} />}
+          </section>
+          <NextAction stage={stage} sess={sess} busy={busy} t={t} onFind={doCompute} onApprove={() => setSess((x) => approve(x))} onRun={runPlay}
+            onPause={() => setPlaying(false)} onResults={viewResults} onReset={() => { setPlaying(false); setSess((x) => resetRun(x)); }} onDiscard={() => setSess((x) => discardApproval(x))} />
+        </main>
+      )}
+      </div>
+
       {view === 'ops' ? (
         <>
-          <main className="ops-grid">
-            <section className="col-map" aria-label="Map and residents">
-              {mapEl}
-              <Roster sess={sess} statusOf={statusOf} schedule={schedule} />
-              <StillNeedHelp sess={sess} stale={stale} />
-            </section>
-            <section className="col-plan" aria-label="Plan and next action">
-              <PlanCard sess={sess} stale={stale} view_={view_} run={run} />
-              {plan && !stale && <Confirmations sess={sess} edit={edit} />}
-              <NextAction stage={stage} sess={sess} busy={busy} t={t} onFind={doCompute} onApprove={() => setSess((x) => approve(x))} onRun={runPlay}
-                onPause={() => setPlaying(false)} onResults={viewResults} onReset={() => { setPlaying(false); setSess((x) => resetRun(x)); }} onDiscard={() => setSess((x) => discardApproval(x))} />
-            </section>
-          </main>
           {sess.run && <Results sess={sess} innerRef={resultsRef} statusOf={statusOf} />}
           <section className="secondary-panels">
             <details className="panel">
@@ -451,7 +456,7 @@ function NextAction({ stage, sess, busy, t, onFind, onApprove, onRun, onPause, o
   const now = sc && started ? sc.crew.find((a) => a.start <= t && t < a.end) : undefined;
   const next = sc ? sc.crew.find((a) => a.kind !== 'travel' && a.kind !== 'wait' && a.start >= (started ? t : 0) && a !== now) : undefined;
   return (
-    <section className="card next" aria-label="Next action">
+    <section className="next timebar" aria-label="Next action">
       <ol className="stages" aria-label="Progress">{steps.map((x, i) => <li key={x} className={i < idx ? 'past' : i === idx ? 'now' : ''} aria-current={i === idx ? 'step' : undefined}>{x}</li>)}</ol>
       {stage === 'find' && <button className="cta" onClick={onFind} disabled={!!busy}>{busy ?? 'Find a plan'}</button>}
       {stage === 'approve' && <>
