@@ -16,11 +16,10 @@
     "offline-check": "tsx scripts/offline-check.ts"
   },
   "dependencies": {
-    "@fontsource/audiowide": "^5.3.0",
-    "@fontsource/great-vibes": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
-    "@fontsource/iceberg": "^5.3.0",
+    "@fontsource/metropolis": "^5.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

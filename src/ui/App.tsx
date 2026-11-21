@@ -59,10 +59,11 @@ export default function App() {
   const [speed, setSpeed] = useState(700);
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
-  const [sheet, setSheet] = useState<SheetId>(() => { try { return localStorage.getItem('breathline.onboarded') !== '1' ? 'help' : null; } catch { return 'help'; } });
+  const [sheet, setSheet] = useState<SheetId>(null);
+  const [showKey, setShowKey] = useState(false);
   const [stress, setStress] = useState<{ rows: StressRow[]; recomputed: Record<string, string> } | null>(null);
   const [cam, setCam] = useState<Camera>({ x: 0, y: 0, k: 1 });
-  const [layers, setLayers] = useState<Layers>({ routes: true, hazards: true, labels: true });
+  const [layers, setLayers] = useState<Layers>({ routes: true, hazards: true, labels: true, times: false });
   const [selected, setSelected] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   const resultsRef = useRef<HTMLElement | null>(null);
@@ -79,7 +80,7 @@ export default function App() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  const insets = mobile ? { left: 8, right: 8, top: 8, bottom: 60 } : { left: lw + 30, right: rw + 30, top: 86, bottom: tbh + 74 };
+  const insets = mobile ? { left: 8, right: 8, top: 8, bottom: vp.w < 520 ? 100 : 56 } : { left: lw + 30, right: rw + 30, top: 86, bottom: tbh + 74 };
 
   useEffect(() => { saveSession(sess); }, [sess]);
   useEffect(() => {
@@ -182,21 +183,22 @@ export default function App() {
         <Backdrop />
         <MapView s={s} plan={stale ? null : plan} schedule={schedule} approved={!!sess.approved} run={run} t={t} statusOf={statusOf}
           cam={cam} setCam={setCam} layers={layers} insets={insets} selected={selected} onSelect={setSelected} />
-        <MapTools cam={cam} setCam={setCam} layers={layers} setLayers={setLayers} />
+        <MapTools cam={cam} setCam={setCam} layers={layers} setLayers={setLayers} showKey={showKey} setShowKey={setShowKey} />
+        {showKey && <Legend s={s} conditional={conditional} />}
       </div>
 
       <header className="topbar">
         <div className="brand">
-          <h1><span className="script">Breathline</span> <span className="block">Rescue planner</span></h1>
-          <span className="tagline">they're watching<span className="tl-dot">.</span></span>
+          <h1><span className="brand-ring" aria-hidden="true" /><span className="brand-name">Breathline</span></h1>
+          <span className="brand-sub">Rescue planner</span>
         </div>
-        <div className="banner" role="note"><span className="dot" aria-hidden="true" /> Simulation<span className="long"> — illustrative conditions and assumptions</span></div>
+        <div className="banner" role="note" title="Illustrative conditions and assumptions"><span className="dot" aria-hidden="true" /> Simulation<span className="sr-only"> — illustrative conditions and assumptions</span></div>
         <nav className="views" role="tablist" aria-label="Views">
           <button role="tab" aria-selected={ops} className={ops ? 'on' : ''} onClick={() => setView('ops')}>Operations</button>
           <button role="tab" aria-selected={!ops} className={!ops ? 'on' : ''} onClick={() => { setView('demo'); setSheet((x) => (x === 'help' ? x : null)); }}>Demo &amp; testing</button>
         </nav>
         <div className="secondary-actions" aria-label="More actions">
-          <button className={`ghost${sheet === 'conditions' ? ' on' : ''}`} onClick={() => toggleSheet('conditions')} aria-expanded={sheet === 'conditions'}>Update conditions</button>
+          <button className={`ghost${sheet === 'conditions' ? ' on' : ''}`} onClick={() => toggleSheet('conditions')} aria-expanded={sheet === 'conditions'}>Conditions</button>
           {sess.run && <button className={`ghost${sheet === 'results' ? ' on' : ''}`} onClick={() => toggleSheet('results')} aria-expanded={sheet === 'results'}>Results</button>}
           <details className="menu">
             <summary>More</summary>
@@ -207,7 +209,7 @@ export default function App() {
               <button className="ghost" onClick={copyJson} disabled={!sess.run}>Copy record</button>
             </div>
           </details>
-          <button className={`ghost${sheet === 'help' ? ' on' : ''}`} onClick={() => (sheet === 'help' ? closeHelp() : setSheet('help'))} aria-expanded={sheet === 'help'}>How it works</button>
+          <button className={`ghost help-btn${sheet === 'help' ? ' on' : ''}`} onClick={() => (sheet === 'help' ? closeHelp() : setSheet('help'))} aria-expanded={sheet === 'help'} aria-label="How it works" title="How it works">?</button>
         </div>
       </header>
 
@@ -238,7 +240,6 @@ export default function App() {
           ) : (
             <DemoLeft sess={sess} setSess={setSess} switchScenario={switchScenario} onResetSession={() => { clearSession(); switchScenario(sess.scenarioId); }} />
           )}
-          <Legend s={s} conditional={conditional} />
         </div>
         <div className="right-stack">
           {ops ? (
@@ -290,18 +291,24 @@ function Sheet({ title, onClose, children, className, wide }: { title: string; o
   );
 }
 
-function MapTools({ setCam, layers, setLayers }: { cam: Camera; setCam: (c: Camera | ((c: Camera) => Camera)) => void; layers: Layers; setLayers: (f: (l: Layers) => Layers) => void }) {
+function MapTools({ setCam, layers, setLayers, showKey, setShowKey }: { cam: Camera; setCam: (c: Camera | ((c: Camera) => Camera)) => void; layers: Layers; setLayers: (f: (l: Layers) => Layers) => void; showKey: boolean; setShowKey: (f: (b: boolean) => boolean) => void }) {
   const toggle = (k: keyof Layers) => setLayers((l) => ({ ...l, [k]: !l[k] }));
+  const layer = (k: keyof Layers, label: string, title: string) => (
+    <button className={`tool layer${layers[k] ? ' on' : ''}`} aria-pressed={layers[k]} onClick={() => toggle(k)} title={title}>{label}</button>
+  );
   return (
     <div className="map-tools" role="toolbar" aria-label="Map controls">
-      <button className="tool" aria-label="Zoom in" title="Zoom in (+)" onClick={() => setCam((c) => zoomAbout(c, 1.25))}>+</button>
-      <button className="tool" aria-label="Zoom out" title="Zoom out (−)" onClick={() => setCam((c) => zoomAbout(c, 1 / 1.25))}>−</button>
-      <button className="tool" aria-label="Reset the map view" title="Reset view (0)" onClick={() => setCam({ x: 0, y: 0, k: 1 })}>⟲</button>
-      <div className="tool-sep" aria-hidden="true" />
       <div role="group" aria-label="Map layers" className="layers">
-        <button className={`tool layer${layers.routes ? ' on' : ''}`} aria-pressed={layers.routes} onClick={() => toggle('routes')} title="Show or hide planned routes"><i aria-hidden="true">〰</i><small>routes</small></button>
-        <button className={`tool layer${layers.hazards ? ' on' : ''}`} aria-pressed={layers.hazards} onClick={() => toggle('hazards')} title="Show or hide hazard readings"><i aria-hidden="true">⚠</i><small>hazard</small></button>
-        <button className={`tool layer${layers.labels ? ' on' : ''}`} aria-pressed={layers.labels} onClick={() => toggle('labels')} title="Show or hide names and travel times"><i aria-hidden="true">Aa</i><small>labels</small></button>
+        {layer('routes', 'routes', 'Show or hide planned routes')}
+        {layer('hazards', 'hazards', 'Show or hide hazard readings')}
+        {layer('labels', 'names', 'Show or hide place names')}
+        {layer('times', 'times', 'Show or hide travel times')}
+        <button className={`tool layer${showKey ? ' on' : ''}`} aria-pressed={showKey} onClick={() => setShowKey((v) => !v)} title="Show the map key">key</button>
+      </div>
+      <div className="zoom" role="group" aria-label="Zoom">
+        <button className="tool" aria-label="Zoom in" title="Zoom in (+)" onClick={() => setCam((c) => zoomAbout(c, 1.25))}>+</button>
+        <button className="tool" aria-label="Zoom out" title="Zoom out (−)" onClick={() => setCam((c) => zoomAbout(c, 1 / 1.25))}>−</button>
+        <button className="tool" aria-label="Reset the map view" title="Reset view (0)" onClick={() => setCam({ x: 0, y: 0, k: 1 })}>⟲</button>
       </div>
     </div>
   );
@@ -472,33 +479,33 @@ function Situation({ sess, statusOf, view_ }: { sess: Session; statusOf: (g: str
     const waitIds = s.groups.filter((g) => ['unresolved', 'conditional', 'held'].includes(m.groups[g.id].status)).map((g) => g.id);
     const cond = countOf(s, waitIds.filter((g) => statusOf(g) === 'waiting-inspection'));
     const prot = countOf(s, waitIds.filter((g) => statusOf(g) === 'protected'));
-    counters.push({ label: done ? 'Reached shelter' : 'Reached shelter so far', value: `${arrived}`, tag: 'Simulation result', sub: done ? `of ${T} residents` : `${onWay} more on the way`, tone: 'good' });
-    counters.push({ label: 'Still waiting', value: `${countOf(s, waitIds)}`, tag: done ? 'Simulation result' : 'Now', sub: [cond ? `${cond} waiting for inspection` : '', prot ? `${prot} with temporary protection` : ''].filter(Boolean).join(' · ') || (countOf(s, waitIds) ? 'need a route' : 'nobody left waiting'), tone: countOf(s, waitIds) ? 'warn' : 'good' });
-    counters.push({ label: 'Without crew intervention', value: `${by(b, (x) => x === 'arrived')}`, tag: done ? 'Simulation result' : 'Running alongside', sub: 'same start, same rules', tone: '' });
+    counters.push({ label: done ? 'Reached shelter' : 'Reached shelter so far', value: `${arrived}`, tag: 'Simulation result', sub: done ? '' : onWay ? `${onWay} on the way` : '', tone: 'good' });
+    counters.push({ label: 'Still waiting', value: `${countOf(s, waitIds)}`, tag: done ? 'Simulation result' : 'Now', sub: [cond ? `${cond} waiting for inspection` : '', prot ? `${prot} with temporary protection` : ''].filter(Boolean).join(' · '), tone: countOf(s, waitIds) ? 'warn' : 'good' });
+    counters.push({ label: 'Without crew intervention', value: `${by(b, (x) => x === 'arrived')}`, tag: done ? 'Simulation result' : 'Running alongside', sub: '', tone: '' });
   } else if (plan && view_) {
     const sc = mainSchedule(plan);
     const base = sess.baseline?.schedule.objective.served ?? 0;
     if (plan.kind === 'policy' && plan.inspection) {
       const o = plan.objective;
-      counters.push({ label: 'Can reach shelter', value: `${o.min}–${o.nOpen}`, tag: 'Forecast', sub: `${o.min} whatever the check finds · ${o.nOpen - o.nBlocked} depend on it`, tone: 'good' });
-      counters.push({ label: 'Still needing help', value: `${T - o.nOpen}–${T - o.min}`, tag: 'Forecast', sub: `${o.nOpen - o.nBlocked} waiting for inspection`, tone: 'warn' });
+      counters.push({ label: 'Can reach shelter', value: `${o.min}–${o.nOpen}`, tag: 'Forecast', sub: `${o.nOpen - o.nBlocked} depend on the inspection`, tone: 'good' });
+      counters.push({ label: 'Still needing help', value: `${T - o.nOpen}–${T - o.min}`, tag: 'Forecast', sub: '', tone: 'warn' });
     } else {
       const prot = countOf(s, s.groups.filter((g) => statusOf(g.id) === 'protected').map((g) => g.id));
-      counters.push({ label: 'Can reach shelter', value: `${sc.objective.served}`, tag: 'Forecast', sub: `of ${T} residents`, tone: 'good' });
-      counters.push({ label: 'Still needing help', value: `${T - sc.objective.served}`, tag: 'Forecast', sub: prot ? `${prot} with temporary protection` : T - sc.objective.served ? 'no route in this plan' : 'everyone has a route', tone: T - sc.objective.served ? 'warn' : 'good' });
+      counters.push({ label: 'Can reach shelter', value: `${sc.objective.served}`, tag: 'Forecast', sub: '', tone: 'good' });
+      counters.push({ label: 'Still needing help', value: `${T - sc.objective.served}`, tag: 'Forecast', sub: prot ? `${prot} with temporary protection` : '', tone: T - sc.objective.served ? 'warn' : 'good' });
     }
-    counters.push({ label: 'Without crew intervention', value: `${base}`, tag: 'Forecast', sub: 'existing routes only', tone: '' });
+    counters.push({ label: 'Without crew intervention', value: `${base}`, tag: 'Forecast', sub: '', tone: '' });
   } else {
-    counters.push({ label: 'Residents', value: `${T}`, tag: 'Reported', sub: `in ${s.groups.length} groups`, tone: '' });
-    counters.push({ label: 'Shelter places', value: `${shelterPlaces}`, tag: 'Confirmed', sub: `in ${s.shelters.length} shelters`, tone: '' });
-    counters.push({ label: 'Crew', value: '1', tag: 'Available', sub: `${s.crew.batteries} batteries${s.crew.toolkit ? ', tool kit' : ''}`, tone: '' });
+    counters.push({ label: 'Residents', value: `${T}`, tag: 'Reported', sub: '', tone: '' });
+    counters.push({ label: 'Shelter places', value: `${shelterPlaces}`, tag: 'Confirmed', sub: '', tone: '' });
+    counters.push({ label: 'Batteries', value: `${s.crew.batteries}`, tag: 'Crew pack', sub: '', tone: '' });
   }
   return (
     <section className="situation panel" aria-label="Situation">
       <div className="sit-text">
-        <p className="eyebrow">Scenario <span className="hl">{s.label}</span></p>
+        <p className="eyebrow">Scenario {s.label}</p>
         <h2>{s.title}</h2>
-        <p>{s.summary} {T} residents in {s.groups.length} groups, {s.shelters.length} shelters with {shelterPlaces} places, one crew, a {s.horizon}-minute window.</p>
+        <details className="about"><summary>About this scenario</summary><p>{s.summary} {T} residents in {s.groups.length} groups, {s.shelters.length} shelters with {shelterPlaces} places, one crew, a {s.horizon}-minute window.</p></details>
         {sess.revision > 0 && <span className="chip-updated" title={`Input revision ${sess.revision}`}>Conditions updated {'·'} {plural(sess.revision, 'change')}</span>}
       </div>
       <div className="counters">
@@ -507,7 +514,7 @@ function Situation({ sess, statusOf, view_ }: { sess: Session; statusOf: (g: str
             <span className="ctr-tag">{c.tag}</span>
             <span className="n">{c.value}</span>
             <span className="ctr-label">{c.label}</span>
-            <span className="ctr-sub">{c.sub}</span>
+            {c.sub && <span className="ctr-sub">{c.sub}</span>}
           </div>
         ))}
       </div>
@@ -545,7 +552,7 @@ function Roster({ sess, statusOf, schedule, selected, onLocate }: { sess: Sessio
           return (
             <li key={g.id} className={`rrow st-${st}${selected === `group:${g.id}` ? ' sel' : ''}`}>
               <button className="rcount" onClick={() => onLocate(`group:${g.id}`)} aria-label={`Show ${groupName(g)} on the map`} title="Show on the map">{g.count}</button>
-              <span className="rname"><b>{groupName(g)}</b> <span className="muted">{plural(g.count, 'person', 'people')}{g.mobility === 'wheelchair' ? ' · ♿ wheelchair user, needs escort' : ''}</span><br /><span className="rwhere">{where}</span></span>
+              <span className="rname" title={where}><b>{groupName(g)}</b>{g.mobility === 'wheelchair' && <span className="wc" title="Includes a wheelchair user who needs an escort" aria-label="includes a wheelchair user"> ♿</span>}</span>
               <span className={`rstatus st-${st}`}><span aria-hidden="true">{STATUS_WORDS[st].icon}</span> {plan || run ? STATUS_WORDS[st].label : 'Not yet planned'}</span>
             </li>
           );
@@ -559,43 +566,41 @@ function StillNeedHelp({ sess, stale }: { sess: Session; stale: boolean }) {
   const s = sess.scenario;
   const plan = sess.plan;
   if (!plan || stale) return null;
-  const sets: [string, Schedule, 'confirmed' | PassageState][] = plan.kind === 'schedule' || !plan.inspection ? [['', mainSchedule(plan), plan.kind === 'schedule' ? 'confirmed' : 'confirmed']] : [[`If the ${passageName(s, plan.connection)} is blocked: `, plan.branches.blocked, 'blocked'], [`If it is open: `, plan.branches.open, 'open']];
+  const sets: [string, Schedule, 'confirmed' | PassageState][] = plan.kind === 'schedule' || !plan.inspection ? [['', mainSchedule(plan), 'confirmed']] : [['If blocked: ', plan.branches.blocked, 'blocked'], ['If open: ', plan.branches.open, 'open']];
   const items = sets.flatMap(([pre, sc, key]) => sc.unresolved.map((gid) => ({ pre, sc, key, g: s.groups.find((x) => x.id === gid)! })));
+  if (!items.length) return null;
   const prot = protectionGains(s, plan.kind === 'policy' && plan.inspection ? plan.branches.blocked : mainSchedule(plan), sess.baseline?.schedule ?? null);
   return (
     <section className="card needs" aria-label="People still needing help">
-      <h3 className="disp">People still <span className="hl">needing help</span></h3>
-      {!items.length && <p className="ok">{'✓'} Everyone in this plan has a route to a suitable shelter.</p>}
+      <h3 className="disp">Still needing help</h3>
       {items.map(({ pre, sc, key, g }, i) => {
         const why = whyWaiting(s, sc, g.id, plan.search).sort((a, b) => BLOCKER_ORDER.indexOf(a.code) - BLOCKER_ORDER.indexOf(b.code));
         const rr = sess.requests?.[(plan.kind === 'schedule' || !plan.inspection ? 'confirmed' : key) as 'confirmed'];
         const reqs = rr?.requests.filter((q) => q.groupId === g.id) ?? [];
-        const none = rr?.none.find((n) => n.groupId === g.id);
         const p = prot.find((x) => x.g.id === g.id);
         return (
           <div key={i} className="need">
-            <div className="need-head"><b>{pre}{groupName(g)}</b> <span className="muted">{plural(g.count, 'person', 'people')}{g.mobility === 'wheelchair' ? ', including a wheelchair user' : ''}</span></div>
-            <ul className="why">{why.slice(0, 2).map((w, k) => <li key={k}>{w.text}</li>)}</ul>
-            {p && <p className="protect"><span aria-hidden="true">{'◐'}</span> {g.count} residents gain {p.gain} minutes each below the hazard limit. They still need a route.</p>}
-            {reqs.map((q, k) => (
-              <div key={k} className="request">
-                <div className="req-head">What would help {'·'} tested</div>
-                <div className="req-grid">
-                  <span>What</span><b>{q.resource === 'instructions' ? 'Departure instructions' : `${q.quantity} ${q.resource === 'places' ? (q.quantity === 1 ? 'shelter place' : 'shelter places') : (q.quantity === 1 ? 'battery' : 'batteries')}`}</b>
-                  <span>Where</span><b>{placeName(s, q.location)}</b>
-                  <span>By</span><b>{q.latest !== null ? `minute ${q.latest}` : q.windows.map(([a, b]) => `${a}–${b}`).join(', ')}{q.latest !== null && q.latest < s.horizon ? ` (minute ${q.latest + 1} is too late)` : ''}</b>
-                  <span>For</span><b>{q.benefits.gained.map((x) => groupName(s.groups.find((y) => y.id === x)!)).join(', ')} ({plural(q.benefits.residents, 'person', 'people')})</b>
-                </div>
-                <details><summary>Full request</summary><p>{plain(s, q.text)}</p><p className="muted small">{plain(s, q.binding)} {q.waitNote ? plain(s, q.waitNote) : ''}</p></details>
-              </div>
-            ))}
-            {!rr && <p className="muted small">Checking what could help…</p>}
-            {none && <p className="muted small">No tested change (more batteries, shelter places or earlier instructions) gives them a route.</p>}
-            {why.length > 2 && <details><summary>All reasons</summary><ul>{why.slice(2).map((w, k) => <li key={k}>{w.text}</li>)}</ul></details>}
+            <div className="need-head"><b>{pre}{groupName(g)}</b> <span className="muted">· {g.count}</span>{p && <span className="need-prot" title={`${g.count} residents gain ${p.gain} minutes each below the hazard limit. They still need a route.`}>◐ +{p.gain} min protected</span>}</div>
+            {why[0] && <p className="why1">{why[0].text}</p>}
+            {(reqs.length > 0 || why.length > 1) && (
+              <details className="need-more"><summary>{reqs.length ? 'What would help' : 'More reasons'}</summary>
+                {reqs.map((q, k) => (
+                  <div key={k} className="request">
+                    <div className="req-grid">
+                      <span>What</span><b>{q.resource === 'instructions' ? 'Departure instructions' : `${q.quantity} ${q.resource === 'places' ? (q.quantity === 1 ? 'shelter place' : 'shelter places') : (q.quantity === 1 ? 'battery' : 'batteries')}`}</b>
+                      <span>Where</span><b>{placeName(s, q.location)}</b>
+                      <span>By</span><b>{q.latest !== null ? `minute ${q.latest}` : q.windows.map(([a2, b2]) => `${a2}–${b2}`).join(', ')}{q.latest !== null && q.latest < s.horizon ? ` (minute ${q.latest + 1} is too late)` : ''}</b>
+                      <span>For</span><b>{q.benefits.gained.map((x) => groupName(s.groups.find((y) => y.id === x)!)).join(', ')} ({plural(q.benefits.residents, 'person', 'people')})</b>
+                    </div>
+                    <p className="muted small">{plain(s, q.text)} Tested hypothetical: it reserves nothing and never counts as an arrival.</p>
+                  </div>
+                ))}
+                {why.length > 1 && <ul className="why">{why.slice(1).map((w, k) => <li key={k}>{w.text}</li>)}</ul>}
+              </details>
+            )}
           </div>
         );
       })}
-      {items.length > 0 && <p className="muted small">Requests are tested hypotheticals to take to neighbouring crews or stewards. They reserve nothing and never count as arrivals.</p>}
     </section>
   );
 }
@@ -610,7 +615,7 @@ function PlanCard({ sess, stale, view_, run }: { sess: Session; stale: boolean; 
       <section className="card plan" aria-label="Recommended plan">
         <p className="eyebrow">Recommended plan</p>
         <h2 className="headline">{stale ? 'Conditions changed — find a new plan' : 'No plan yet'}</h2>
-        <p>Breathline checks every order of repairs, openings{s.knowledge.unknown ? ', inspections' : ''} and escorts the crew could do in {s.horizon} minutes, and compares the best one with doing nothing.</p>
+        <p className="muted">Compares every order of crew work in {s.horizon} minutes with doing nothing.</p>
       </section>
     );
   }
@@ -637,7 +642,7 @@ function PlanCard({ sess, stale, view_, run }: { sess: Session; stale: boolean; 
       <p className="benefit"><span className="tag-forecast">Forecast</span> {view_.forecast.replace(/^Forecast: /, '')}</p>
       {simLine && <p className="benefit"><span className="tag-result">Simulation result</span> {simLine.replace(/^Simulation result: /, '')}</p>}
       {view_.protection.map((p) => <p key={p.group} className="protect"><span aria-hidden="true">{'◐'}</span> {p.text}</p>)}
-      {view_.notes.length > 0 && <ul className="notes">{view_.notes.slice(0, 3).map((n, i) => <li key={i} className={`note-${n.kind}`}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
+      {view_.notes.length > 0 && <ul className="notes">{view_.notes.slice(0, 1).map((n, i) => <li key={i} className={`note-${n.kind}`} title={n.text}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
       <PlanDetails sess={sess} view_={view_} />
     </section>
   );
@@ -650,6 +655,7 @@ function PlanDetails({ sess, view_ }: { sess: Session; view_: ReturnType<typeof 
   return (
     <details className="plan-details">
       <summary>Plan details</summary>
+      {view_.notes.length > 1 && <ul className="notes">{view_.notes.slice(1).map((n, i) => <li key={i} className={`note-${n.kind}`}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
       {plan.kind === 'policy' && <p className="muted small">{explainPolicy(s, plan).summary}</p>}
       {scheds.map(([pre, sc]) => {
         const ex = explainSchedule(s, sc, sess.baseline?.schedule);
@@ -685,20 +691,19 @@ function Confirmations({ sess, edit }: { sess: Session; edit: (t: string, f: (x:
   const items = confirmationsFor(s, sess.plan!);
   const missing = items.filter((x) => !x.confirmed);
   const done = items.filter((x) => x.confirmed);
-  if (sess.approved) return <section className="card conf ok-card" aria-label="Confirmations"><p><span aria-hidden="true">{'✓'}</span> Approved with {plural(items.length, 'confirmation')}. Places and batteries are reserved.</p></section>;
+  if (sess.approved) return <section className="card conf ok-card" aria-label="Confirmations"><p><span aria-hidden="true">{'✓'}</span> Approved · places and batteries reserved</p></section>;
   return (
     <section className="card conf" aria-label="Required confirmations">
-      <h3>{missing.length ? `Confirm before approving (${missing.length})` : `All ${items.length} confirmations received`}</h3>
+      {missing.length > 0 && <h3 className="disp">Confirm first ({missing.length})</h3>}
       {missing.length > 0 && (
         <ul className="todo">
           {missing.map((c, i) => {
             const ins = confirmationInstruction(s, c);
-            return <li key={i}><span>{ins.text} <span className="muted small">({c.source})</span></span><button onClick={() => edit(ins.editText, ins.apply)}>Mark confirmed</button></li>;
+            return <li key={i}><span>{ins.text} <span className="muted small">({c.source})</span></span><button onClick={() => edit(ins.editText, ins.apply)} title="Records the confirmation; you will then find the plan again">Mark confirmed</button></li>;
           })}
         </ul>
       )}
-      {missing.length > 0 && <p className="muted small">Marking an item confirmed updates the conditions, so you will be asked to find the plan again. Residents stay in the plan meanwhile.</p>}
-      <details><summary>{done.length} confirmed</summary><ul className="small doneList">{done.map((c, i) => <li key={i}>{'✓'} {confirmationInstruction(s, c).done} <span className="muted">— {c.source}</span></li>)}</ul></details>
+      <details className="conf-done"><summary>{missing.length ? `${done.length} confirmed` : `✓ All ${items.length} confirmations received`}</summary><ul className="small doneList">{done.map((c, i) => <li key={i}>{'✓'} {confirmationInstruction(s, c).done} <span className="muted">— {c.source}</span></li>)}</ul></details>
       {sess.approvalErrors.length > 0 && <ul className="errors">{sess.approvalErrors.slice(0, 4).map((e, i) => <li key={i}>{plain(s, e)}</li>)}</ul>}
     </section>
   );
@@ -713,10 +718,9 @@ function NextAction({ stage, sess, busy, t, onFind, onApprove, onRun, onPause, o
   const idx = stage === 'find' ? 0 : stage === 'approve' ? 1 : stage === 'done' ? 3 : 2;
   const started = !!run && run.processedThrough >= 0;
   const now = sc && started ? sc.crew.find((a) => a.start <= t && t < a.end) : undefined;
-  const next = sc ? sc.crew.find((a) => a.kind !== 'travel' && a.kind !== 'wait' && a.start >= (started ? t : 0) && a !== now) : undefined;
   return (
     <section className="card next" aria-label="Next action">
-      <ol className="stages" aria-label="Progress">{steps.map((x, i) => <li key={x} className={i < idx ? 'past' : i === idx ? 'now' : ''} aria-current={i === idx ? 'step' : undefined}>{x}</li>)}</ol>
+      <ol className="stages" aria-label="Progress">{steps.map((x, i) => <li key={x} className={i < idx ? 'past' : i === idx ? 'now' : ''} aria-current={i === idx ? 'step' : undefined} title={x}><span className="st-label">{x}</span></li>)}</ol>
       {stage === 'find' && <button className="cta" onClick={onFind} disabled={!!busy}>{busy ?? 'Find a plan'}</button>}
       {stage === 'approve' && <>
         <button className="cta" onClick={onApprove} disabled={missing > 0}>Approve plan</button>
@@ -738,7 +742,7 @@ function NextAction({ stage, sess, busy, t, onFind, onApprove, onRun, onPause, o
       </>}
       {sess.run && stage !== 'done' && (
         <div className="progress">
-          <div className="crew-now"><span className="cn-lab">Crew now</span> {now ? crewText(s, now) : run?.done ? 'finished' : started ? 'idle' : 'at the start'}{next && <><br /><span className="cn-lab">Next</span> {crewText(s, next)} (minute {next.start})</>}</div>
+          <div className="crew-now"><span className="cn-lab">Crew now</span> {now ? crewText(s, now) : run?.done ? 'finished' : started ? 'idle' : 'at the start'}</div>
         </div>
       )}
     </section>
@@ -891,14 +895,14 @@ function DemoLeft(p: { sess: Session; setSess: (f: (x: Session) => Session) => v
   const run = sess.run?.main.state;
   return (
     <section className="demo-left panel" aria-label="Demo and testing: scenario and hidden conditions">
-      <p className="demo-intro">Tools for demonstrations, testing and review. Nothing here is needed to run an operation. The hidden simulator conditions below are never passed to the planner.</p>
+      <p className="demo-intro">For demos and review only — not needed to run an operation.</p>
       <div className="block"><h3 className="disp">Scenario</h3>
         <div className="scen-list">{Object.keys(SCENARIO_BUILDERS).map((id) => <button key={id} className={id === sess.scenarioId ? 'on' : ''} onClick={() => p.switchScenario(id)}><b>{id}</b> {getScenario(id).title}</button>)}</div>
         <button className="ghost" onClick={p.onResetSession}>Reset this session</button>
       </div>
       <Controller sess={sess} setSess={p.setSess} />
       <div className="block"><h3 className="disp">Playback</h3>
-        <p className="muted small">{run ? 'Play, pause, step one minute, reset the run and change the speed in the time bar at the bottom.' : 'Approve a plan in Operations to enable playback. Controls appear in the time bar at the bottom.'}</p>
+        <p className="muted small">{run ? 'Step, reset and speed are in the time bar.' : 'Approve a plan in Operations first.'}</p>
       </div>
     </section>
   );
@@ -924,7 +928,7 @@ function Controller({ sess, setSess }: { sess: Session; setSess: (f: (x: Session
   const s = sess.scenario;
   const started = !!sess.run && sess.run.main.state.processedThrough >= 0;
   return (
-    <div className="block"><h3 className="disp">Hidden conditions</h3><p className="muted small">Simulator only — never passed to the planner.</p>
+    <div className="block"><h3 className="disp">Hidden conditions</h3><p className="muted small">Never passed to the planner.</p>
       {!s.knowledge.unknown && !s.deliveries.some((d) => d.confirmed) && <p className="muted small">This scenario has no hidden passage state or expected deliveries.</p>}
       {s.knowledge.unknown && (
         <label className="row">Actual state of the {passageName(s, s.knowledge.unknown.connection)}:

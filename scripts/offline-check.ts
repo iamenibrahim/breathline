@@ -29,6 +29,8 @@ async function click(page: Page, text: string) {
 }
 async function enabled(page: Page, text: string) { for (const el of await buttons(page, text)) if (!(await el.evaluate((b) => (b as HTMLButtonElement).disabled))) return true; return false; }
 const text = (page: Page, sel: string) => page.$eval(sel, (e) => (e as HTMLElement).innerText).catch(() => '');
+// DOM text, unaffected by CSS text-transform (headlines are set in capitals by the stylesheet)
+const raw = (page: Page, sel: string) => page.$eval(sel, (e) => (e.textContent ?? '').trim()).catch(() => '');
 const body = (page: Page) => page.evaluate(() => document.body.innerText);
 async function waitFor(pred: () => Promise<boolean>, ms = 20000) { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await pred()) return true; await sleep(100); } return false; }
 async function counter(page: Page, label: string) {
@@ -40,7 +42,7 @@ async function ops(page: Page) { await click(page, 'Operations'); }
 async function scenario(page: Page, id: string) { await demo(page); const [b] = await page.$$(`xpath/.//div[@class='scen-list']/button[b[normalize-space(.)='${id}']]`); await b.click(); await sleep(150); await ops(page); }
 async function stepToEnd(page: Page) { await demo(page); for (let i = 0; i < 30; i++) { if (!(await enabled(page, 'Step 1 minute'))) break; await click(page, 'Step 1 minute'); } await ops(page); }
 async function stepN(page: Page, n: number) { await demo(page); for (let i = 0; i < n; i++) await click(page, 'Step 1 minute'); await ops(page); }
-async function openConditions(page: Page) { if (!(await page.$('.drawer-conditions'))) { await click(page, 'Update conditions'); await sleep(120); } must(!!(await page.$('.drawer-conditions')), 'conditions drawer did not open'); }
+async function openConditions(page: Page) { if (!(await page.$('.drawer-conditions'))) { await click(page, 'Conditions'); await sleep(120); } must(!!(await page.$('.drawer-conditions')), 'conditions drawer did not open'); }
 async function setNumber(page: Page, label: string, value: string) {
   const [inp] = await page.$$(`xpath/.//label[span[contains(., "${label}")]]/input`);
   await inp.click({ clickCount: 3 }); await inp.type(value);
@@ -65,7 +67,7 @@ async function setNumber(page: Page, label: string, value: string) {
 
     // A: plan, forecast labels, approve, run, simulation result vs baseline
     await findPlan(page);
-    const head = await text(page, '.plan .headline');
+    const head = await raw(page, '.plan .headline');
     const checklist = await text(page, '.plan .checklist');
     const fc = await counter(page, 'Can reach shelter');
     must(head.startsWith('Help all 24') && fc?.tag === 'Forecast' && fc.n === '24', `A plan: ${head} / ${JSON.stringify(fc)}`);
@@ -107,7 +109,7 @@ async function setNumber(page: Page, label: string, value: string) {
     const sceneStep = (`scene: time bar "${mode}" at minute ${minute} with ${marks} planned-event markers; selecting the crew opened a details card (place names only); zoom, arrow-key pan and reset changed and restored the view; the routes layer hid ${nRoutes} route segments and restored them`);
     must(await enabled(page, 'View results'), 'View results action');
     await click(page, 'View results');
-    must((await text(page, '#results')).startsWith('Simulation result'), 'results section');
+    must((await raw(page, '#results')).startsWith('Simulation result'), 'results section');
     steps.push(`A: "${head}"; checklist of ${checklist.split('\n').length} steps; Forecast 24 \u2192 Simulation result 24 vs 12 without crew; Pause shown during playback`);
     steps.push(sceneStep);
 
@@ -142,7 +144,7 @@ async function setNumber(page: Page, label: string, value: string) {
     // changed conditions invalidate the old plan
     must(await enabled(page, 'Find a plan') && !(await enabled(page, 'Approve plan')), 'stale plan must not be approvable');
     await findPlan(page);
-    const head2 = await text(page, '.plan .headline');
+    const head2 = await raw(page, '.plan .headline');
     must(head2.startsWith('Help 16 of 24'), `recompute: ${head2}`);
     steps.push(`changed conditions: old plan could not be approved; new plan "${head2}"`);
 

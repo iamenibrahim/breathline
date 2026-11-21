@@ -8,9 +8,10 @@ import type { SimState } from '../engine/simulate';
 import { liveNodeHazard } from '../engine/simulate';
 import { baseWorld, nodeHazard, withEffects } from '../engine/world';
 import { groupName, passageName, placeName, type Plainstatus } from './plain';
+import terrain from './assets/terrain.png';
 
 export interface Camera { x: number; y: number; k: number }
-export interface Layers { routes: boolean; hazards: boolean; labels: boolean }
+export interface Layers { routes: boolean; hazards: boolean; labels: boolean; times: boolean }
 export interface Insets { left: number; right: number; top: number; bottom: number }
 
 interface Props {
@@ -196,6 +197,7 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
           <radialGradient id="orb" cx="35%" cy="35%" r="70%"><stop offset="0%" stopColor="#fff7ed" /><stop offset="40%" stopColor="#c4b5fd" /><stop offset="100%" stopColor="#5b21b6" /></radialGradient>
         </defs>
         <g className={`cam${dragging ? '' : ' smooth'}`} style={{ transform: `translate(${cam.x}px, ${cam.y}px) scale(${cam.k})` }}>
+          <image href={terrain} x={-500} y={-320} width={2000} height={1280} className="terrain" preserveAspectRatio="none" />
           {[{ y: 40, h: 110, label: 'Upper level' }, { y: 160, h: 220, label: 'Middle level' }, { y: 390, h: 230, label: 'Deep level' }].map((l) => (
             <g key={l.label} className="stratum"><rect x={10} y={l.y} width={980} height={l.h} rx={16} /><text x={978} y={l.y + l.h - 10} textAnchor="end" className="stratum-label">{l.label}</text></g>
           ))}
@@ -211,7 +213,7 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
                 <title>{passageName(s, c.id)} ({c.id}) — {c.minutes} min{c.kind === 'stairs' ? ', stairs' : ''}{c.capacity < 24 ? `, up to ${c.capacity} people at once` : ''}</title>
                 {st === 'unknown' && <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="url(#hatch)" strokeWidth={12} opacity={0.55} />}
                 <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} className={`edge edge-${st}${c.kind === 'stairs' ? ' edge-stairs' : ''}`} />
-                {rel && layers.labels && <text x={lx} y={ly} textAnchor="middle" className="edge-label">{c.minutes} min{c.kind === 'stairs' ? ' · stairs' : ''}</text>}
+                {rel && layers.times && <text x={lx} y={ly} textAnchor="middle" className="edge-label">{c.minutes} min{c.kind === 'stairs' ? ' · stairs' : ''}</text>}
                 {st === 'blocked' && <g className="blocked-mark"><circle cx={mx} cy={my} r={11} /><text x={mx} y={my + 5} textAnchor="middle">✕</text>{rel && <text x={mx} y={my + 27} textAnchor="middle" className="edge-tag">{c.note?.includes('collapsed') ? 'collapsed' : 'blocked'}</text>}</g>}
                 {st === 'unknown' && <g className="unknown-mark"><circle cx={mx} cy={my} r={12} /><text x={mx} y={my + 6} textAnchor="middle">?</text><text x={mx} y={my + 29} textAnchor="middle" className="edge-tag">open or blocked?</text></g>}
                 {st === 'opened' && rel && <text x={mx} y={my + 24} textAnchor="middle" className="edge-tag opened">✓ open</text>}
@@ -220,7 +222,7 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
           })}
           {layers.routes && legs.map((x, i) => {
             const a = loc(x.leg.from), b = loc(x.leg.to);
-            return <line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} className={`route route-${x.kind}${!approved ? ' proposed' : ''}${x.done ? ' done' : ''}${x.active ? ' active' : ''}`} filter={x.kind === 'resident' && !x.done ? 'url(#glow)' : undefined} />;
+            return <line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} className={`route route-${x.kind}${!approved ? ' proposed' : ''}${x.done ? ' done' : ''}${x.active ? ' active' : ''}`} />;
           })}
           {s.locations.map((l) => {
             const rel = !focusing || relevantNode.has(l.id);
@@ -234,12 +236,9 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
               return (
                 <g key={l.id} className={`shelter${isSel ? ' sel' : ''}`} {...sel(id, `${l.name}: ${occN} of ${sh.places} inside`)}>
                   <title>{l.name} ({l.id})</title>
-                  <rect x={l.x - 92} y={l.y - 40} width={184} height={86} rx={12} className="shelter-glow" filter="url(#softglow)" />
-                  <rect x={l.x - 92} y={l.y - 40} width={184} height={86} rx={12} />
-                  <text x={l.x} y={l.y - 18} textAnchor="middle" className="shelter-name">⌂ {l.name}</text>
-                  <text x={l.x} y={l.y + 1} textAnchor="middle" className="shelter-occ">{occN} of {sh.places} inside</text>
-                  <text x={l.x} y={l.y + 18} textAnchor="middle" className="shelter-exp">{resN ? `${resN} expected` : 'none expected'}</text>
-                  <text x={l.x} y={l.y + 35} textAnchor="middle" className="shelter-check">{sh.checklist.accessibleEntry === 'present' ? 'step-free' : 'no step-free entry'} · {sh.checklist.assistanceOnArrival === 'present' ? 'assistance' : 'no assistance'}</text>
+                  <rect x={l.x - 78} y={l.y - 30} width={156} height={60} rx={6} />
+                  <text x={l.x} y={l.y - 8} textAnchor="middle" className="shelter-name">{l.name}</text>
+                  <text x={l.x} y={l.y + 15} textAnchor="middle" className="shelter-occ">{occN}<tspan className="shelter-of"> / {sh.places}</tspan>{resN ? <tspan className="shelter-exp"> · +{resN} due</tspan> : null}</text>
                 </g>
               );
             }
@@ -251,12 +250,12 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
             return (
               <g key={l.id} className={`place${rel ? '' : ' faded'}${isSel ? ' sel' : ''}`} {...sel(id, placeName(s, l.id))}>
                 <title>{placeName(s, l.id)} ({l.id})</title>
-                {hazardous && level !== 'quiet' && <circle cx={l.x} cy={l.y} r={level === 'red' ? 34 : 26} className={`haze haze-${level}`} filter="url(#softglow)" />}
-                <circle cx={l.x} cy={l.y} r={hazardous ? 13 : 8} className={`node${level ? ' node-' + level : ''}`} fill={hazardous ? undefined : 'url(#orb)'} />
+                {hazardous && level !== 'quiet' && <circle cx={l.x} cy={l.y} r={level === 'red' ? 30 : 23} className={`haze haze-${level}`} />}
+                <circle cx={l.x} cy={l.y} r={hazardous ? 12 : 6} className={`node${level ? ' node-' + level : ''}`} />
                 {isSel && <circle cx={l.x} cy={l.y} r={22} className="sel-ring" />}
                 {hazardous && <text x={l.x} y={l.y + 5} textAnchor="middle" className="node-icon">⚠</text>}
                 {(layers.labels || isSel) && <text x={l.x} y={l.y + (hazardous ? 32 : 26)} textAnchor="middle" className="node-name">{placeName(s, l.id)}</text>}
-                {hazardous && <text x={l.x} y={l.y + 49} textAnchor="middle" className={`node-hz ${level}`}>{occupied ? <>hazard {Math.round(h)} now · {Math.round(he)} at min {s.horizon}{h >= s.threshold ? ' — over the limit' : ''}</> : <>hazard {Math.round(h)} · nobody here now</>}</text>}
+                {hazardous && occupied && <text x={l.x} y={l.y + 47} textAnchor="middle" className={`node-hz ${level}`}><title>{`Hazard ${Math.round(h)} now, ${Math.round(he)} by minute ${s.horizon} (limit ${s.threshold})`}</title>⚠ {Math.round(h)} → {Math.round(he)}{h >= s.threshold ? ' over limit' : ''}</text>}
               </g>
             );
           })}
@@ -271,7 +270,7 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
             return (
               <g key={g.id} transform={`translate(${x + off[0]},${y + off[1]})`} className={`group-marker${selected === id ? ' sel' : ''}`} {...sel(id, `${groupName(g)}, ${g.count} residents`)}>
                 <title>{groupName(g)}: {g.count} residents{g.mobility === 'wheelchair' ? ' (wheelchair user)' : ''}</title>
-                <circle r={21} className="gm-halo" fill={STATUS_FILL[st]} filter="url(#softglow)" />
+                {(st === 'needs-help' || st === 'waiting-inspection' || st === 'unsafe') && <circle r={17} className={`gm-pulse pulse-${st}`} />}
                 <circle r={17} fill={STATUS_FILL[st]} className="gm-dot" />
                 <text y={6} textAnchor="middle" className="gm-count">{g.count}</text>
                 {STATUS_ICON[st] && <text x={15} y={-11} className="gm-status">{STATUS_ICON[st]}</text>}
@@ -285,8 +284,9 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
             const atShelter = !!c?.at && !c.edge && isShelter(c.at);
             return (
               <g transform={`translate(${atShelter ? x - 60 : x + 24},${atShelter ? y + 60 : y - 22})`} className={`crew-marker${selected === 'crew' ? ' sel' : ''}`} {...sel('crew', 'Crew')}>
-                <rect x={-11} y={-11} width={22} height={22} transform="rotate(45)" filter="url(#glow)" />
-                <text x={18} y={5} className="crew-label">Crew{c?.activity ? ` · ${CREW_DOING[c.activity.split(':')[0]] ?? ''}` : ''}</text>
+                <rect x={-10} y={-10} width={20} height={20} transform="rotate(45)" />
+                <title>{`Crew${c?.activity ? ` — ${CREW_DOING[c.activity.split(':')[0]] ?? ''}` : ''}`}</title>
+                <text x={18} y={5} className="crew-label">Crew</text>
               </g>
             );
           })()}
@@ -298,15 +298,15 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
 
 export function Legend({ s, conditional }: { s: Scenario; conditional: boolean }) {
   return (
-    <div className="legend" aria-label="Map legend">
+    <div className="legend" role="note" aria-label="Map key">
       <span><i className="lg lg-res" /> residents' route</span>
       <span><i className="lg lg-crew" /> crew route</span>
       {conditional && <span><i className="lg lg-cond" /> only if the inspection finds it open</span>}
       <span className="sym red">✕ blocked</span>
       {s.connections.some((c) => c.state === 'unknown') && <span className="sym amber">? not yet checked</span>}
-      <span className="sym amber">⚠ hazard (limit {s.threshold})</span>
-      <span className="sym">◆ crew</span>
-      <span className="sym">(n) people in a group</span>
+      <span className="sym amber">⚠ 44 → 142 hazard now → minute {s.horizon} (limit {s.threshold})</span>
+      <span className="sym">◆ crew · (n) people in a group</span>
+      <span className="sym">12 / 12 shelter places taken</span>
     </div>
   );
 }
