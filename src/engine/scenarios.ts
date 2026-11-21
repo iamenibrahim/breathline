@@ -161,7 +161,7 @@ export function scenarioD(inspectionDuration = 1): Scenario {
   const s = scenarioA();
   s.id = 'D'; s.label = 'D';
   s.title = 'Decide whether checking the bypass is worth the time';
-  s.summary = 'Gate B and Fan 3 each need the whole battery pack. A bypass to Deep Homes may be open, but only an inspection at X3 can tell.';
+  s.summary = 'Gate B and Fan 3 each need the whole battery pack. A bypass to Deep Homes may be open, but only an inspection at the bypass can tell.';
   setLocHazard(s, 'RA', 2, 5);
   setLocHazard(s, 'J3', 10, 6);
   (action(s, 'repair-fan-3').effect as { rate: number }).rate = 0;

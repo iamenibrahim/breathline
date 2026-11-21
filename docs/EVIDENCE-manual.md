@@ -2,7 +2,19 @@
 
 ### Interface walkthroughs (full evacuation and an edited run)
 
-Status: **observed by an automated headless-browser script, not by a person.** `scripts/offline-check.ts` (the `offline-browser` check above) drives the real built interface in Chrome with DevTools offline mode on and every non-`file:` request refused. It computes and approves A, plays to minute 20 and reads the executed counter (24/24), reloads mid-run and confirms the run restores paused at its last checkpoint and resumes to 24/24 with 0 invariant violations, edits the battery inventory from 4 to 3 and confirms the plan is marked stale and recomputes to 16, executes D in both hidden states (20 blocked, 24 open), executes E (20 arrived; +24 protected person-minutes, shown separately), and confirms the printable dispatch sheet is present. A walkthrough by a person at the keyboard has **not been recorded**.
+Status: **observed by an automated headless-browser script, not by a person.** `scripts/offline-check.ts` (the `offline-browser` check above) drives the real built interface in Chrome with DevTools offline mode on and every non-`file:` request refused. It checks each of the following:
+
+- A: forecast 24, then a simulation result of 24 against 12 without crew intervention, with **Pause** dominant during playback
+- no location codes on the main screen
+- a reload mid-run restores paused at the last saved minute and resumes to 24 with 0 invariant violations
+- editing during a run warns beforehand, and the notice says it starts a new run and does not replan
+- a changed condition makes the old plan unapprovable, and finding a plan again gives 16
+- an unconfirmed shelter-place count shows "Confirm Lower Refuge has 12 places." and blocks approval until it is confirmed and the plan is found again
+- D shows both modeled outcomes and "Waiting for inspection", then executes 20 (blocked) and 24 (open)
+- E shows "4 residents gain 6 minutes each below the hazard limit. They still need a route." and counts 20 arrived separately from the 4 protected residents
+- at 390 px wide the plan and next action come before the map
+
+A walkthrough by a person at the keyboard, or a usability test with first-time users, has **not been recorded**.
 
 ### Dispatch comprehension test
 

@@ -146,7 +146,7 @@ function earliestIgnoringHazard(w: World, g: GroupDef, shelters: string[]) {
   return null;
 }
 
-export interface Dependency { actionId: string; groupId: string; text: string; short: string }
+export interface Dependency { actionId: string; groupId: string; text: string; short: string; kind?: 'access' | 'hazard'; node?: string; t?: number; withWork?: number; withoutWork?: number }
 
 /** Which served groups depend on which completed work, from hazard and access checks. */
 export function dependencies(s: Scenario, sc: Schedule, state?: 'open' | 'blocked'): Dependency[] {
@@ -160,7 +160,7 @@ export function dependencies(s: Scenario, sc: Schedule, state?: 'open' | 'blocke
       if (e.effect.type === 'openConnection' || e.effect.type === 'reveal') {
         const c = (e.effect as { connection: string }).connection;
         const leg = j.legs.find((l) => l.conn === c);
-        if (leg) deps.push({ actionId: act.id, groupId: g.id, text: `${g.name} crosses ${c} at minute ${leg.start}, opened${e.effect.type === 'reveal' ? ' (confirmed by inspection)' : ''} at minute ${e.at}`, short: `${g.name} (${g.count}) can cross ${c} at minute ${leg.start}` });
+        if (leg) deps.push({ actionId: act.id, groupId: g.id, text: `${g.name} crosses ${c} at minute ${leg.start}, opened${e.effect.type === 'reveal' ? ' (confirmed by inspection)' : ''} at minute ${e.at}`, short: `${g.name} (${g.count}) can cross ${c} at minute ${leg.start}`, kind: 'access', node: c, t: leg.start });
         continue;
       }
       // hazard dependency: a visited location would be at/above threshold without this work
@@ -171,7 +171,7 @@ export function dependencies(s: Scenario, sc: Schedule, state?: 'open' | 'blocke
         else visits.push({ node: l.to, t: l.end });
       }
       const crit = visits.find((v) => !full.shelters.has(v.node) && nodeHazard(without, v.node, v.t) >= full.thr && nodeHazard(full, v.node, v.t) < full.thr);
-      if (crit) deps.push({ actionId: act.id, groupId: g.id, text: `${g.name} passes ${locName(s, crit.node)} (${crit.node}) at minute ${crit.t}: hazard ${fmt(nodeHazard(full, crit.node, crit.t))} with ${lowerFirst(act.label)} completed at ${e.at}, ${fmt(nodeHazard(without, crit.node, crit.t))} without it`, short: `${g.name} (${g.count}) can pass the ${locName(s, crit.node).toLowerCase()} at minute ${crit.t} (hazard ${fmt(nodeHazard(full, crit.node, crit.t))} instead of ${fmt(nodeHazard(without, crit.node, crit.t))})` });
+      if (crit) deps.push({ actionId: act.id, groupId: g.id, text: `${g.name} passes ${locName(s, crit.node)} (${crit.node}) at minute ${crit.t}: hazard ${fmt(nodeHazard(full, crit.node, crit.t))} with ${lowerFirst(act.label)} completed at ${e.at}, ${fmt(nodeHazard(without, crit.node, crit.t))} without it`, short: `${g.name} (${g.count}) can pass the ${locName(s, crit.node).toLowerCase()} at minute ${crit.t} (hazard ${fmt(nodeHazard(full, crit.node, crit.t))} instead of ${fmt(nodeHazard(without, crit.node, crit.t))})`, kind: 'hazard', node: crit.node, t: crit.t, withWork: nodeHazard(full, crit.node, crit.t), withoutWork: nodeHazard(without, crit.node, crit.t) });
     }
   }
   void state;

@@ -1,6 +1,6 @@
 {
- "buildId": "breathline-1.0.0+src.a1409d284c9e585d",
- "generatedAt": "2026-11-21T02:08:24.113Z",
+ "buildId": "breathline-1.0.0+src.4a25d234ff57da05",
+ "generatedAt": "2026-11-21T02:47:27.839Z",
  "command": "npm run evidence",
  "summary": {
   "passed": 114,
@@ -137,7 +137,7 @@
      "id": "req-B-instr",
      "name": "Resource request: B-instr",
      "status": "passed",
-     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 60 ms)",
      "expected": "instructions to RB by minute 1"
     },
     {
@@ -780,7 +780,7 @@
      "id": "seeded-variations",
      "name": "15 seeded perturbations of A–C (seed 4242)",
      "status": "passed",
-     "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 3 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12",
+     "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 2 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12",
      "expected": ">= 12 cases; every schedule independently valid and at least the seeded baseline"
     },
     {
@@ -815,7 +815,7 @@
      "id": "benchmarks",
      "name": "Search-time benchmarks on this machine (median of 3)",
      "status": "passed",
-     "observed": "A: median 2.8 ms (8 plans, exhaustive); B: median 2.6 ms (7 plans, exhaustive); C: median 3.0 ms (8 plans, exhaustive); D: median 14.2 ms (80 plans, exhaustive); E: median 2.7 ms (5 plans, exhaustive)",
+     "observed": "A: median 2.7 ms (8 plans, exhaustive); B: median 2.6 ms (7 plans, exhaustive); C: median 2.8 ms (8 plans, exhaustive); D: median 14.6 ms (80 plans, exhaustive); E: median 2.0 ms (5 plans, exhaustive)",
      "expected": "recorded"
     },
     {
@@ -829,15 +829,15 @@
      "id": "build",
      "name": "Production build (tsc + vite single-file)",
      "status": "passed",
-     "observed": "dist/index.html 525 KiB",
+     "observed": "dist/index.html 544 KiB",
      "expected": "build succeeds"
     },
     {
      "id": "offline-browser",
      "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
      "status": "passed",
-     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
-     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A forecast 24 → simulation result 24 vs 12; reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection s",
+     "expected": "no network requests; A forecast then simulation result vs baseline; reload restores paused; edit during a run explains a new run; stale plan blocked; missing confirmation blocks approval; D both outcomes and both hidden states; E protection separate from arrivals; mobile order"
     }
    ]
   },
@@ -968,7 +968,7 @@
      "id": "req-B-instr",
      "name": "Resource request: B-instr",
      "status": "passed",
-     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 60 ms)",
      "expected": "instructions to RB by minute 1"
     },
     {
@@ -1017,8 +1017,8 @@
      "id": "offline-browser",
      "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
      "status": "passed",
-     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
-     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A forecast 24 → simulation result 24 vs 12; reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection s",
+     "expected": "no network requests; A forecast then simulation result vs baseline; reload restores paused; edit during a run explains a new run; stale plan blocked; missing confirmation blocks approval; D both outcomes and both hidden states; E protection separate from arrivals; mobile order"
     }
    ]
   },
@@ -1154,8 +1154,8 @@
      "id": "offline-browser",
      "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
      "status": "passed",
-     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
-     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A forecast 24 → simulation result 24 vs 12; reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection s",
+     "expected": "no network requests; A forecast then simulation result vs baseline; reload restores paused; edit during a run explains a new run; stale plan blocked; missing confirmation blocks approval; D both outcomes and both hidden states; E protection separate from arrivals; mobile order"
     }
    ]
   }
