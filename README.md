@@ -1,6 +1,6 @@
 # Breathline
 
-**Simulation — illustrative conditions and assumptions.**
+**Simulation: illustrative conditions and assumptions.**
 
 Breathline helps one underground neighborhood in the Hollow use one crew, one tool kit and a few batteries to get more residents to shelter. It decides **what to repair, whom to escort, and whether checking an uncertain passage is worth the crew time it costs**. Recommendations become physical, minute-by-minute journeys, and Breathline executes them on one clock and compares them with doing nothing from the same starting state.
 
@@ -44,11 +44,12 @@ npm run build          # → dist/index.html (single self-contained file)
 
 ## Using it
 
-The **Operations** view is built for a first-time coordinator and has one main action at each stage: **Find a plan → Confirm and approve → Run simulation → View results**.
+The interface is laid out like a planetarium or mission-control viewer: the neighborhood map fills the screen and everything else floats over it. The look is a worn government bunker terminal: deep indigo screen with a violet glow, scanlines and a faint flicker (off under `prefers-reduced-motion`), IBM Plex Mono throughout and VT323 only for large readouts. Long explanations sit behind *About this scenario*, *Plan details*, *What would help* and tooltips. The **Operations** view is built for a first-time coordinator and has one main action at each stage: **Find a plan → Confirm and approve → Run simulation → View results**.
 
-- **Top:** a short situation summary and three counters. Before a run they are labeled **Forecast**: can reach shelter, still needing help, and without crew intervention. During and after a run they show the **Simulation result**. In the uncertain-passage case the forecast is a range (for example 20–24), and the people whose route depends on the inspection are counted separately.
-- **Left:** the neighborhood map and a compact roster beneath it. Each group shows a word and an icon as well as a color: *Arrived*, *On the way*, *Has a route*, *Waiting for inspection*, *Still needs help*, *Still needs help · temporary protection*. Below the roster, **People still needing help** gives the reasons from the planner's constraint checks and a tested request (what, where, by when, for whom) when one exists.
-- **Right:** the recommended plan:
+- **The map (centre):** drag or use the arrow keys to move, scroll, pinch or press **+**/**−** to zoom, **0** or ⟲ to reset. The map is fitted into the space between the panels. Toggles above the time bar show or hide routes, hazard readings, place names and travel times, and open the map key. Hazards read *now → minute 20*; shelters read *places taken / places*. Selecting a place, a group or the crew opens a details card: hazard now and at minute 20, who is there, passages with travel times and state, planned work, a group's route and why anyone is still waiting, the crew's current and next task. Routes in force, the hazards on them, the affected residents and the crew are emphasised; unrelated passages fade.
+- **Top left:** the scenario summary and three counters. Before a run they are labeled **Forecast**: can reach shelter, still needing help, and without crew intervention. During and after a run they show the **Simulation result**. In the uncertain-passage case the forecast is a range (for example 20–24), and the people whose route depends on the inspection are counted separately.
+- **Left panel:** a compact roster (select a group's number to find it on the map). Each group shows a word and an icon as well as a color: *Arrived*, *On the way*, *Has a route*, *Waiting for inspection*, *Still needs help*, *Still needs help · temporary protection*. Below it, **People still needing help** gives the reasons from the planner's constraint checks and a tested request (what, where, by when, for whom) when one exists. The map legend sits at the bottom.
+- **Right panel:** the recommended plan:
   - an outcome headline, e.g. *Help all 24 residents reach shelter*
   - a short numbered checklist, e.g. *Repair Fan 3 so Pump Quarter can pass. Open Gate B. Escort the Deep Homes residents…*
   - one forecast sentence, e.g. *24 can reach shelter; 12 without crew intervention*
@@ -56,12 +57,13 @@ The **Operations** view is built for a first-time coordinator and has one main a
   - for the uncertain passage, both modeled outcomes side by side
   - for temporary protection, *"4 residents gain 6 minutes each below the hazard limit. They still need a route."*
 
-  Exact timings, battery allocations, routes and the full explanation are under **Plan details**. Below the plan, required confirmations appear as instructions such as *"Confirm Lower Refuge has 12 places."*, each with **Mark confirmed**. Then comes the next action, and **Pause** stays visible during playback.
+  Exact timings, battery allocations, routes and the full explanation are under **Plan details**. Required confirmations appear as instructions such as *"Confirm Lower Refuge has 12 places."*, each with **Mark confirmed**. The next action is pinned to the bottom of the panel, and **Pause** stays visible during playback.
+- **Time bar (bottom):** *Forecast* or *Simulation* label, the current minute out of 20, play/pause, and a 0–20 timeline with markers for planned crew tasks, the inspection result and arrivals (dashed markers only happen if the inspection finds the passage open). It names the next planned event.
+- **Top right:** **Conditions** opens the setup editor and steward reports as a sheet over the map. Any change marks the current plan as needing to be found again. If a simulation is running, the sheet says beforehand that a change starts a **new run** from the updated starting conditions; it does not replan from where people are. **Results** reopens the simulation result. **More** holds the dispatch sheet preview, Print dispatch, Export and Copy record. **?** explains the roles.
+- **Demo & testing** view: the map stays on screen; the left panel holds scenario switching (A–E) and hidden simulator conditions (never passed to the planner); the right panel holds stress tests with recomputation, search diagnostics, the evidence panel, the event log, exposure detail and assumptions; the time bar adds **Step 1 minute**, **Reset run** and speed.
 - Every number and step comes from the engine's results; nothing about a scenario's outcome is written into the interface.
-- **Secondary actions:** Print dispatch, Export, Copy record, How it works. **Update conditions and confirmations** holds the setup editor and steward reports. Any change marks the current plan as needing to be found again. If a simulation is running, the panel says beforehand that a change starts a **new run** from the updated starting conditions; it does not replan from where people are.
-- **Demo & testing** view: scenario switching (A–E), hidden simulator conditions (never passed to the planner), playback stepping and speed, stress tests with recomputation, search diagnostics, the evidence panel, the event log, exposure detail, and assumptions.
 
-Place names are used throughout. Location codes appear only in Plan details, tooltips, the testing view and the printed dispatch. Keyboard focus is visible and contrast follows the dark palette. Under `prefers-reduced-motion` the markers and scrolling don't animate. Below 1050 px the plan and next action move above the map.
+Place names are used throughout. Location codes appear only in Plan details, tooltips, the testing view and the printed dispatch. Keyboard focus is visible, the map and every marker on it can be reached and operated from the keyboard, and status is never shown by color alone. Under `prefers-reduced-motion` the camera, markers and route animation don't move. Below 1050 px the layout becomes a single scrolling column with the plan and next action above the map.
 
 ## The model
 
@@ -140,14 +142,3 @@ tests/          vitest entry points
 docs/           EVIDENCE-manual.md (human-run checks and their status)
 ```
 
-Planning and simulation do not depend on React.
-
-## Known differences, limits and incomplete work
-
-- **Dispatch comprehension test: not run.** It needs two people who did not build the system. The protocol and an empty results table are in EVIDENCE.md. The interface walkthroughs were performed by an automated headless-browser script, not a person.
-- **Lower Refuge place request (A, 11 places):** the deadline matches the brief (minute 20, the horizon; never-arrives fails; minute 13 avoids waiting). The planner's own timing differs from the brief's narrative, though: it has **Pump Quarter B leave at minute 10** and arrive at 20, rather than Group A waiting with the crew at the Lower passage from 12 to 19. That choice saves 7 crew-busy minutes (criterion 4). The brief's timing is built by hand, passes the independent validator and executes to 24 arrivals with A admitted at 20, recorded as its own check.
-- The search is exhaustive **within the declared scope**, not over every conceivable schedule. Agreement with the independent solver is established for the generated instances under its stated preconditions.
-- Instruction lateness *during* execution is not simulated: instruction availability is a time-0 input. The validator rejects a plan whose departures precede it.
-- Interruption tests restore from boundary checkpoints taken immediately before and after each transaction minute. A torn write inside a boundary is equivalent to the "before" checkpoint, because the boundary is re-processed idempotently.
-- Not implemented (stretch): exact latest-dispatch optimisation, multiple ranked alternatives, more than one unknown passage, replanning from in-transit positions (editing after execution starts a clearly labeled new run instead), and a Web Worker (searches take milliseconds here).
-- Not modeled: medical outcomes, shelter habitability beyond minute 20, adversarial reports, changing hidden conditions, unreliable inspection, actual radio delivery, sensor calibration, and any control over Directorate infrastructure. Fan 3 slows hazard growth in one transit corridor. It does not restore ventilation in homes.

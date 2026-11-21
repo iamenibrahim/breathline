@@ -6,7 +6,7 @@ import { planConfirmed, residentCandidates } from '../engine/planner';
 import { planAny, planPolicy } from '../engine/policy';
 import { validatePolicy, validateSchedule } from '../engine/validator';
 import { agreementCheck, duplicateProcessingTest, interruptionTest } from '../engine/agreement';
-import { compilePlan, executeWithCheckpoints, initSim, runToEnd, arrivedCount, type SimState } from '../engine/simulate';
+import { compilePlan, initSim, runToEnd, arrivedCount, type SimState } from '../engine/simulate';
 import { buildExport, reproduceExport } from '../engine/exportRun';
 import { computeRequests } from '../engine/requests';
 import { perturb, recomputeUnder, stressSelected, STRESS_VARIANTS, propagate } from '../engine/stress';
@@ -64,7 +64,6 @@ const groupsOf = (p: PlanResult) => p.schedule.journeys.map((j) => j.groupId).so
 const vOK = (s: Scenario, p: AnyPlan) => (p.kind === 'schedule' ? validateSchedule(s, p.schedule) : validatePolicy(s, p));
 const vtext = (s: Scenario, p: AnyPlan) => { const v = vOK(s, p); return v.valid ? 'valid' : `INVALID: ${v.errors.slice(0, 2).join('; ')}`; };
 const edit = (id: string, f: (s: Scenario) => void) => { const s = getScenario(id); f(s); return s; };
-const arrivedGroups = (s: Scenario, st: SimState) => s.groups.filter((g) => st.groups[g.id].status === 'arrived').map((g) => g.id).join('');
 
 // ---------------------------------------------------------------- reference & edits
 export function referenceChecks(): Check[] {

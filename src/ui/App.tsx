@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode } from 'react';
 import type { AnyPlan, ChecklistState, PassageState, Scenario, Schedule, ShelterChecklist } from '../engine/types';
 import { getScenario, SCENARIO_BUILDERS } from '../engine/scenarios';
 import { explainPolicy, explainSchedule } from '../engine/explain';
@@ -8,7 +8,9 @@ import { stressSelected, recomputeUnder, STRESS_VARIANTS, type StressRow } from 
 import { buildExport, ASSUMPTIONS, BUILD_ID } from '../engine/exportRun';
 import { CHECK_LABEL } from '../engine/common';
 import type { SimState } from '../engine/simulate';
-import { MapView } from './MapView';
+import { liveNodeHazard } from '../engine/simulate';
+import { baseWorld, nodeHazard } from '../engine/world';
+import { focusOn, Legend, MapView, zoomAbout, type Camera, type Layers } from './MapView';
 import { DispatchSheet } from './Dispatch';
 import {
   activeSchedule, applyEdit, approve, clearSession, compute, computeAllRequests, discardApproval, isPlanStale, loadSession, newSession,
@@ -22,11 +24,32 @@ import evidenceSummary from '../generated/evidence-summary.json';
 
 type View = 'ops' | 'demo';
 type Stage = 'find' | 'approve' | 'run' | 'running' | 'restored' | 'stopped' | 'done';
+type SheetId = 'help' | 'results' | 'conditions' | 'dispatch' | null;
 
 /** Everyday words for the engine's status vocabulary. */
-const words = (x: string) => x.replace(/Unresolved \u2014 location reached the threshold/g, 'Still waiting; the hazard limit was reached at their location').replace(/\bUnresolved\b/g, 'Still waiting').replace(/below threshold/g, 'below the hazard limit').replace(/\bthreshold\b/g, 'hazard limit');
+const words = (x: string) => x.replace(/Unresolved — location reached the threshold/g, 'Still waiting; the hazard limit was reached at their location').replace(/\bUnresolved\b/g, 'Still waiting').replace(/below threshold/g, 'below the hazard limit').replace(/\bthreshold\b/g, 'hazard limit');
 
 const BLOCKER_ORDER = ['unsuitable-shelter', 'missing-resources', 'shelter-shortage', 'instructions', 'threshold-at-arrival', 'unsafe-waiting', 'horizon', 'no-route', 'unknown-passage', 'inaccessible-stairs', 'missing-escort', 'displaced'];
+const MOBILE_BELOW = 1050;
+
+/** Plain description of one crew activity. */
+function crewText(s: Scenario, a: Schedule['crew'][number] | undefined): string | null {
+  if (!a) return null;
+  if (a.kind === 'work' || a.kind === 'inspect') return s.actions.find((x) => x.id === a.actionId)?.label ?? 'Work';
+  if (a.kind === 'escort') return `Escort ${groupName(s.groups.find((g) => g.id === a.groupId)!)} to ${placeName(s, a.to)}`;
+  if (a.kind === 'travel') return `Travel to ${placeName(s, a.to)}`;
+  return `Wait at ${placeName(s, a.from)}`;
+}
+
+function useViewport() {
+  const [vp, setVp] = useState(() => ({ w: window.innerWidth, h: window.innerHeight }));
+  useEffect(() => {
+    const f = () => setVp({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', f);
+    return () => window.removeEventListener('resize', f);
+  }, []);
+  return vp;
+}
 
 export default function App() {
   const [sess, setSess] = useState<Session>(() => loadSession() ?? newSession('A'));
@@ -35,10 +58,28 @@ export default function App() {
   const [speed, setSpeed] = useState(700);
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
-  const [showHelp, setShowHelp] = useState(() => { try { return localStorage.getItem('breathline.onboarded') !== '1'; } catch { return true; } });
+  const [sheet, setSheet] = useState<SheetId>(null);
+  const [showKey, setShowKey] = useState(false);
   const [stress, setStress] = useState<{ rows: StressRow[]; recomputed: Record<string, string> } | null>(null);
+  const [cam, setCam] = useState<Camera>({ x: 0, y: 0, k: 1 });
+  const [layers, setLayers] = useState<Layers>({ routes: true, hazards: true, labels: true, times: false });
+  const [selected, setSelected] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   const resultsRef = useRef<HTMLElement | null>(null);
+  const vp = useViewport();
+  const mobile = vp.w < MOBILE_BELOW;
+  // side panel widths; the map is fitted into the space between them, above the time bar
+  const lw = vp.w >= 1800 ? 360 : vp.w >= 1600 ? 340 : vp.w >= 1360 ? 312 : 292, rw = vp.w >= 1800 ? 420 : vp.w >= 1600 ? 396 : vp.w >= 1360 ? 368 : 344;
+  const [tbh, setTbh] = useState(108); // measured time bar height; the map and overlays sit above it
+  const tbRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = tbRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => setTbh(Math.round(el.getBoundingClientRect().height) || 108));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const insets = mobile ? { left: 8, right: 8, top: 8, bottom: vp.w < 520 ? 100 : 56 } : { left: lw + 30, right: rw + 30, top: 86, bottom: tbh + 74 };
 
   useEffect(() => { saveSession(sess); }, [sess]);
   useEffect(() => {
@@ -50,6 +91,11 @@ export default function App() {
     }), speed);
     return () => { if (timer.current) window.clearInterval(timer.current); };
   }, [playing, speed]);
+  useEffect(() => {
+    const f = (e: KeyboardEvent) => { if (e.key === 'Escape') { setSheet(null); setSelected(null); } };
+    window.addEventListener('keydown', f);
+    return () => window.removeEventListener('keydown', f);
+  }, []);
 
   const s = sess.scenario;
   const plan = sess.plan;
@@ -60,6 +106,7 @@ export default function App() {
   const schedule = stale ? null : activeSchedule(sess);
   const view_ = useMemo(() => (plan && !stale ? planView(s, plan, sess.baseline) : null), [plan, stale, s, sess.baseline]);
   const restoredPause = !!run?.paused && !!run.pause?.reason.startsWith('Restored');
+  const ops = view === 'ops';
 
   const stage: Stage = !plan || stale ? 'find' : !sess.run ? 'approve' : run!.done ? 'done' : playing ? 'running' : run!.paused ? (restoredPause ? 'restored' : 'stopped') : 'run';
 
@@ -68,6 +115,7 @@ export default function App() {
     const prot = plan && !stale ? protectionGains(s, plan.kind === 'policy' && plan.inspection ? plan.branches.blocked : mainSchedule(plan), sess.baseline?.schedule ?? null).some((x) => x.g.id === gid) : false;
     if (run) {
       const g = run.groups[gid];
+      if (!g) return 'needs-help';
       if (g.status === 'arrived') return 'arrived';
       if (g.status === 'traveling') return 'on-the-way';
       if (g.status === 'assigned') return 'has-route';
@@ -91,10 +139,22 @@ export default function App() {
       setTimeout(() => { setSess((x) => computeAllRequests(x)); setBusy(null); }, 30);
     }, 30);
   };
-  const switchScenario = (id: string) => { setPlaying(false); setStress(null); setSess(newSession(id)); };
+  const switchScenario = (id: string) => { setPlaying(false); setStress(null); setSelected(null); setCam({ x: 0, y: 0, k: 1 }); setSheet((x) => (x === 'results' || x === 'dispatch' ? null : x)); setSess(newSession(id)); };
   const edit = (text: string, f: (x: Scenario) => void) => { setPlaying(false); setStress(null); setSess((x) => applyEdit(x, text, f)); };
-  const runPlay = () => { if (run?.paused && restoredPause) setSess((x) => ({ ...resumeRun(x), notice: null })); setPlaying(true); };
-  const viewResults = () => { setView('ops'); setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }), 30); resultsRef.current?.focus(); };
+  const runPlay = () => { if (run?.paused && restoredPause) setSess((x) => ({ ...resumeRun(x), notice: null })); setSheet((x) => (x === 'results' ? null : x)); setPlaying(true); };
+  const resetRun_ = () => { setPlaying(false); setSheet((x) => (x === 'results' ? null : x)); setSess((x) => resetRun(x)); };
+  const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; } };
+  const viewResults = () => {
+    setView('ops'); setSheet('results');
+    setTimeout(() => { resultsRef.current?.focus(); if (mobile) resultsRef.current?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); }, 40);
+  };
+  const toggleSheet = (x: Exclude<SheetId, null>) => { if (x !== 'help') setView('ops'); setSheet((cur) => (cur === x ? null : x)); };
+  const closeHelp = () => { setSheet(null); try { localStorage.setItem('breathline.onboarded', '1'); } catch { /* ignore */ } };
+  const locate = (id: string) => {
+    setSelected(id);
+    const xy = pointOf(s, run, id, t);
+    if (xy) setCam((c) => focusOn(c, xy[0], xy[1]));
+  };
 
   const exportText = () => {
     if (!sess.run || !plan) return '';
@@ -113,70 +173,272 @@ export default function App() {
     setTimeout(() => setCopied(null), 3000);
   };
 
-  const mapEl = <MapView s={s} plan={stale ? null : plan} schedule={schedule} approved={!!sess.approved} run={run} t={t} statusOf={statusOf} />;
+  const conditional = !!(plan && !stale && plan.kind === 'policy' && plan.inspection && !run?.knowledge.observations.length);
+  const appStyle = { '--lw': `${lw}px`, '--rw': `${rw}px`, '--tbh': `${tbh}px` } as CSSProperties;
 
   return (
-    <div className="app">
-      <div className={view === 'ops' ? 'stage' : 'page-head'}>
-      <header className="top">
-        <div className="brand"><h1>Breathline</h1><span className="tag">Community rescue planner</span></div>
-        <div className="banner" role="note">Simulation — illustrative conditions and assumptions</div>
+    <div className={`app immersive${mobile ? ' is-mobile' : ''}${ops ? ' view-ops' : ' view-demo'}`} style={appStyle}>
+      <div className="scene-layer">
+        <MapView s={s} plan={stale ? null : plan} schedule={schedule} approved={!!sess.approved} run={run} t={t} statusOf={statusOf}
+          cam={cam} setCam={setCam} layers={layers} insets={insets} selected={selected} onSelect={setSelected} />
+        <MapTools cam={cam} setCam={setCam} layers={layers} setLayers={setLayers} showKey={showKey} setShowKey={setShowKey} />
+        {showKey && <Legend s={s} conditional={conditional} />}
+      </div>
+
+      <header className="topbar">
+        <div className="brand">
+          <h1><span className="brand-name">Breathline</span><span className="cursor" aria-hidden="true" /></h1>
+          <span className="brand-sub">Rescue planner</span>
+        </div>
+        <div className="banner" role="note" title="Illustrative conditions and assumptions"><span className="dot" aria-hidden="true" /> Simulation<span className="sr-only"> — illustrative conditions and assumptions</span></div>
         <nav className="views" role="tablist" aria-label="Views">
-          <button role="tab" aria-selected={view === 'ops'} className={view === 'ops' ? 'on' : ''} onClick={() => setView('ops')}>Operations</button>
-          <button role="tab" aria-selected={view === 'demo'} className={view === 'demo' ? 'on' : ''} onClick={() => setView('demo')}>Demo &amp; testing</button>
+          <button role="tab" aria-selected={ops} className={ops ? 'on' : ''} onClick={() => setView('ops')}>Operations</button>
+          <button role="tab" aria-selected={!ops} className={!ops ? 'on' : ''} onClick={() => { setView('demo'); setSheet((x) => (x === 'help' ? x : null)); }}>Demo &amp; testing</button>
         </nav>
         <div className="secondary-actions" aria-label="More actions">
-          <button className="ghost" onClick={() => window.print()} disabled={!plan || stale}>Print dispatch</button>
-          <button className="ghost" onClick={exportJson} disabled={!sess.run}>Export</button>
-          <button className="ghost" onClick={copyJson} disabled={!sess.run}>Copy record</button>
-          <button className="ghost" onClick={() => setShowHelp((v) => !v)} aria-expanded={showHelp}>How it works</button>
-          {copied && <span className="muted small" role="status">{copied}</span>}
+          <button className={`ghost${sheet === 'conditions' ? ' on' : ''}`} onClick={() => toggleSheet('conditions')} aria-expanded={sheet === 'conditions'}>Conditions</button>
+          {sess.run && <button className={`ghost${sheet === 'results' ? ' on' : ''}`} onClick={() => toggleSheet('results')} aria-expanded={sheet === 'results'}>Results</button>}
+          <details className="menu">
+            <summary>More</summary>
+            <div className="menu-pop">
+              <button className="ghost" onClick={() => toggleSheet('dispatch')} disabled={!plan || stale}>Dispatch sheet</button>
+              <button className="ghost" onClick={() => window.print()} disabled={!plan || stale}>Print dispatch</button>
+              <button className="ghost" onClick={exportJson} disabled={!sess.run}>Export</button>
+              <button className="ghost" onClick={copyJson} disabled={!sess.run}>Copy record</button>
+            </div>
+          </details>
+          <button className={`ghost help-btn${sheet === 'help' ? ' on' : ''}`} onClick={() => (sheet === 'help' ? closeHelp() : setSheet('help'))} aria-expanded={sheet === 'help'} aria-label="How it works" title="How it works">?</button>
         </div>
       </header>
 
-      {showHelp && <Help onClose={() => { setShowHelp(false); try { localStorage.setItem('breathline.onboarded', '1'); } catch { /* ignore */ } }} />}
-
-      <Situation sess={sess} statusOf={statusOf} view_={view_} />
-
-      <Alerts sess={sess} stale={stale} run={run} onResume={() => setSess((x) => ({ ...resumeRun(x), notice: null }))} onFind={doCompute} />
-
-      {view === 'ops' && (
-        <main className="ops-grid">
-          {mapEl}
-          <section className="col-map" aria-label="Residents">
-            <Roster sess={sess} statusOf={statusOf} schedule={schedule} />
-            <StillNeedHelp sess={sess} stale={stale} />
-          </section>
-          <section className="col-plan" aria-label="Plan">
-            <PlanCard sess={sess} stale={stale} view_={view_} run={run} />
-            {plan && !stale && <Confirmations sess={sess} edit={edit} />}
-          </section>
-          <NextAction stage={stage} sess={sess} busy={busy} t={t} onFind={doCompute} onApprove={() => setSess((x) => approve(x))} onRun={runPlay}
-            onPause={() => setPlaying(false)} onResults={viewResults} onReset={() => { setPlaying(false); setSess((x) => resetRun(x)); }} onDiscard={() => setSess((x) => discardApproval(x))} />
-        </main>
-      )}
+      <div className="center-stack">
+        <Alerts sess={sess} stale={stale} run={run} onResume={() => setSess((x) => ({ ...resumeRun(x), notice: null }))} onFind={doCompute} />
+        {copied && <div className="alerts"><div className="alert info" role="status">{copied}</div></div>}
+        {sheet === 'help' && <Sheet title="How Breathline is used" onClose={closeHelp}><Help onClose={closeHelp} /></Sheet>}
+        {ops && sheet === 'results' && sess.run && <Sheet title="Results" onClose={() => setSheet(null)} wide><Results sess={sess} innerRef={resultsRef} statusOf={statusOf} /></Sheet>}
+        {ops && sheet === 'conditions' && (
+          <Sheet title="Update conditions and confirmations" onClose={() => setSheet(null)} className="drawer-conditions" wide>
+            {started && !run!.done && <p className="warn-inline">A simulation is running. Changing any condition stops it; the next approved plan starts a <b>new run</b> from the updated starting conditions. Breathline does not replan from where people are now.</p>}
+            <Setup sess={sess} edit={edit} />
+            <Reports sess={sess} edit={edit} />
+          </Sheet>
+        )}
+        {ops && sheet === 'dispatch' && plan && !stale && <Sheet title="Dispatch sheet — preview of what Print dispatch produces" onClose={() => setSheet(null)} wide><DispatchSheet s={s} plan={plan} revision={sess.revision} requests={sess.requests} /></Sheet>}
+        {!sheet && selected && <InfoCard sess={sess} id={selected} schedule={schedule} statusOf={statusOf} t={t} onClose={() => setSelected(null)} onFocus={() => locate(selected)} />}
       </div>
 
-      {view === 'ops' ? (
-        <>
-          {sess.run && <Results sess={sess} innerRef={resultsRef} statusOf={statusOf} />}
-          <section className="secondary-panels">
-            <details className="panel">
-              <summary>Update conditions and confirmations</summary>
-              {started && !run!.done && <p className="warn-inline">A simulation is running. Changing any condition stops it; the next approved plan starts a <b>new run</b> from the updated starting conditions. Breathline does not replan from where people are now.</p>}
-              <Setup sess={sess} edit={edit} />
-              <Reports sess={sess} edit={edit} />
-            </details>
-            {plan && !stale && <details className="panel"><summary>Dispatch sheet (preview of what Print dispatch produces)</summary><DispatchSheet s={s} plan={plan} revision={sess.revision} requests={sess.requests} /></details>}
-          </section>
-        </>
-      ) : (
-        <DemoView sess={sess} setSess={setSess} switchScenario={switchScenario} mapEl={mapEl} t={t} playing={playing} setPlaying={setPlaying} speed={speed} setSpeed={setSpeed}
-          stress={stress} setStress={setStress} onStep={() => setSess((x) => stepRun(x))} onReset={() => { setPlaying(false); setSess((x) => resetRun(x)); }} onResetSession={() => { clearSession(); switchScenario(sess.scenarioId); }} />
-      )}
+      <main className="ops-grid">
+        <div className="left-stack">
+          <Situation sess={sess} statusOf={statusOf} view_={view_} />
+          {ops ? (
+            <section className="col-map panel" aria-label="Residents">
+              <Roster sess={sess} statusOf={statusOf} schedule={schedule} selected={selected} onLocate={locate} />
+              <StillNeedHelp sess={sess} stale={stale} />
+            </section>
+          ) : (
+            <DemoLeft sess={sess} setSess={setSess} switchScenario={switchScenario} onResetSession={() => { clearSession(); switchScenario(sess.scenarioId); }} />
+          )}
+        </div>
+        <div className="right-stack">
+          {ops ? (
+            <section className="col-plan panel" aria-label="Plan and next action">
+              <div className="plan-scroll">
+                <PlanCard sess={sess} stale={stale} view_={view_} run={run} />
+                {plan && !stale && <Confirmations sess={sess} edit={edit} />}
+              </div>
+              <NextAction stage={stage} sess={sess} busy={busy} t={t} onFind={doCompute} onApprove={() => setSess((x) => approve(x))} onRun={runPlay}
+                onPause={() => setPlaying(false)} onResults={viewResults} onReset={resetRun_} onDiscard={() => setSess((x) => discardApproval(x))} />
+            </section>
+          ) : (
+            <DemoRight sess={sess} stress={stress} setStress={setStress} />
+          )}
+        </div>
+      </main>
+
+      <TimeBar innerRef={tbRef} sess={sess} schedule={schedule} stale={stale} view_={view_} t={t} stage={stage} playing={playing} demo={!ops} speed={speed} setSpeed={setSpeed}
+        onPlay={runPlay} onPause={() => setPlaying(false)} onStep={() => setSess((x) => stepRun(x))} onReset={resetRun_} />
+
       {plan && !stale && <div className="print-only"><DispatchSheet s={s} plan={plan} revision={sess.revision} requests={sess.requests} /></div>}
-      <footer className="foot">Runs entirely on this laptop · no accounts, no network · the planner never sees the simulator's hidden conditions · build {BUILD_ID}</footer>
+      <footer className="foot">Runs on this laptop · no accounts, no network · build {BUILD_ID}</footer>
     </div>
+  );
+}
+
+// ------------------------------------------------------------------ scene chrome
+
+/** Map coordinates of a selectable item, for centring the view. */
+function pointOf(s: Scenario, run: SimState | null, id: string, t: number): [number, number] | null {
+  const loc = (lid: string) => s.locations.find((l) => l.id === lid);
+  const along = (at: string | null, edge: { from: string; to: string; start: number; end: number } | null, fb: string): [number, number] | null => {
+    if (edge && edge.start < t && t < edge.end) { const a = loc(edge.from)!, b = loc(edge.to)!; const f = (t - edge.start) / (edge.end - edge.start); return [a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f]; }
+    const l = loc(at ?? fb);
+    return l ? [l.x, l.y] : null;
+  };
+  if (id === 'crew') return along(run?.crew.at ?? null, run?.crew.edge ?? null, s.crew.start);
+  if (id.startsWith('group:')) { const g = s.groups.find((x) => `group:${x.id}` === id); if (!g) return null; const gl = run?.groups[g.id]; return along(gl ? (gl.status === 'arrived' ? gl.shelter ?? gl.at : gl.at) : null, gl?.edge ?? null, g.location); }
+  if (id.startsWith('place:')) { const l = loc(id.slice(6)); return l ? [l.x, l.y] : null; }
+  return null;
+}
+
+function Sheet({ title, onClose, children, className, wide }: { title: string; onClose: () => void; children: ReactNode; className?: string; wide?: boolean }) {
+  return (
+    <section className={`drawer${wide ? ' wide' : ''}${className ? ' ' + className : ''}`} aria-label={title}>
+      <div className="drawer-bar"><span className="drawer-title">{title}</span><button className="ghost drawer-close" onClick={onClose} aria-label={`Close ${title}`}>Close ✕</button></div>
+      <div className="drawer-body">{children}</div>
+    </section>
+  );
+}
+
+function MapTools({ setCam, layers, setLayers, showKey, setShowKey }: { cam: Camera; setCam: (c: Camera | ((c: Camera) => Camera)) => void; layers: Layers; setLayers: (f: (l: Layers) => Layers) => void; showKey: boolean; setShowKey: (f: (b: boolean) => boolean) => void }) {
+  const toggle = (k: keyof Layers) => setLayers((l) => ({ ...l, [k]: !l[k] }));
+  const layer = (k: keyof Layers, label: string, title: string) => (
+    <button className={`tool layer${layers[k] ? ' on' : ''}`} aria-pressed={layers[k]} onClick={() => toggle(k)} title={title}>{label}</button>
+  );
+  return (
+    <div className="map-tools" role="toolbar" aria-label="Map controls">
+      <div role="group" aria-label="Map layers" className="layers">
+        {layer('routes', 'routes', 'Show or hide planned routes')}
+        {layer('hazards', 'hazards', 'Show or hide hazard readings')}
+        {layer('labels', 'names', 'Show or hide place names')}
+        {layer('times', 'times', 'Show or hide travel times')}
+        <button className={`tool layer${showKey ? ' on' : ''}`} aria-pressed={showKey} onClick={() => setShowKey((v) => !v)} title="Show the map key">key</button>
+      </div>
+      <div className="zoom" role="group" aria-label="Zoom">
+        <button className="tool" aria-label="Zoom in" title="Zoom in (+)" onClick={() => setCam((c) => zoomAbout(c, 1.25))}>+</button>
+        <button className="tool" aria-label="Zoom out" title="Zoom out (−)" onClick={() => setCam((c) => zoomAbout(c, 1 / 1.25))}>−</button>
+        <button className="tool" aria-label="Reset the map view" title="Reset view (0)" onClick={() => setCam({ x: 0, y: 0, k: 1 })}>⟲</button>
+      </div>
+    </div>
+  );
+}
+
+interface Mark { t: number; kind: 'crew' | 'arrive' | 'inspect' | 'cond'; text: string }
+
+function TimeBar(p: {
+  innerRef: MutableRefObject<HTMLElement | null>; sess: Session; schedule: Schedule | null; stale: boolean; view_: ReturnType<typeof planView> | null; t: number; stage: Stage; playing: boolean; demo: boolean;
+  speed: number; setSpeed: (n: number) => void; onPlay: () => void; onPause: () => void; onStep: () => void; onReset: () => void;
+}) {
+  const { sess, schedule, t } = p;
+  const s = sess.scenario;
+  const plan = sess.plan && !p.stale ? sess.plan : null;
+  const run = sess.run?.main.state ?? null;
+  const started = !!run && run.processedThrough >= 0;
+  const H = s.horizon;
+  const marks: Mark[] = [];
+  if (plan && schedule) {
+    const condGroups = p.view_?.conditionalGroups ?? [];
+    const observed = !!run?.knowledge.observations.length;
+    const prefix = plan.kind === 'policy' && plan.inspection && !observed ? plan.inspection.prefixCrewCount : Infinity;
+    schedule.crew.forEach((a, i) => {
+      if (a.kind !== 'work' && a.kind !== 'inspect' && a.kind !== 'escort') return;
+      marks.push({ t: a.start, kind: a.kind === 'inspect' ? 'inspect' : i >= prefix ? 'cond' : 'crew', text: `${crewText(s, a)}${i >= prefix ? ' (only if the check finds it open)' : ''}` });
+    });
+    if (plan.kind === 'policy' && plan.inspection) marks.push({ t: plan.inspection.end, kind: 'inspect', text: `Inspection result: is the ${passageName(s, plan.connection)} open?` });
+    for (const j of schedule.journeys) {
+      const cond = !observed && condGroups.includes(j.groupId);
+      marks.push({ t: j.arrival, kind: cond ? 'cond' : 'arrive', text: `${groupName(s.groups.find((g) => g.id === j.groupId)!)} reach ${placeName(s, j.shelter)}${cond ? ' (if the check finds it open)' : ''}` });
+    }
+    marks.sort((a, b) => a.t - b.t);
+  }
+  const upcoming = marks.find((m) => (started ? m.t > t : m.t >= 0));
+  const mode = run ? (run.done ? 'Simulation result' : 'Simulation') : plan ? 'Forecast' : 'No plan yet';
+  const canPlay = p.stage === 'run' || p.stage === 'restored';
+  const stack: Record<number, number> = {};
+  return (
+    <section className={`timebar${p.demo ? ' demo' : ''}`} aria-label="Time" ref={p.innerRef}>
+      <div className="tb-row">
+        <span className={`tb-mode ${run ? 'sim' : plan ? 'fc' : 'none'}`}>{mode}</span>
+        <span className="tb-minute" aria-live="polite"><span className="tb-lab">Minute</span> <b>{started ? t : 0}</b><span className="tb-of">/ {H}</span></span>
+        <button className={`tb-play${p.playing ? ' on' : ''}`} onClick={p.playing ? p.onPause : p.onPlay} disabled={!p.playing && !canPlay}
+          aria-label={p.playing ? 'Pause the simulation' : p.stage === 'restored' ? 'Resume the simulation' : 'Play the simulation'} title={p.playing ? 'Pause' : 'Play'}>{p.playing ? '⏸' : '▶'}</button>
+        {p.demo && <span className="tb-demo">
+          <button onClick={p.onStep} disabled={!run || run.done || run.paused}>Step 1 minute</button>
+          <button onClick={p.onReset} disabled={!run}>Reset run</button>
+          <label>Speed <select value={p.speed} onChange={(e) => p.setSpeed(Number(e.target.value))}><option value={1200}>slow</option><option value={700}>normal</option><option value={250}>fast</option></select></label>
+        </span>}
+        <span className="tb-next" title={upcoming ? `Minute ${upcoming.t}: ${upcoming.text}` : undefined}>{!plan ? 'Find a plan to see what happens when.' : run?.done ? `Simulation finished at minute ${H}.` : upcoming ? <><span className="tb-lab">Next</span> minute {upcoming.t} · {upcoming.text}</> : 'No further planned events.'}</span>
+      </div>
+      <div className="tb-track" aria-hidden="true">
+        <div className="tb-rail" />
+        {started && <div className="tb-fill" style={{ width: `${(t / H) * 100}%` }} />}
+        {Array.from({ length: H + 1 }, (_, i) => <span key={i} className={`tb-tick${i % 5 === 0 ? ' major' : ''}`} style={{ left: `${(i / H) * 100}%` }}>{i % 5 === 0 && <em>{i}</em>}</span>)}
+        {marks.map((m, i) => { const k = (stack[m.t] = (stack[m.t] ?? -1) + 1); return <span key={i} className={`tb-mark mk-${m.kind}${started && m.t <= t ? ' past' : ''}`} style={{ left: `${(m.t / H) * 100}%`, bottom: `${14 + k * 9}px` }} title={`Minute ${m.t}: ${m.text}`} />; })}
+        {started && <div className="tb-head" style={{ left: `${(t / H) * 100}%` }} />}
+      </div>
+      {marks.length > 0 && <ol className="sr-only" aria-label="Planned events">{marks.map((m, i) => <li key={i}>Minute {m.t}: {m.text}</li>)}</ol>}
+    </section>
+  );
+}
+
+function InfoCard({ sess, id, schedule, statusOf, t, onClose, onFocus }: { sess: Session; id: string; schedule: Schedule | null; statusOf: (g: string) => Plainstatus; t: number; onClose: () => void; onFocus: () => void }) {
+  const s = sess.scenario;
+  const run = sess.run?.main.state ?? null;
+  const plan = sess.plan && !isPlanStale(sess) ? sess.plan : null;
+  let kind = '', title = '';
+  const lines: ReactNode[] = [];
+  const hzAt = (lid: string, m: number) => Math.round(run ? liveNodeHazard(s, run, lid, m) : nodeHazard(baseWorld(s), lid, m));
+  if (id === 'crew') {
+    kind = 'Crew'; title = s.crew.name || 'Crew';
+    const now = schedule && run && run.processedThrough >= 0 ? schedule.crew.find((a) => a.start <= t && t < a.end) : undefined;
+    const next = schedule?.crew.find((a) => a.kind !== 'travel' && a.kind !== 'wait' && a.start >= (run && run.processedThrough >= 0 ? t : 0) && a !== now);
+    lines.push(<li key="at">At {placeName(s, run?.crew.at ?? s.crew.start)}{run?.crew.edge ? `, moving toward ${placeName(s, run.crew.edge.to)}` : ''}</li>);
+    if (now) lines.push(<li key="now"><b>Now:</b> {crewText(s, now)}</li>);
+    if (next) lines.push(<li key="next"><b>Next:</b> {crewText(s, next)} (minute {next.start})</li>);
+    if (!schedule) lines.push(<li key="np" className="muted">No plan yet — find one to see the crew's tasks.</li>);
+    lines.push(<li key="kit">{plural(s.crew.batteries, 'battery', 'batteries')} in the pack{s.crew.toolkit ? ' · tool kit' : ''}</li>);
+  } else if (id.startsWith('group:')) {
+    const g = s.groups.find((x) => `group:${x.id}` === id);
+    if (!g) return null;
+    kind = 'Residents'; title = groupName(g);
+    const st = statusOf(g.id);
+    const live = run?.groups[g.id];
+    const j = schedule?.journeys.find((x) => x.groupId === g.id);
+    lines.push(<li key="n">{plural(g.count, 'person', 'people')}{g.mobility === 'wheelchair' ? ' · ♿ wheelchair user, needs an escort' : ''}</li>);
+    lines.push(<li key="st"><span className={`rstatus st-${st}`}>{STATUS_WORDS[st].icon} {plan || run ? STATUS_WORDS[st].label : 'Not yet planned'}</span></li>);
+    lines.push(<li key="w">{live?.status === 'arrived' ? `In ${placeName(s, live.shelter!)} since minute ${live.arrivedAt}` : live?.edge ? `Moving toward ${placeName(s, live.edge.to)}` : `At ${placeName(s, live?.at ?? g.location)} · hazard ${hzAt(live?.at ?? g.location, t)} now (limit ${s.threshold})`}</li>);
+    if (j && live?.status !== 'arrived') lines.push(<li key="j">{st === 'waiting-inspection' ? 'If the check finds the route open: ' : ''}leave at minute {j.departure}{j.escorted ? ' with the crew' : ''}, reach {placeName(s, j.shelter)} at minute {j.arrival} via {j.legs.filter((l) => l.conn).map((l) => placeName(s, l.to)).join(' → ')}</li>);
+    if (!j && plan && schedule) { const why = whyWaiting(s, schedule, g.id, plan.search).sort((a, b) => BLOCKER_ORDER.indexOf(a.code) - BLOCKER_ORDER.indexOf(b.code)); if (why[0]) lines.push(<li key="why"><b>Why waiting:</b> {why[0].text}</li>); }
+    if (g.needsAccessibleEntry || g.needsAssistanceOnArrival) lines.push(<li key="needs" className="muted">Needs {[g.needsAccessibleEntry ? 'step-free entry' : '', g.needsAssistanceOnArrival ? 'assistance on arrival' : ''].filter(Boolean).join(' and ')} at the shelter</li>);
+  } else if (id.startsWith('place:')) {
+    const lid = id.slice(6);
+    const l = s.locations.find((x) => x.id === lid);
+    if (!l) return null;
+    title = placeName(s, lid);
+    const sh = s.shelters.find((x) => x.location === lid);
+    if (sh) {
+      kind = 'Shelter';
+      const occ = run ? run.shelters[lid].occupants : [];
+      const occN = occ.reduce((n, gid) => n + (s.groups.find((g) => g.id === gid)?.count ?? 0), 0);
+      const exp = schedule ? schedule.journeys.filter((j) => j.shelter === lid && !occ.includes(j.groupId)).reduce((n, j) => n + (s.groups.find((g) => g.id === j.groupId)?.count ?? 0), 0) : 0;
+      lines.push(<li key="o"><b>{occN} of {sh.places}</b> places taken{exp ? ` · ${exp} expected under the plan` : ''}{sh.placesConfirmed ? '' : ' · place count not confirmed'}</li>);
+      (Object.keys(sh.checklist) as (keyof ShelterChecklist)[]).forEach((k) => lines.push(<li key={k}>{sh.checklist[k] === 'present' ? '✓' : sh.checklist[k] === 'absent' ? '✕' : '?'} {CHECK_LABEL[k]}: {sh.checklist[k] === 'present' ? 'confirmed' : sh.checklist[k] === 'absent' ? 'not available' : 'not confirmed yet'}</li>));
+      lines.push(<li key="sw" className="muted">Steward: {sh.steward}</li>);
+    } else {
+      kind = 'Place';
+      const hazardous = l.hazard.initial > 0 || l.hazard.rate > 0;
+      if (hazardous) lines.push(<li key="h">⚠ Hazard {hzAt(lid, t)} now · {hzAt(lid, s.horizon)} by minute {s.horizon} (limit {s.threshold})</li>);
+      const here = s.groups.filter((g) => { const gl = run?.groups[g.id]; return gl ? gl.status !== 'arrived' && !gl.edge && gl.at === lid : g.location === lid; });
+      lines.push(<li key="who">{here.length ? `Here now: ${here.map((g) => `${groupName(g)} (${g.count})`).join(', ')}` : 'Nobody waiting here now'}</li>);
+      s.connections.filter((c) => c.a === lid || c.b === lid).forEach((c) => {
+        const other = c.a === lid ? c.b : c.a;
+        const st = c.state === 'unknown' ? (run?.knowledge.observations.find((o) => o.connection === c.id)?.state ?? 'not yet checked') : run ? ((run.openAt[c.id] ?? Infinity) <= t ? 'open' : 'blocked') : c.state;
+        lines.push(<li key={c.id} className="small">{passageName(s, c.id)} to {placeName(s, other)} — {c.minutes} min{c.kind === 'stairs' ? ', stairs' : ''}, {st}</li>);
+      });
+      s.actions.filter((a) => a.workLocation === lid && a.offered).forEach((a) => {
+        const sc = schedule?.crew.find((x) => x.actionId === a.id);
+        lines.push(<li key={a.id}><b>{a.label}</b>: {sc ? `planned minute ${sc.start}–${sc.end}` : 'not in this plan'} · {a.duration} min{a.batteries ? `, ${plural(a.batteries, 'battery', 'batteries')}` : ''}</li>);
+      });
+    }
+  }
+  return (
+    <section className="infocard" aria-label={`Details: ${title}`}>
+      <div className="ic-head">
+        <span className="ic-kind">{kind}</span>
+        <h3>{title}</h3>
+        <span className="ic-actions"><button className="ghost" onClick={onFocus}>Centre map</button><button className="ghost" onClick={onClose} aria-label="Close details">✕</button></span>
+      </div>
+      <ul className="ic-lines">{lines}</ul>
+    </section>
   );
 }
 
@@ -184,7 +446,7 @@ export default function App() {
 
 function Help({ onClose }: { onClose: () => void }) {
   return (
-    <section className="help" aria-label="How Breathline is used">
+    <div className="help">
       <ol>
         <li>The <b>coordinator</b> runs Breathline on the command-station laptop. Residents need no phones or accounts.</li>
         <li><b>Resident representatives</b> report where each group is and what help it needs, by radio or messenger.</li>
@@ -192,8 +454,10 @@ function Help({ onClose }: { onClose: () => void }) {
         <li>Breathline finds a plan. The coordinator confirms what it depends on, approves it, and relays the printed dispatch.</li>
       </ol>
       <p className="muted small">Restrictions are modeled as physical access limits; Breathline cannot override the Directorate. Radio coverage, power, accurate reports and compliance remain dependencies.</p>
-      <button onClick={onClose}>Got it</button>
-    </section>
+      <p className="muted small">Everything runs on this laptop with no accounts and no network. The planner never sees the simulator's hidden conditions.</p>
+      <p className="muted small">Moving around the map: drag or use the arrow keys, scroll or press + and − to zoom, 0 to reset. Select a place, a group or the crew for details.</p>
+      <button className="primary" onClick={onClose}>Got it</button>
+    </div>
   );
 }
 
@@ -213,32 +477,33 @@ function Situation({ sess, statusOf, view_ }: { sess: Session; statusOf: (g: str
     const waitIds = s.groups.filter((g) => ['unresolved', 'conditional', 'held'].includes(m.groups[g.id].status)).map((g) => g.id);
     const cond = countOf(s, waitIds.filter((g) => statusOf(g) === 'waiting-inspection'));
     const prot = countOf(s, waitIds.filter((g) => statusOf(g) === 'protected'));
-    counters.push({ label: done ? 'Reached shelter' : 'Reached shelter so far', value: `${arrived}`, tag: 'Simulation result', sub: done ? `of ${T} residents` : `${onWay} more on the way`, tone: 'good' });
-    counters.push({ label: 'Still waiting', value: `${countOf(s, waitIds)}`, tag: done ? 'Simulation result' : 'Now', sub: [cond ? `${cond} waiting for inspection` : '', prot ? `${prot} with temporary protection` : ''].filter(Boolean).join(' · ') || (countOf(s, waitIds) ? 'need a route' : 'nobody left waiting'), tone: countOf(s, waitIds) ? 'warn' : 'good' });
-    counters.push({ label: 'Without crew intervention', value: `${by(b, (x) => x === 'arrived')}`, tag: done ? 'Simulation result' : 'Running alongside', sub: 'same start, same rules', tone: '' });
+    counters.push({ label: done ? 'Reached shelter' : 'Reached shelter so far', value: `${arrived}`, tag: 'Simulation result', sub: done ? '' : onWay ? `${onWay} on the way` : '', tone: 'good' });
+    counters.push({ label: 'Still waiting', value: `${countOf(s, waitIds)}`, tag: done ? 'Simulation result' : 'Now', sub: [cond ? `${cond} waiting for inspection` : '', prot ? `${prot} with temporary protection` : ''].filter(Boolean).join(' · '), tone: countOf(s, waitIds) ? 'warn' : 'good' });
+    counters.push({ label: 'Without crew intervention', value: `${by(b, (x) => x === 'arrived')}`, tag: done ? 'Simulation result' : 'Running alongside', sub: '', tone: '' });
   } else if (plan && view_) {
     const sc = mainSchedule(plan);
     const base = sess.baseline?.schedule.objective.served ?? 0;
     if (plan.kind === 'policy' && plan.inspection) {
       const o = plan.objective;
-      counters.push({ label: 'Can reach shelter', value: `${o.min}–${o.nOpen}`, tag: 'Forecast', sub: `${o.min} whatever the check finds · ${o.nOpen - o.nBlocked} depend on it`, tone: 'good' });
-      counters.push({ label: 'Still needing help', value: `${T - o.nOpen}–${T - o.min}`, tag: 'Forecast', sub: `${o.nOpen - o.nBlocked} waiting for inspection`, tone: 'warn' });
+      counters.push({ label: 'Can reach shelter', value: `${o.min}–${o.nOpen}`, tag: 'Forecast', sub: `${o.nOpen - o.nBlocked} depend on the inspection`, tone: 'good' });
+      counters.push({ label: 'Still needing help', value: `${T - o.nOpen}–${T - o.min}`, tag: 'Forecast', sub: '', tone: 'warn' });
     } else {
       const prot = countOf(s, s.groups.filter((g) => statusOf(g.id) === 'protected').map((g) => g.id));
-      counters.push({ label: 'Can reach shelter', value: `${sc.objective.served}`, tag: 'Forecast', sub: `of ${T} residents`, tone: 'good' });
-      counters.push({ label: 'Still needing help', value: `${T - sc.objective.served}`, tag: 'Forecast', sub: prot ? `${prot} with temporary protection` : T - sc.objective.served ? 'no route in this plan' : 'everyone has a route', tone: T - sc.objective.served ? 'warn' : 'good' });
+      counters.push({ label: 'Can reach shelter', value: `${sc.objective.served}`, tag: 'Forecast', sub: '', tone: 'good' });
+      counters.push({ label: 'Still needing help', value: `${T - sc.objective.served}`, tag: 'Forecast', sub: prot ? `${prot} with temporary protection` : '', tone: T - sc.objective.served ? 'warn' : 'good' });
     }
-    counters.push({ label: 'Without crew intervention', value: `${base}`, tag: 'Forecast', sub: 'existing routes only', tone: '' });
+    counters.push({ label: 'Without crew intervention', value: `${base}`, tag: 'Forecast', sub: '', tone: '' });
   } else {
-    counters.push({ label: 'Residents', value: `${T}`, tag: 'Reported', sub: `in ${s.groups.length} groups`, tone: '' });
-    counters.push({ label: 'Shelter places', value: `${shelterPlaces}`, tag: 'Confirmed', sub: `in ${s.shelters.length} shelters`, tone: '' });
-    counters.push({ label: 'Crew', value: '1', tag: 'Available', sub: `${s.crew.batteries} batteries${s.crew.toolkit ? ', tool kit' : ''}`, tone: '' });
+    counters.push({ label: 'Residents', value: `${T}`, tag: 'Reported', sub: '', tone: '' });
+    counters.push({ label: 'Shelter places', value: `${shelterPlaces}`, tag: 'Confirmed', sub: '', tone: '' });
+    counters.push({ label: 'Batteries', value: `${s.crew.batteries}`, tag: 'Crew pack', sub: '', tone: '' });
   }
   return (
-    <section className="situation" aria-label="Situation">
+    <section className="situation panel" aria-label="Situation">
       <div className="sit-text">
+        <p className="eyebrow">Scenario {s.label}</p>
         <h2>{s.title}</h2>
-        <p>{s.summary} {T} residents in {s.groups.length} groups, {s.shelters.length} shelters with {shelterPlaces} places, one crew, a {s.horizon}-minute window.</p>
+        <details className="about"><summary>About this scenario</summary><p>{s.summary} {T} residents in {s.groups.length} groups, {s.shelters.length} shelters with {shelterPlaces} places, one crew, a {s.horizon}-minute window.</p></details>
         {sess.revision > 0 && <span className="chip-updated" title={`Input revision ${sess.revision}`}>Conditions updated {'·'} {plural(sess.revision, 'change')}</span>}
       </div>
       <div className="counters">
@@ -247,7 +512,7 @@ function Situation({ sess, statusOf, view_ }: { sess: Session; statusOf: (g: str
             <span className="ctr-tag">{c.tag}</span>
             <span className="n">{c.value}</span>
             <span className="ctr-label">{c.label}</span>
-            <span className="ctr-sub">{c.sub}</span>
+            {c.sub && <span className="ctr-sub">{c.sub}</span>}
           </div>
         ))}
       </div>
@@ -266,13 +531,13 @@ function Alerts({ sess, stale, run, onResume, onFind }: { sess: Session; stale: 
 
 // ------------------------------------------------------------------ left column
 
-function Roster({ sess, statusOf, schedule }: { sess: Session; statusOf: (g: string) => Plainstatus; schedule: Schedule | null }) {
+function Roster({ sess, statusOf, schedule, selected, onLocate }: { sess: Session; statusOf: (g: string) => Plainstatus; schedule: Schedule | null; selected: string | null; onLocate: (id: string) => void }) {
   const s = sess.scenario;
   const plan = sess.plan && !isPlanStale(sess) ? sess.plan : null;
   const run = sess.run?.main.state;
   return (
     <section className="card roster-card" aria-label="Residents">
-      <h3>Residents</h3>
+      <h3 className="disp">Residents</h3>
       <ul className="roster">
         {s.groups.map((g) => {
           const st = statusOf(g.id);
@@ -283,9 +548,9 @@ function Roster({ sess, statusOf, schedule }: { sess: Session; statusOf: (g: str
             : j && st !== 'needs-help' && st !== 'protected' ? `${st === 'waiting-inspection' ? 'If the check finds the route open: ' : ''}to ${placeName(s, j.shelter)}, leaving at minute ${j.departure}${g.escortRequired ? ' with the crew' : ''}`
             : `At ${placeName(s, live?.at ?? g.location)}`;
           return (
-            <li key={g.id} className={`rrow st-${st}`}>
-              <span className="rcount" aria-hidden="true">{g.count}</span>
-              <span className="rname"><b>{groupName(g)}</b> <span className="muted">{plural(g.count, 'person', 'people')}{g.mobility === 'wheelchair' ? ' · ♿ wheelchair user, needs escort' : ''}</span><br /><span className="rwhere">{where}</span></span>
+            <li key={g.id} className={`rrow st-${st}${selected === `group:${g.id}` ? ' sel' : ''}`}>
+              <button className="rcount" onClick={() => onLocate(`group:${g.id}`)} aria-label={`Show ${groupName(g)} on the map`} title="Show on the map">{g.count}</button>
+              <span className="rname" title={where}><b>{groupName(g)}</b>{g.mobility === 'wheelchair' && <span className="wc" title="Includes a wheelchair user who needs an escort" aria-label="includes a wheelchair user"> ♿</span>}</span>
               <span className={`rstatus st-${st}`}><span aria-hidden="true">{STATUS_WORDS[st].icon}</span> {plan || run ? STATUS_WORDS[st].label : 'Not yet planned'}</span>
             </li>
           );
@@ -299,43 +564,41 @@ function StillNeedHelp({ sess, stale }: { sess: Session; stale: boolean }) {
   const s = sess.scenario;
   const plan = sess.plan;
   if (!plan || stale) return null;
-  const sets: [string, Schedule, 'confirmed' | PassageState][] = plan.kind === 'schedule' || !plan.inspection ? [['', mainSchedule(plan), plan.kind === 'schedule' ? 'confirmed' : 'confirmed']] : [[`If the ${passageName(s, plan.connection)} is blocked: `, plan.branches.blocked, 'blocked'], [`If it is open: `, plan.branches.open, 'open']];
+  const sets: [string, Schedule, 'confirmed' | PassageState][] = plan.kind === 'schedule' || !plan.inspection ? [['', mainSchedule(plan), 'confirmed']] : [['If blocked: ', plan.branches.blocked, 'blocked'], ['If open: ', plan.branches.open, 'open']];
   const items = sets.flatMap(([pre, sc, key]) => sc.unresolved.map((gid) => ({ pre, sc, key, g: s.groups.find((x) => x.id === gid)! })));
+  if (!items.length) return null;
   const prot = protectionGains(s, plan.kind === 'policy' && plan.inspection ? plan.branches.blocked : mainSchedule(plan), sess.baseline?.schedule ?? null);
   return (
     <section className="card needs" aria-label="People still needing help">
-      <h3>People still needing help</h3>
-      {!items.length && <p className="ok">{'✓'} Everyone in this plan has a route to a suitable shelter.</p>}
+      <h3 className="disp">Still needing help</h3>
       {items.map(({ pre, sc, key, g }, i) => {
         const why = whyWaiting(s, sc, g.id, plan.search).sort((a, b) => BLOCKER_ORDER.indexOf(a.code) - BLOCKER_ORDER.indexOf(b.code));
         const rr = sess.requests?.[(plan.kind === 'schedule' || !plan.inspection ? 'confirmed' : key) as 'confirmed'];
         const reqs = rr?.requests.filter((q) => q.groupId === g.id) ?? [];
-        const none = rr?.none.find((n) => n.groupId === g.id);
         const p = prot.find((x) => x.g.id === g.id);
         return (
           <div key={i} className="need">
-            <div className="need-head"><b>{pre}{groupName(g)}</b> <span className="muted">{plural(g.count, 'person', 'people')}{g.mobility === 'wheelchair' ? ', including a wheelchair user' : ''}</span></div>
-            <ul className="why">{why.slice(0, 2).map((w, k) => <li key={k}>{w.text}</li>)}</ul>
-            {p && <p className="protect"><span aria-hidden="true">{'◐'}</span> {g.count} residents gain {p.gain} minutes each below the hazard limit. They still need a route.</p>}
-            {reqs.map((q, k) => (
-              <div key={k} className="request">
-                <div className="req-head">What would help {'·'} tested</div>
-                <div className="req-grid">
-                  <span>What</span><b>{q.resource === 'instructions' ? 'Departure instructions' : `${q.quantity} ${q.resource === 'places' ? (q.quantity === 1 ? 'shelter place' : 'shelter places') : (q.quantity === 1 ? 'battery' : 'batteries')}`}</b>
-                  <span>Where</span><b>{placeName(s, q.location)}</b>
-                  <span>By</span><b>{q.latest !== null ? `minute ${q.latest}` : q.windows.map(([a, b]) => `${a}–${b}`).join(', ')}{q.latest !== null && q.latest < s.horizon ? ` (minute ${q.latest + 1} is too late)` : ''}</b>
-                  <span>For</span><b>{q.benefits.gained.map((x) => groupName(s.groups.find((y) => y.id === x)!)).join(', ')} ({plural(q.benefits.residents, 'person', 'people')})</b>
-                </div>
-                <details><summary>Full request</summary><p>{plain(s, q.text)}</p><p className="muted small">{plain(s, q.binding)} {q.waitNote ? plain(s, q.waitNote) : ''}</p></details>
-              </div>
-            ))}
-            {!rr && <p className="muted small">Checking what could help…</p>}
-            {none && <p className="muted small">No tested change (more batteries, shelter places or earlier instructions) gives them a route.</p>}
-            {why.length > 2 && <details><summary>All reasons</summary><ul>{why.slice(2).map((w, k) => <li key={k}>{w.text}</li>)}</ul></details>}
+            <div className="need-head"><b>{pre}{groupName(g)}</b> <span className="muted">· {g.count}</span>{p && <span className="need-prot" title={`${g.count} residents gain ${p.gain} minutes each below the hazard limit. They still need a route.`}>◐ +{p.gain} min protected</span>}</div>
+            {why[0] && <p className="why1">{why[0].text}</p>}
+            {(reqs.length > 0 || why.length > 1) && (
+              <details className="need-more"><summary>{reqs.length ? 'What would help' : 'More reasons'}</summary>
+                {reqs.map((q, k) => (
+                  <div key={k} className="request">
+                    <div className="req-grid">
+                      <span>What</span><b>{q.resource === 'instructions' ? 'Departure instructions' : `${q.quantity} ${q.resource === 'places' ? (q.quantity === 1 ? 'shelter place' : 'shelter places') : (q.quantity === 1 ? 'battery' : 'batteries')}`}</b>
+                      <span>Where</span><b>{placeName(s, q.location)}</b>
+                      <span>By</span><b>{q.latest !== null ? `minute ${q.latest}` : q.windows.map(([a2, b2]) => `${a2}–${b2}`).join(', ')}{q.latest !== null && q.latest < s.horizon ? ` (minute ${q.latest + 1} is too late)` : ''}</b>
+                      <span>For</span><b>{q.benefits.gained.map((x) => groupName(s.groups.find((y) => y.id === x)!)).join(', ')} ({plural(q.benefits.residents, 'person', 'people')})</b>
+                    </div>
+                    <p className="muted small">{plain(s, q.text)} Tested hypothetical: it reserves nothing and never counts as an arrival.</p>
+                  </div>
+                ))}
+                {why.length > 1 && <ul className="why">{why.slice(1).map((w, k) => <li key={k}>{w.text}</li>)}</ul>}
+              </details>
+            )}
           </div>
         );
       })}
-      {items.length > 0 && <p className="muted small">Requests are tested hypotheticals to take to neighbouring crews or stewards. They reserve nothing and never count as arrivals.</p>}
     </section>
   );
 }
@@ -350,7 +613,7 @@ function PlanCard({ sess, stale, view_, run }: { sess: Session; stale: boolean; 
       <section className="card plan" aria-label="Recommended plan">
         <p className="eyebrow">Recommended plan</p>
         <h2 className="headline">{stale ? 'Conditions changed — find a new plan' : 'No plan yet'}</h2>
-        <p>Breathline checks every order of repairs, openings{s.knowledge.unknown ? ', inspections' : ''} and escorts the crew could do in {s.horizon} minutes, and compares the best one with doing nothing.</p>
+        <p className="muted">Compares every order of crew work in {s.horizon} minutes with doing nothing.</p>
       </section>
     );
   }
@@ -377,7 +640,7 @@ function PlanCard({ sess, stale, view_, run }: { sess: Session; stale: boolean; 
       <p className="benefit"><span className="tag-forecast">Forecast</span> {view_.forecast.replace(/^Forecast: /, '')}</p>
       {simLine && <p className="benefit"><span className="tag-result">Simulation result</span> {simLine.replace(/^Simulation result: /, '')}</p>}
       {view_.protection.map((p) => <p key={p.group} className="protect"><span aria-hidden="true">{'◐'}</span> {p.text}</p>)}
-      {view_.notes.length > 0 && <ul className="notes">{view_.notes.slice(0, 3).map((n, i) => <li key={i} className={`note-${n.kind}`}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
+      {view_.notes.length > 0 && <ul className="notes">{view_.notes.slice(0, 1).map((n, i) => <li key={i} className={`note-${n.kind}`} title={n.text}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
       <PlanDetails sess={sess} view_={view_} />
     </section>
   );
@@ -390,6 +653,7 @@ function PlanDetails({ sess, view_ }: { sess: Session; view_: ReturnType<typeof 
   return (
     <details className="plan-details">
       <summary>Plan details</summary>
+      {view_.notes.length > 1 && <ul className="notes">{view_.notes.slice(1).map((n, i) => <li key={i} className={`note-${n.kind}`}><span className="note-tag">{n.kind === 'uncertain' ? 'Uncertain' : n.kind === 'depends' ? 'Depends on' : 'Blocker'}</span> {n.text.replace(/^Depends on /, '')}</li>)}</ul>}
       {plan.kind === 'policy' && <p className="muted small">{explainPolicy(s, plan).summary}</p>}
       {scheds.map(([pre, sc]) => {
         const ex = explainSchedule(s, sc, sess.baseline?.schedule);
@@ -425,20 +689,19 @@ function Confirmations({ sess, edit }: { sess: Session; edit: (t: string, f: (x:
   const items = confirmationsFor(s, sess.plan!);
   const missing = items.filter((x) => !x.confirmed);
   const done = items.filter((x) => x.confirmed);
-  if (sess.approved) return <section className="card conf ok-card" aria-label="Confirmations"><p><span aria-hidden="true">{'✓'}</span> Approved with {plural(items.length, 'confirmation')}. Places and batteries are reserved.</p></section>;
+  if (sess.approved) return <section className="card conf ok-card" aria-label="Confirmations"><p><span aria-hidden="true">{'✓'}</span> Approved · places and batteries reserved</p></section>;
   return (
     <section className="card conf" aria-label="Required confirmations">
-      <h3>{missing.length ? `Confirm before approving (${missing.length})` : `All ${items.length} confirmations received`}</h3>
+      {missing.length > 0 && <h3 className="disp">Confirm first ({missing.length})</h3>}
       {missing.length > 0 && (
         <ul className="todo">
           {missing.map((c, i) => {
             const ins = confirmationInstruction(s, c);
-            return <li key={i}><span>{ins.text} <span className="muted small">({c.source})</span></span><button onClick={() => edit(ins.editText, ins.apply)}>Mark confirmed</button></li>;
+            return <li key={i}><span>{ins.text} <span className="muted small">({c.source})</span></span><button onClick={() => edit(ins.editText, ins.apply)} title="Records the confirmation; you will then find the plan again">Mark confirmed</button></li>;
           })}
         </ul>
       )}
-      {missing.length > 0 && <p className="muted small">Marking an item confirmed updates the conditions, so you will be asked to find the plan again. Residents stay in the plan meanwhile.</p>}
-      <details><summary>{done.length} confirmed</summary><ul className="small doneList">{done.map((c, i) => <li key={i}>{'✓'} {confirmationInstruction(s, c).done} <span className="muted">— {c.source}</span></li>)}</ul></details>
+      <details className="conf-done"><summary>{missing.length ? `${done.length} confirmed` : `✓ All ${items.length} confirmations received`}</summary><ul className="small doneList">{done.map((c, i) => <li key={i}>{'✓'} {confirmationInstruction(s, c).done} <span className="muted">— {c.source}</span></li>)}</ul></details>
       {sess.approvalErrors.length > 0 && <ul className="errors">{sess.approvalErrors.slice(0, 4).map((e, i) => <li key={i}>{plain(s, e)}</li>)}</ul>}
     </section>
   );
@@ -452,12 +715,10 @@ function NextAction({ stage, sess, busy, t, onFind, onApprove, onRun, onPause, o
   const steps = ['Find a plan', 'Confirm and approve', 'Run simulation', 'View results'];
   const idx = stage === 'find' ? 0 : stage === 'approve' ? 1 : stage === 'done' ? 3 : 2;
   const started = !!run && run.processedThrough >= 0;
-  const crewText = (a: Schedule['crew'][number] | undefined) => !a ? null : a.kind === 'work' || a.kind === 'inspect' ? s.actions.find((x) => x.id === a.actionId)?.label : a.kind === 'escort' ? `Escort ${groupName(s.groups.find((g) => g.id === a.groupId)!)} to ${placeName(s, a.to)}` : a.kind === 'travel' ? `Travel to ${placeName(s, a.to)}` : `Wait at ${placeName(s, a.from)}`;
   const now = sc && started ? sc.crew.find((a) => a.start <= t && t < a.end) : undefined;
-  const next = sc ? sc.crew.find((a) => a.kind !== 'travel' && a.kind !== 'wait' && a.start >= (started ? t : 0) && a !== now) : undefined;
   return (
-    <section className="next timebar" aria-label="Next action">
-      <ol className="stages" aria-label="Progress">{steps.map((x, i) => <li key={x} className={i < idx ? 'past' : i === idx ? 'now' : ''} aria-current={i === idx ? 'step' : undefined}>{x}</li>)}</ol>
+    <section className="card next" aria-label="Next action">
+      <ol className="stages" aria-label="Progress">{steps.map((x, i) => <li key={x} className={i < idx ? 'past' : i === idx ? 'now' : ''} aria-current={i === idx ? 'step' : undefined} title={x}><span className="st-label">{x}</span></li>)}</ol>
       {stage === 'find' && <button className="cta" onClick={onFind} disabled={!!busy}>{busy ?? 'Find a plan'}</button>}
       {stage === 'approve' && <>
         <button className="cta" onClick={onApprove} disabled={missing > 0}>Approve plan</button>
@@ -477,11 +738,9 @@ function NextAction({ stage, sess, busy, t, onFind, onApprove, onRun, onPause, o
         <button className="cta" onClick={onResults}>View results</button>
         <button className="link" onClick={onReset}>Run again from the start</button>
       </>}
-      {sess.run && (
+      {sess.run && stage !== 'done' && (
         <div className="progress">
-          <div className="minute">Minute <b>{started ? t : 0}</b> of {s.horizon}</div>
-          <div className="ticks" aria-hidden="true">{Array.from({ length: s.horizon + 1 }, (_, i) => <span key={i} className={started && i <= t ? 'on' : ''} />)}</div>
-          {stage !== 'done' && <div className="crew-now"><b>Crew now:</b> {now ? crewText(now) : run?.done ? 'finished' : started ? 'idle' : 'at the start'}{next && <><br /><b>Next:</b> {crewText(next)} (minute {next.start})</>}</div>}
+          <div className="crew-now"><span className="cn-lab">Crew now</span> {now ? crewText(s, now) : run?.done ? 'finished' : started ? 'idle' : 'at the start'}</div>
         </div>
       )}
     </section>
@@ -629,40 +888,37 @@ function Reports({ sess, edit }: { sess: Session; edit: (t: string, f: (s: Scena
 
 // ------------------------------------------------------------------ demo & testing view
 
-function DemoView(p: {
-  sess: Session; setSess: (f: (x: Session) => Session) => void; switchScenario: (id: string) => void; mapEl: JSX.Element; t: number; playing: boolean; setPlaying: (b: boolean) => void;
-  speed: number; setSpeed: (n: number) => void; stress: { rows: StressRow[]; recomputed: Record<string, string> } | null; setStress: (x: { rows: StressRow[]; recomputed: Record<string, string> } | null) => void;
-  onStep: () => void; onReset: () => void; onResetSession: () => void;
-}) {
+function DemoLeft(p: { sess: Session; setSess: (f: (x: Session) => Session) => void; switchScenario: (id: string) => void; onResetSession: () => void }) {
   const { sess } = p;
+  const run = sess.run?.main.state;
+  return (
+    <section className="demo-left panel" aria-label="Demo and testing: scenario and hidden conditions">
+      <p className="demo-intro">For demos and review only — not needed to run an operation.</p>
+      <div className="block"><h3 className="disp">Scenario</h3>
+        <div className="scen-list">{Object.keys(SCENARIO_BUILDERS).map((id) => <button key={id} className={id === sess.scenarioId ? 'on' : ''} onClick={() => p.switchScenario(id)}><b>{id}</b> {getScenario(id).title}</button>)}</div>
+        <button className="ghost" onClick={p.onResetSession}>Reset this session</button>
+      </div>
+      <Controller sess={sess} setSess={p.setSess} />
+      <div className="block"><h3 className="disp">Playback</h3>
+        <p className="muted small">{run ? 'Step, reset and speed are in the time bar.' : 'Approve a plan in Operations first.'}</p>
+      </div>
+    </section>
+  );
+}
+
+function DemoRight({ sess, stress, setStress }: { sess: Session; stress: { rows: StressRow[]; recomputed: Record<string, string> } | null; setStress: (x: { rows: StressRow[]; recomputed: Record<string, string> } | null) => void }) {
   const s = sess.scenario;
   const run = sess.run?.main.state;
   return (
-    <main className="demo">
-      <p className="demo-intro">Tools for demonstrations, testing and review. Nothing here is needed to run an operation. The hidden simulator conditions below are never passed to the planner.</p>
-      <section className="panel open"><h3>Scenario</h3>
-        <div className="scen-list">{Object.keys(SCENARIO_BUILDERS).map((id) => <button key={id} className={id === sess.scenarioId ? 'on' : ''} onClick={() => p.switchScenario(id)}><b>{id}</b> {getScenario(id).title}</button>)}</div>
-        <button className="ghost" onClick={p.onResetSession}>Reset this session</button>
-      </section>
-      <Controller sess={sess} setSess={p.setSess} />
-      <section className="panel open"><h3>Playback</h3>
-        <div className="row">
-          <span>Minute <b>{run && run.processedThrough >= 0 ? p.t : 0}</b> of {s.horizon}</span>
-          <button onClick={() => p.setPlaying(!p.playing)} disabled={!run || run.done || (run.paused && !run.pause?.reason.startsWith('Restored'))}>{p.playing ? 'Pause' : 'Play'}</button>
-          <button onClick={p.onStep} disabled={!run || run.done || run.paused}>Step 1 minute</button>
-          <button onClick={p.onReset} disabled={!run}>Reset run</button>
-          <label>Speed <select value={p.speed} onChange={(e) => p.setSpeed(Number(e.target.value))}><option value={1200}>slow</option><option value={700}>normal</option><option value={250}>fast</option></select></label>
-        </div>
-        {!run && <p className="muted small">Approve a plan in Operations to enable playback.</p>}
-        {p.mapEl}
-      </section>
-      <Stress sess={sess} stress={p.stress} setStress={p.setStress} />
+    <section className="demo-right panel" aria-label="Demo and testing: checks and records">
+      <h3 className="disp">Checks <span className="hl">&amp;</span> records</h3>
+      <Stress sess={sess} stress={stress} setStress={setStress} />
       <Diagnostics sess={sess} />
       <Evidence sess={sess} />
       <Events run={run ?? null} />
       <Exposure sess={sess} />
       <details className="panel"><summary>Assumptions and limits</summary><ul>{ASSUMPTIONS.map((a) => <li key={a}>{a}</li>)}</ul><p className="muted small">Not modeled: medical outcomes, shelter habitability beyond minute {s.horizon}, adversarial reports, changing hidden conditions, unreliable inspection, actual radio delivery, sensor calibration, control over Directorate infrastructure.</p></details>
-    </main>
+    </section>
   );
 }
 
@@ -670,7 +926,7 @@ function Controller({ sess, setSess }: { sess: Session; setSess: (f: (x: Session
   const s = sess.scenario;
   const started = !!sess.run && sess.run.main.state.processedThrough >= 0;
   return (
-    <section className="panel open"><h3>Hidden simulator conditions (never passed to the planner)</h3>
+    <div className="block"><h3 className="disp">Hidden conditions</h3><p className="muted small">Never passed to the planner.</p>
       {!s.knowledge.unknown && !s.deliveries.some((d) => d.confirmed) && <p className="muted small">This scenario has no hidden passage state or expected deliveries.</p>}
       {s.knowledge.unknown && (
         <label className="row">Actual state of the {passageName(s, s.knowledge.unknown.connection)}:
@@ -687,7 +943,7 @@ function Controller({ sess, setSess }: { sess: Session; setSess: (f: (x: Session
         </label>
       ))}
       {started && <p className="muted small">Locked while a simulation is running.</p>}
-    </section>
+    </div>
   );
 }
 

@@ -6,6 +6,7 @@ Status: **observed by an automated headless-browser script, not by a person.** `
 
 - A: forecast 24, then a simulation result of 24 against 12 without crew intervention, with **Pause** dominant during playback
 - no location codes on the main screen
+- the map scene: the time bar reads "Simulation result" at minute 20 with planned-event markers; selecting the crew opens a details card that uses place names only and closes with Escape; the zoom button, arrow-key pan and the 0 key change and restore the view; the routes layer toggle hides and restores the route lines
 - a reload mid-run restores paused at the last saved minute and resumes to 24 with 0 invariant violations
 - editing during a run warns beforehand, and the notice says it starts a new run and does not replan
 - a changed condition makes the old plan unapprovable, and finding a plan again gives 16
@@ -22,7 +23,7 @@ Status: **not run.** This test needs two people who did not build the system: on
 
 Protocol, so it can be run as written:
 
-1. Print the dispatch for A (`Print dispatch` after approving A) and for D (policy, both branches).
+1. Print the dispatch for A (**More → Print dispatch** after approving A) and for D (policy, both branches).
 2. Teammate 1 gets the crew sheet; teammate 2 gets the resident instructions. No verbal guidance from the builder.
 3. The facilitator steps the clock one minute at a time and executes only stated actions.
 4. Record: confusing wording; missed dependencies (Group A setting out before the crew arrives; the crew leaving A before admission; the crew crossing the bypass without the inspection result; starting work before a delivery arrives); skipped acknowledgements; whether each journey completes.

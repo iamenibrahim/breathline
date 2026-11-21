@@ -1,8 +1,8 @@
 {
  "command": "npm run evidence",
- "buildId": "breathline-1.0.0+src.4a25d234ff57da05",
- "generatedAt": "2026-11-21T02:47:29.761Z",
- "elapsedMs": 50969,
+ "buildId": "breathline-1.0.0+src.460330e68b373b1f",
+ "generatedAt": "2026-11-21T04:11:06.280Z",
+ "elapsedMs": 60222,
  "env": {
   "node": "v22.23.5",
   "platform": "linux 6.18.44-fc-v726",
@@ -27,8 +27,8 @@
    "required": true,
    "status": "passed",
    "expected": "all tests pass",
-   "observed": "16/16 tests passed in 2 files",
-   "elapsedMs": 6549
+   "observed": "21/21 tests passed in 3 files",
+   "elapsedMs": 8284
   },
   {
    "id": "ref-A",
@@ -43,7 +43,7 @@
    "status": "passed",
    "expected": "24 assigned (fan > gate > escort), baseline 12; executed 24 vs 12",
    "observed": "assigned 24 (repair-fan-3 > open-gate-b > escort-A); baseline 12; executed arrivals 24 vs 12; +12",
-   "elapsedMs": 37,
+   "elapsedMs": 36,
    "inputHash": "872501e9f46075a8",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -59,7 +59,7 @@
    "status": "passed",
    "expected": "12 / 20 / 16 / 24",
    "observed": "12 (C) / 20 (BC) / 16 (AC) / 24 (ABC)",
-   "elapsedMs": 27,
+   "elapsedMs": 39,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -74,7 +74,7 @@
    "status": "passed",
    "expected": "selected gate > escort > fan = 24; fan-first best 20; no intervention 12; gate+escort 16",
    "observed": "selected 24 (open-gate-b > escort-A > repair-fan-3); fan-first best 20; none 12; gate+escort 16",
-   "elapsedMs": 27,
+   "elapsedMs": 28,
    "inputHash": "b4331e630766b360",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -90,7 +90,7 @@
    "status": "passed",
    "expected": "B fails at +1 minute (J3 = 100 at minute 18)",
    "observed": "B fails: group B: reaches J3 at 18 with hazard 100 (must be < 100)",
-   "elapsedMs": 11
+   "elapsedMs": 23
   },
   {
    "id": "ref-C",
@@ -120,7 +120,7 @@
    "status": "passed",
    "expected": "24/20; inspection included; confirmed routes 20/20",
    "observed": "24/20; inspection 9–10; confirmed routes 20/20;",
-   "elapsedMs": 59,
+   "elapsedMs": 72,
    "inputHash": "74d0fd2d2af53f48",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -137,7 +137,7 @@
    "status": "passed",
    "expected": "24/20; inspection included; confirmed routes 20/20",
    "observed": "24/20; inspection 9–16; confirmed routes 20/20; open-branch A arrival 20",
-   "elapsedMs": 21,
+   "elapsedMs": 26,
    "inputHash": "34fcce97986065d6",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -154,7 +154,7 @@
    "status": "passed",
    "expected": "20/20; inspection omitted; confirmed routes 20/20",
    "observed": "20/20; inspection omitted; confirmed routes 20/20;",
-   "elapsedMs": 14,
+   "elapsedMs": 19,
    "inputHash": "7f3d3b9440884221",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -171,7 +171,7 @@
    "status": "passed",
    "expected": "policy open 24 / blocked 20 arrivals; confirmed-route 20 / 20",
    "observed": "policy 24/20; confirmed-route 20/20",
-   "elapsedMs": 31
+   "elapsedMs": 36
   },
   {
    "id": "ref-D-truth-invariance",
@@ -185,7 +185,7 @@
    "status": "passed",
    "expected": "identical policy JSON for open and blocked truths",
    "observed": "identical (the planner signature has no truth parameter; truth is only passed to the simulator)",
-   "elapsedMs": 68
+   "elapsedMs": 62
   },
   {
    "id": "ref-label-invariance",
@@ -198,7 +198,7 @@
    "status": "passed",
    "expected": "identical objective after relabelling",
    "observed": "identical objectives (D and A)",
-   "elapsedMs": 41
+   "elapsedMs": 47
   },
   {
    "id": "ref-E",
@@ -259,7 +259,7 @@
    "status": "passed",
    "expected": "20 through B and C",
    "observed": "20 (BC; repair-fan-3). A: No open step-free route in this plan: RA-G blocked (Open Gate B would open it; not in this plan); RA-X3 blocked; no available action opens it. Needs a continuous escort; in this plan the crew is committed to other work. Lower Refuge has 11 places; B (8) is assigned there; A needs 4.",
-   "elapsedMs": 13,
+   "elapsedMs": 7,
    "inputHash": "dc798e08970e53af",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -276,7 +276,7 @@
    "status": "passed",
    "expected": "24 infeasible; B arrival would be 21",
    "observed": "16 (AC; open-gate-b > escort-A). B: Instructions are available at minute 2; the shortest journey takes 19 minutes, so arrival would be minute 21, after the 20-minute horizon.",
-   "elapsedMs": 3,
+   "elapsedMs": 4,
    "inputHash": "1a807a7529f9faea",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -293,7 +293,7 @@
    "status": "passed",
    "expected": "20 through B and C; unsuitable shelter",
    "observed": "20 (BC; repair-fan-3). A: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival.",
-   "elapsedMs": 7,
+   "elapsedMs": 3,
    "inputHash": "baf2d9178e3de604",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -310,7 +310,7 @@
    "status": "passed",
    "expected": "fan kept; 20; A protected 14",
    "observed": "20 (BC; repair-fan-3; A protected 14). A: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
-   "elapsedMs": 2,
+   "elapsedMs": 3,
    "inputHash": "74ba21b1176325a0",
    "searchStatus": "exhaustive",
    "validator": "valid"
@@ -327,7 +327,7 @@
    "status": "passed",
    "expected": "names the J3 hazard 68 vs 100 for B and the escort for A",
    "observed": "24 of 24 residents have a feasible shelter journey (+12 versus no intervention). Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refuge (arriving at minute 13).",
-   "elapsedMs": 5
+   "elapsedMs": 4
   },
   {
    "id": "benefit-A-E",
@@ -340,7 +340,7 @@
    "status": "passed",
    "expected": "A: A and B newly arrive, C unchanged; E: A +6 min/person, +24 person-minutes, not evacuated",
    "observed": "A: Accessible assistance: Gate B opened and a continuous escort to Lower Refuge [Unresolved — location reached the threshold → Arrived (minute 13)] | B: A traversable corridor: Repair Fan 3 keeps Vent corridor below threshold at arrival [Unresolved → Arrived (minute 10)] | C: Retained shelter access: its existing route and Upper Refuge places stay reserved (outcome unchanged — not credited to the intervention) [Arrived (minute 3) → Arrived (minute 3)] | A: Temporary ventilation at Deep Homes A — not evacuated; below threshold until the horizon at minute 20 instead of reaching it at minute 14 (+6 minutes per person, 24 person-minutes) [Unresolved — location reached the threshold → Unresolved] | B: A traversable corridor: Repair Fan 3 keeps Vent corridor below threshold at arrival [Unresolved → Arrived (minute 10)] | C: Retained shelter access: its existing route and Upper Refuge places stay reserved (outcome unchanged — not credited to the intervention) [Arrived (minute 3) → Arrived (minute 3)]",
-   "elapsedMs": 11
+   "elapsedMs": 21
   },
   {
    "id": "validator-all",
@@ -353,7 +353,7 @@
    "status": "passed",
    "expected": "all valid",
    "observed": "A selected: valid; A baseline: valid; B selected: valid; B baseline: valid; C selected: valid; C baseline: valid; E selected: valid; E baseline: valid; D1 policy: valid; D7 policy: valid; D8 policy: valid",
-   "elapsedMs": 64
+   "elapsedMs": 60
   },
   {
    "id": "f-threshold",
@@ -393,7 +393,7 @@
    "status": "passed",
    "expected": "A in A: waiting 0–9 = 335; B 0; unresolved A over horizon = 1370",
    "observed": "A exposure 335 (waiting 335, travel 0); unresolved A over 20 minutes 1370",
-   "elapsedMs": 5
+   "elapsedMs": 4
   },
   {
    "id": "f-instructions",
@@ -419,7 +419,7 @@
    "status": "passed",
    "expected": "validator rejects (…not step-free…)",
    "observed": "crew escort A: RA-ST is not step-free",
-   "elapsedMs": 4
+   "elapsedMs": 2
   },
   {
    "id": "f-escort",
@@ -445,7 +445,7 @@
    "status": "passed",
    "expected": "validator rejects (…overlaps…)",
    "observed": "crew travel: overlaps the previous activity (starts 4, previous ends 5)",
-   "elapsedMs": 5
+   "elapsedMs": 3
   },
   {
    "id": "f-toolkit",
@@ -497,7 +497,7 @@
    "status": "passed",
    "expected": "validator rejects (…places needed…)",
    "observed": "L: 12 places needed at minute 13, 11 available",
-   "elapsedMs": 4
+   "elapsedMs": 2
   },
   {
    "id": "f-threshold-arrival",
@@ -510,7 +510,7 @@
    "status": "passed",
    "expected": "validator rejects (…hazard…)",
    "observed": "group B: reaches J3 at 9 with hazard 100 (must be < 100)",
-   "elapsedMs": 4
+   "elapsedMs": 3
   },
   {
    "id": "f-corridor",
@@ -523,7 +523,7 @@
    "status": "passed",
    "expected": "overlap blocked; adjacent allowed; opposite shares the pool; planner staggers groups",
    "observed": "overlap blocked true; adjacent allowed true; same-direction staggered [1,3) [3,5); opposite M→N [1,3) N→M [3,5); forced overlap rejected: corridor M-N carries 6 residents at minute 1 (capacity 3)",
-   "elapsedMs": 7
+   "elapsedMs": 4
   },
   {
    "id": "f-reservation-conversion",
@@ -536,7 +536,7 @@
    "status": "passed",
    "expected": "occupants equal reservations at the horizon, no duplicates",
    "observed": "L: occupants B,A / reservations A,B; U: occupants C / reservations C",
-   "elapsedMs": 10
+   "elapsedMs": 13
   },
   {
    "id": "f-suitability",
@@ -550,7 +550,7 @@
    "status": "passed",
    "expected": "A-only exclusion; all-group exclusion; approval blocked",
    "observed": "assistance absent → BC; ventilation absent → C; accessible entry unconfirmed → planned 24, approval: unconfirmed essential input: Lower Refuge: accessible entry (Lower Refuge steward)",
-   "elapsedMs": 16
+   "elapsedMs": 15
   },
   {
    "id": "f-joint-alt-shelter",
@@ -564,7 +564,7 @@
    "status": "passed",
    "expected": "production 4 = oracle 4; greedy 2",
    "observed": "production {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; oracle {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; flexible group → S2; greedy 2",
-   "elapsedMs": 5,
+   "elapsedMs": 7,
    "validator": "valid"
   },
   {
@@ -579,7 +579,7 @@
    "status": "passed",
    "expected": "complete policy objective identical at both durations",
    "observed": "d=1: agree 5/3 inspection used (2398 inspection policies enumerated); d=3: agree 3/3 inspection omitted (199 inspection policies enumerated)",
-   "elapsedMs": 356
+   "elapsedMs": 361
   },
   {
    "id": "generated-batch",
@@ -593,7 +593,7 @@
    "status": "passed",
    "expected": "every case agrees on every objective component and validates; both inspection kinds present (>= 8 each)",
    "observed": "81 cases (40 confirmed-state, 41 two-state); agree 81; valid 81; inspection-helps 8; inspection-wastes-time 30; failures none",
-   "elapsedMs": 2584,
+   "elapsedMs": 3194,
    "limitations": "Agreement establishes correctness for these generated instances only. Generator bounds: corridor/location capacities not varied and no deliveries (oracle preconditions)."
   },
   {
@@ -607,7 +607,7 @@
    "status": "passed",
    "expected": "plan computed at revision 0 cannot be approved at revision 1",
    "observed": "Stale plan: computed for input revision 0, current revision is 1. Recompute before approval. | same revision approves: true",
-   "elapsedMs": 3
+   "elapsedMs": 6
   },
   {
    "id": "neg-duplicate",
@@ -620,7 +620,7 @@
    "status": "passed",
    "expected": "identical state after re-processing minute 5 (fan completion) and 13 (admission)",
    "observed": "minute 5 identical; minute 13 identical",
-   "elapsedMs": 8
+   "elapsedMs": 14
   },
   {
    "id": "neg-corrupt",
@@ -633,7 +633,7 @@
    "status": "passed",
    "expected": "paused; invariant \"valid arrivals\"",
    "observed": "paused at 5: Invariant violated: valid arrivals — B jumped from J2 to L, which are not adjacent (event corrupt:05:05)",
-   "elapsedMs": 7
+   "elapsedMs": 11
   },
   {
    "id": "neg-unknown-edge",
@@ -647,7 +647,7 @@
    "status": "passed",
    "expected": "validator error; simulator pauses",
    "observed": "validator: [open] uses the unknown connection without inspection; simulator: Invariant violated: shelter capacity — Lower Refuge: reservations need 16 places at minute 17, profile has 12",
-   "elapsedMs": 25
+   "elapsedMs": 40
   },
   {
    "id": "neg-confirm-change",
@@ -661,7 +661,7 @@
    "status": "passed",
    "expected": "stale; recompute 20; A lost; request: 1 place at Lower Refuge by 20",
    "observed": "stale true; recompute 20 (BC); lost A; request: Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting.",
-   "elapsedMs": 188
+   "elapsedMs": 182
   },
   {
    "id": "neg-unconfirmed",
@@ -675,7 +675,7 @@
    "status": "passed",
    "expected": "approval blocked with reasons; residents not dropped",
    "observed": "planned 24; unconfirmed essential input: Upper Refuge: 12 places (Upper Refuge steward) | unconfirmed essential input: Departure instructions for Pump Quarter B available by minute 0 (resident representative)",
-   "elapsedMs": 4
+   "elapsedMs": 3
   },
   {
    "id": "int-A-5",
@@ -689,7 +689,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (battery consumption exactly once)",
    "observed": "before minute 5: ok; after minute 5: ok; consumed 4; arrivals 24",
-   "elapsedMs": 9
+   "elapsedMs": 20
   },
   {
    "id": "int-A-3-10-13",
@@ -703,7 +703,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (shelter admission exactly once)",
    "observed": "before minute 3: ok; after minute 3: ok; before minute 10: ok; after minute 10: ok; before minute 13: ok; after minute 13: ok; consumed 4; arrivals 24",
-   "elapsedMs": 15
+   "elapsedMs": 39
   },
   {
    "id": "int-D-5-10-14-17",
@@ -717,7 +717,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)",
    "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 14: ok; after minute 14: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 24",
-   "elapsedMs": 33
+   "elapsedMs": 53
   },
   {
    "id": "int-D-5-10-17",
@@ -731,7 +731,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)",
    "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 20",
-   "elapsedMs": 72
+   "elapsedMs": 60
   },
   {
    "id": "int-D-14-16-20",
@@ -745,7 +745,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (delivery and consumption exactly once)",
    "observed": "before minute 14: ok; after minute 14: ok; before minute 16: ok; after minute 16: ok; before minute 20: ok; after minute 20: ok; consumed 8; arrivals 24",
-   "elapsedMs": 46
+   "elapsedMs": 90
   },
   {
    "id": "int-E-5-13",
@@ -773,7 +773,7 @@
    "status": "passed",
    "expected": "resumed runs identical to the uninterrupted run (place delivery and admission exactly once)",
    "observed": "before minute 19: ok; after minute 19: ok; before minute 20: ok; after minute 20: ok; consumed 4; arrivals 24",
-   "elapsedMs": 27
+   "elapsedMs": 29
   },
   {
    "id": "export-A response",
@@ -786,7 +786,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 5,
+   "elapsedMs": 7,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -800,7 +800,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 4,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -814,7 +814,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 4,
    "inputHash": "b4331e630766b360"
   },
   {
@@ -828,7 +828,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 2,
+   "elapsedMs": 4,
    "inputHash": "b4331e630766b360"
   },
   {
@@ -842,7 +842,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 6,
+   "elapsedMs": 4,
    "inputHash": "a32c586a6fa88537"
   },
   {
@@ -856,7 +856,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 2,
+   "elapsedMs": 3,
    "inputHash": "a32c586a6fa88537"
   },
   {
@@ -870,7 +870,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 5,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -884,7 +884,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 2,
+   "elapsedMs": 4,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -898,7 +898,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 7,
+   "elapsedMs": 4,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -912,7 +912,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 5,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -926,7 +926,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 6,
+   "elapsedMs": 7,
    "inputHash": "7f3d3b9440884221"
   },
   {
@@ -940,7 +940,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 2,
+   "elapsedMs": 8,
    "inputHash": "7f3d3b9440884221"
   },
   {
@@ -954,7 +954,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 6,
+   "elapsedMs": 3,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -968,7 +968,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 7,
+   "elapsedMs": 8,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -982,7 +982,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 5,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -996,7 +996,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 2,
+   "elapsedMs": 3,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -1010,7 +1010,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 1,
+   "elapsedMs": 8,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -1024,7 +1024,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 3,
+   "elapsedMs": 5,
    "inputHash": "af393ff4a2fe6607"
   },
   {
@@ -1038,7 +1038,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 11,
+   "elapsedMs": 9,
    "inputHash": "e808f29d312bb37e"
   },
   {
@@ -1052,7 +1052,7 @@
    "status": "passed",
    "expected": "input hash, events, arrivals and consumption reconcile",
    "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
-   "elapsedMs": 5,
+   "elapsedMs": 10,
    "inputHash": "e808f29d312bb37e"
   },
   {
@@ -1066,7 +1066,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
-   "elapsedMs": 43,
+   "elapsedMs": 56,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -1080,7 +1080,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
-   "elapsedMs": 14,
+   "elapsedMs": 34,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -1094,7 +1094,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
-   "elapsedMs": 25,
+   "elapsedMs": 34,
    "inputHash": "b4331e630766b360"
   },
   {
@@ -1108,7 +1108,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
-   "elapsedMs": 9,
+   "elapsedMs": 19,
    "inputHash": "b4331e630766b360"
   },
   {
@@ -1122,7 +1122,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 0)",
-   "elapsedMs": 17,
+   "elapsedMs": 31,
    "inputHash": "a32c586a6fa88537"
   },
   {
@@ -1136,7 +1136,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 0)",
-   "elapsedMs": 13,
+   "elapsedMs": 24,
    "inputHash": "a32c586a6fa88537"
   },
   {
@@ -1150,7 +1150,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 12,
+   "elapsedMs": 25,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -1164,7 +1164,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,C; consumed 0)",
-   "elapsedMs": 20,
+   "elapsedMs": 27,
    "inputHash": "872501e9f46075a8"
   },
   {
@@ -1178,7 +1178,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4; branch open)",
-   "elapsedMs": 17,
+   "elapsedMs": 46,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -1192,7 +1192,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4; branch blocked)",
-   "elapsedMs": 37,
+   "elapsedMs": 28,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -1206,7 +1206,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 12,
+   "elapsedMs": 25,
    "inputHash": "7f3d3b9440884221"
   },
   {
@@ -1220,7 +1220,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 12,
+   "elapsedMs": 21,
    "inputHash": "7f3d3b9440884221"
   },
   {
@@ -1234,7 +1234,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 13,
+   "elapsedMs": 21,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -1248,7 +1248,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 12,
+   "elapsedMs": 20,
    "inputHash": "74d0fd2d2af53f48"
   },
   {
@@ -1262,7 +1262,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 6)",
-   "elapsedMs": 15,
+   "elapsedMs": 23,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -1276,7 +1276,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
-   "elapsedMs": 9,
+   "elapsedMs": 19,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -1290,7 +1290,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
-   "elapsedMs": 12,
+   "elapsedMs": 20,
    "inputHash": "5c5c4eab6f7cddf2"
   },
   {
@@ -1304,7 +1304,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
-   "elapsedMs": 16,
+   "elapsedMs": 30,
    "inputHash": "af393ff4a2fe6607"
   },
   {
@@ -1318,7 +1318,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
-   "elapsedMs": 19,
+   "elapsedMs": 32,
    "inputHash": "e808f29d312bb37e"
   },
   {
@@ -1332,7 +1332,7 @@
    "status": "passed",
    "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
    "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
-   "elapsedMs": 18,
+   "elapsedMs": 35,
    "inputHash": "e808f29d312bb37e"
   },
   {
@@ -1359,8 +1359,8 @@
    "required": true,
    "status": "passed",
    "expected": "4 batteries to G by 14; 15 too late",
-   "observed": "Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A (4 residents, including the wheelchair user) with escort. Delivery at 15 is too late. If it arrives by minute 7, nobody waits for it (time that avoids waiting); the deadline 14 relies on safe waiting. [deadline validated true; next minute/never fails true] (54 planner runs, 140 ms)",
-   "elapsedMs": 156
+   "observed": "Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A (4 residents, including the wheelchair user) with escort. Delivery at 15 is too late. If it arrives by minute 7, nobody waits for it (time that avoids waiting); the deadline 14 relies on safe waiting. [deadline validated true; next minute/never fails true] (54 planner runs, 130 ms)",
+   "elapsedMs": 163
   },
   {
    "id": "req-A-L11",
@@ -1373,8 +1373,8 @@
    "required": true,
    "status": "passed",
    "expected": "1 place at L by 20 (horizon); never-arrives fails; avoids waiting by 13",
-   "observed": "Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting. [deadline validated true; next minute/never fails true] (27 planner runs, 113 ms)",
-   "elapsedMs": 118
+   "observed": "Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting. [deadline validated true; next minute/never fails true] (27 planner runs, 114 ms)",
+   "elapsedMs": 120
   },
   {
    "id": "req-B-instr",
@@ -1387,8 +1387,8 @@
    "required": true,
    "status": "passed",
    "expected": "instructions to RB by minute 1",
-   "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 60 ms)",
-   "elapsedMs": 64
+   "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 56 ms)",
+   "elapsedMs": 59
   },
   {
    "id": "req-A-bat3",
@@ -1401,8 +1401,8 @@
    "required": true,
    "status": "passed",
    "expected": "1 battery at F by 3",
-   "observed": "Deliver 1 battery to Fan 3 workshop (F) by minute 3 to serve Pump Quarter B (8 residents). Delivery at 4 is too late. If it arrives by minute 0, nobody waits for it (time that avoids waiting); the deadline 3 relies on safe waiting. [deadline validated true; next minute/never fails true] (38 planner runs, 71 ms)",
-   "elapsedMs": 72
+   "observed": "Deliver 1 battery to Fan 3 workshop (F) by minute 3 to serve Pump Quarter B (8 residents). Delivery at 4 is too late. If it arrives by minute 0, nobody waits for it (time that avoids waiting); the deadline 3 relies on safe waiting. [deadline validated true; next minute/never fails true] (38 planner runs, 74 ms)",
+   "elapsedMs": 75
   },
   {
    "id": "req-E",
@@ -1415,8 +1415,8 @@
    "required": true,
    "status": "passed",
    "expected": "no tested change; A still needs an accessible route",
-   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it. Temporary ventilation keeps RA below threshold to minute 20; Deep Homes A still needs an accessible route. (8 planner runs, 18 ms)",
-   "elapsedMs": 20
+   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it. Temporary ventilation keeps RA below threshold to minute 20; Deep Homes A still needs an accessible route. (8 planner runs, 21 ms)",
+   "elapsedMs": 23
   },
   {
    "id": "req-A-noaccess",
@@ -1429,8 +1429,8 @@
    "required": true,
    "status": "passed",
    "expected": "no tested change; binding: unsuitable shelter",
-   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival. (4 planner runs, 8 ms)",
-   "elapsedMs": 10
+   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival. (4 planner runs, 9 ms)",
+   "elapsedMs": 11
   },
   {
    "id": "future-D-batteries",
@@ -1444,7 +1444,7 @@
    "status": "passed",
    "expected": "all four accept; 24 arrive; late delivery rejected by validator and pauses at gate start",
    "observed": "approve true; arrivals open/blocked 24/24; late plan: [open] Open Gate B: starts at 14 but delivery req-G arrives at 15 (pending batteries cannot satisfy a work start); playback: Cannot start Open Gate B: batteries from delivery req-G are still pending at G. Crew holds at G; dependent tasks wait. Stop and report the missing delivery.",
-   "elapsedMs": 25
+   "elapsedMs": 43
   },
   {
    "id": "future-A-place",
@@ -1458,7 +1458,7 @@
    "status": "passed",
    "expected": "24 arrive; never-arrives: planning 20, playback pauses at 20",
    "observed": "approve true; executed 24 (planner timing: A 10→13, B 10→20, C 0→3); never-arrives planning 20 (BC); playback: Admission of B at L blocked: places not available (delivery req-L still pending). Residents held at the entrance; stop and report.",
-   "elapsedMs": 16
+   "elapsedMs": 28
   },
   {
    "id": "future-A-place-reference",
@@ -1471,7 +1471,7 @@
    "status": "passed",
    "expected": "valid; 24 arrive; A admitted at 20",
    "observed": "validator valid; executed 24; A admitted at 20; the planner itself prefers B departing at 10 (crew busy 13 vs 20, criterion 4)",
-   "elapsedMs": 10,
+   "elapsedMs": 16,
    "limitations": "Hand-constructed schedule from the specification, checked by the same validator and simulator; not the planner’s selected timing."
   },
   {
@@ -1485,7 +1485,7 @@
    "status": "passed",
    "expected": "24 arrive; late instructions rejected",
    "observed": "approve true; executed 24; with instructions at 2: group B: departs at 1 before instructions are available at 2",
-   "elapsedMs": 4
+   "elapsedMs": 7
   },
   {
    "id": "seeded-variations",
@@ -1497,8 +1497,8 @@
    "required": true,
    "status": "passed",
    "expected": ">= 12 cases; every schedule independently valid and at least the seeded baseline",
-   "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 2 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12, valid, exhaustive, 3 ms); #4 B later instructions: A instructions at 2 → 24 (baseline 12, valid, exhaustive, 2 ms); #5 C faster hazard: RA growth 8.9 → 24 (baseline 20, valid, exhaustive, 7 ms); #6 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #7 B lower shelter capacity: U places 10 → 12 (baseline 0, valid, exhaustive, 6 ms); #8 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 6 ms); #9 A slower connection: RB-J2 6 min → 24 (baseline 12, valid, exhaustive, 5 ms); #10 B later instructions: C instructions at 1 → 24 (baseline 12, valid, exhaustive, 4 ms); #11 C faster hazard: J3 growth 0 → 24 (baseline 20, valid, exhaustive, 5 ms); #12 A battery shortage: batteries 3 → 16 (baseline 12, valid, exhaustive, 3 ms); #13 B lower shelter capacity: L places 8 → 20 (baseline 12, valid, exhaustive, 5 ms); #14 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 5 ms)",
-   "elapsedMs": 81,
+   "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 5 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 4 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12, valid, exhaustive, 4 ms); #4 B later instructions: A instructions at 2 → 24 (baseline 12, valid, exhaustive, 4 ms); #5 C faster hazard: RA growth 8.9 → 24 (baseline 20, valid, exhaustive, 10 ms); #6 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 5 ms); #7 B lower shelter capacity: U places 10 → 12 (baseline 0, valid, exhaustive, 12 ms); #8 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 9 ms); #9 A slower connection: RB-J2 6 min → 24 (baseline 12, valid, exhaustive, 8 ms); #10 B later instructions: C instructions at 1 → 24 (baseline 12, valid, exhaustive, 6 ms); #11 C faster hazard: J3 growth 0 → 24 (baseline 20, valid, exhaustive, 7 ms); #12 A battery shortage: batteries 3 → 16 (baseline 12, valid, exhaustive, 4 ms); #13 B lower shelter capacity: L places 8 → 20 (baseline 12, valid, exhaustive, 7 ms); #14 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 8 ms)",
+   "elapsedMs": 128,
    "limitations": "Validity is established for these instances; optimality only where the all-residents bound is met."
   },
   {
@@ -1513,7 +1513,7 @@
    "status": "passed",
    "expected": "8 rows evaluated with propagation, revalidated",
    "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 12; +4min x1.0: 12; +4min x1.2: 12",
-   "elapsedMs": 9,
+   "elapsedMs": 10,
    "limitations": "Eight-case result describes those eight cases only; not a failure probability."
   },
   {
@@ -1528,7 +1528,7 @@
    "status": "passed",
    "expected": "8 rows evaluated with propagation, revalidated",
    "observed": "+0min x1.0: 24; +0min x1.2: 16; +1min x1.0: 16; +1min x1.2: 16; +3min x1.0: 16; +3min x1.2: 16; +4min x1.0: 12; +4min x1.2: 12",
-   "elapsedMs": 6,
+   "elapsedMs": 18,
    "limitations": "Eight-case result describes those eight cases only; not a failure probability."
   },
   {
@@ -1543,7 +1543,7 @@
    "status": "passed",
    "expected": "8 rows evaluated with propagation, revalidated",
    "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 24; +4min x1.0: 24; +4min x1.2: 24",
-   "elapsedMs": 14,
+   "elapsedMs": 6,
    "limitations": "Eight-case result describes those eight cases only; not a failure probability."
   },
   {
@@ -1557,7 +1557,7 @@
    "status": "passed",
    "expected": "selected plan fails for B; recomputation reports its own result and search status",
    "observed": "recomputed: 20 (repair-fan-3), exhaustive; A remains reachable only without the fan, B only with it",
-   "elapsedMs": 16
+   "elapsedMs": 10
   },
   {
    "id": "stress-D",
@@ -1570,7 +1570,7 @@
    "status": "passed",
    "expected": "d1 24/20, d7 24 (A at 20)/20, d8 20/20 executed",
    "observed": "d1: open 24, blocked 20; d7: open 24 (A at 20), blocked 20; d8: open 20, blocked 20",
-   "elapsedMs": 47
+   "elapsedMs": 69
   },
   {
    "id": "benchmarks",
@@ -1582,26 +1582,26 @@
    "required": true,
    "status": "passed",
    "expected": "recorded",
-   "observed": "A: median 2.7 ms (8 plans, exhaustive); B: median 2.6 ms (7 plans, exhaustive); C: median 2.8 ms (8 plans, exhaustive); D: median 14.6 ms (80 plans, exhaustive); E: median 2.0 ms (5 plans, exhaustive)",
+   "observed": "A: median 6.9 ms (8 plans, exhaustive); B: median 2.5 ms (7 plans, exhaustive); C: median 5.5 ms (8 plans, exhaustive); D: median 20.3 ms (80 plans, exhaustive); E: median 2.0 ms (5 plans, exhaustive)",
    "elapsedMs": 0,
    "data": {
     "A": {
-     "medianMs": 2.7,
+     "medianMs": 6.9,
      "explored": 8,
      "status": "exhaustive"
     },
     "B": {
-     "medianMs": 2.6,
+     "medianMs": 2.5,
      "explored": 7,
      "status": "exhaustive"
     },
     "C": {
-     "medianMs": 2.8,
+     "medianMs": 5.5,
      "explored": 8,
      "status": "exhaustive"
     },
     "D": {
-     "medianMs": 14.6,
+     "medianMs": 20.3,
      "explored": 80,
      "status": "exhaustive"
     },
@@ -1636,12 +1636,12 @@
    "required": true,
    "status": "passed",
    "expected": "build succeeds",
-   "observed": "dist/index.html 544 KiB",
-   "elapsedMs": 6903
+   "observed": "dist/index.html 525 KiB",
+   "elapsedMs": 8355
   },
   {
    "id": "offline-browser",
-   "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
+   "name": "Network-disabled browser run (reload, checkpoint restore, full workflow, map scene)",
    "category": "offline",
    "criteria": [
     "Technical execution",
@@ -1650,10 +1650,10 @@
    ],
    "required": true,
    "status": "passed",
-   "expected": "no network requests; A forecast then simulation result vs baseline; reload restores paused; edit during a run explains a new run; stale plan blocked; missing confirmation blocks approval; D both outcomes and both hidden states; E protection separate from arrivals; mobile order",
-   "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A forecast 24 → simulation result 24 vs 12; reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection shown separately (20 arrived, 4 protected); mobile order",
-   "detail": "loaded offline | A: \"Help all 24 residents reach shelter\"; checklist of 3 steps; Forecast 24 → Simulation result 24 vs 12 without crew; Pause shown during playback | reload at minute 6 restored paused; resumed to 24; Event log (45 events; 21 automatic checks; 0 violations) | edit during execution: warning shown before the change; notice says it starts a new run and does not replan | changed conditions: old plan could not be approved; new plan \"Help 16 of 24 residents reach shelter\" | missing confirmation: \"Confirm Lower Refuge has 12 places.\" blocked approval; after marking it confirmed and finding the plan again, approval was enabled | D hidden blocked: plan showed both outcomes (20–24, \"Waiting for inspection\"); simulation result 20; observed branch marked | D hidden open: plan showed both outcomes (20–24, \"Waiting for inspection\"); simulation result 24; observed branch marked | E: \"4 residents gain 6 minutes each below the hazard limit. They still need a route.\"; Reached shelter 20; Still waiting 4 (with temporary protection) | narrow screen (390 px): plan and next action appear above the map; printable dispatch present",
-   "elapsedMs": 29463
+   "expected": "no network requests; A forecast then simulation result vs baseline; map scene controls (time bar, selection card, zoom/pan/reset, layer toggle); reload restores paused; edit during a run explains a new run; stale plan blocked; missing confirmation blocks approval; D both outcomes and both hidden states; E protection separate from arrivals; mobile order",
+   "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A forecast 24 → simulation result 24 vs 12; scene controls (time bar, selection, zoom/pan, layers); reload restored paused; edit during a run starts a new run; stale plan blocked; missing confirmation blocked approval; D 20/24 by hidden state with both outcomes shown; E protection shown separately (20 arrived, 4 protected); mobile order",
+   "detail": "loaded offline | A: \"Help all 24 residents reach shelter\"; checklist of 3 steps; Forecast 24 → Simulation result 24 vs 12 without crew; Pause shown during playback | scene: time bar \"Simulation result\" at minute 20 with 6 planned-event markers; selecting the crew opened a details card (place names only); zoom, arrow-key pan and reset changed and restored the view; the routes layer hid 14 route segments and restored them | reload at minute 6 restored paused; resumed to 24; Event log (45 events; 21 automatic checks; 0 violations) | edit during execution: warning shown before the change; notice says it starts a new run and does not replan | changed conditions: old plan could not be approved; new plan \"Help 16 of 24 residents reach shelter\" | missing confirmation: \"Confirm Lower Refuge has 12 places.\" blocked approval; after marking it confirmed and finding the plan again, approval was enabled | D hidden blocked: plan showed both outcomes (20–24, \"Waiting for inspection\"); simulation result 20; observed branch marked | D hidden open: plan showed both outcomes (20–24, \"Waiting for inspection\"); simulation result 24; observed branch marked | E: \"4 residents gain 6 minutes each below the hazard limit. They still need a route.\"; Reached shelter 20; Still waiting 4 (with temporary protection) | narrow screen (390 px): plan and next action appear above the map; printable dispatch present",
+   "elapsedMs": 33753
   }
  ],
  "agreement": {
@@ -1928,7 +1928,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 9,
+    "oracleMs": 12,
     "status": "exhaustive"
    },
    {
@@ -1954,7 +1954,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 2,
+    "oracleMs": 6,
     "status": "exhaustive"
    },
    {
@@ -1979,7 +1979,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 5,
+    "productionMs": 0,
     "oracleMs": 0,
     "status": "proven-infeasible"
    },
@@ -2005,8 +2005,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 8,
+    "productionMs": 0,
+    "oracleMs": 4,
     "status": "exhaustive"
    },
    {
@@ -2057,7 +2057,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
+    "productionMs": 5,
     "oracleMs": 0,
     "status": "proven-infeasible"
    },
@@ -2083,8 +2083,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 26,
+    "productionMs": 1,
+    "oracleMs": 32,
     "status": "exhaustive"
    },
    {
@@ -2110,7 +2110,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 5,
-    "oracleMs": 9,
+    "oracleMs": 10,
     "status": "proven-infeasible"
    },
    {
@@ -2136,7 +2136,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 6,
+    "oracleMs": 7,
     "status": "exhaustive"
    },
    {
@@ -2162,7 +2162,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 1,
+    "oracleMs": 10,
     "status": "proven-infeasible"
    },
    {
@@ -2188,7 +2188,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 11,
+    "oracleMs": 14,
     "status": "exhaustive"
    },
    {
@@ -2213,8 +2213,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 4,
+    "productionMs": 1,
+    "oracleMs": 5,
     "status": "exhaustive"
    },
    {
@@ -2239,8 +2239,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 0,
+    "productionMs": 0,
+    "oracleMs": 1,
     "status": "proven-infeasible"
    },
    {
@@ -2265,8 +2265,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 2,
+    "productionMs": 2,
+    "oracleMs": 7,
     "status": "exhaustive"
    },
    {
@@ -2291,8 +2291,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 14,
-    "oracleMs": 16,
+    "productionMs": 25,
+    "oracleMs": 5,
     "status": "exhaustive"
    },
    {
@@ -2343,7 +2343,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 5,
+    "productionMs": 0,
     "oracleMs": 2,
     "status": "exhaustive"
    },
@@ -2369,7 +2369,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
+    "productionMs": 0,
     "oracleMs": 1,
     "status": "proven-infeasible"
    },
@@ -2396,7 +2396,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 1,
+    "oracleMs": 0,
     "status": "exhaustive"
    },
    {
@@ -2421,8 +2421,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 1,
+    "productionMs": 1,
+    "oracleMs": 0,
     "status": "exhaustive"
    },
    {
@@ -2448,7 +2448,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 1,
+    "oracleMs": 4,
     "status": "exhaustive"
    },
    {
@@ -2499,8 +2499,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 1,
+    "productionMs": 1,
+    "oracleMs": 0,
     "status": "proven-infeasible"
    },
    {
@@ -2603,8 +2603,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 0,
+    "productionMs": 0,
+    "oracleMs": 1,
     "status": "exhaustive"
    },
    {
@@ -2629,8 +2629,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 3,
+    "productionMs": 0,
+    "oracleMs": 4,
     "status": "exhaustive"
    },
    {
@@ -2681,7 +2681,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
+    "productionMs": 0,
     "oracleMs": 0,
     "status": "proven-infeasible"
    },
@@ -2708,7 +2708,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 1,
+    "oracleMs": 0,
     "status": "proven-infeasible"
    },
    {
@@ -2733,8 +2733,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 5,
+    "productionMs": 1,
+    "oracleMs": 2,
     "status": "exhaustive"
    },
    {
@@ -2759,7 +2759,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
+    "productionMs": 1,
     "oracleMs": 1,
     "status": "proven-infeasible"
    },
@@ -2786,7 +2786,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 2,
+    "oracleMs": 1,
     "status": "proven-infeasible"
    },
    {
@@ -2812,7 +2812,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 0,
-    "oracleMs": 2,
+    "oracleMs": 1,
     "status": "exhaustive"
    },
    {
@@ -2864,7 +2864,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 9,
+    "oracleMs": 15,
     "status": "exhaustive"
    },
    {
@@ -2889,7 +2889,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
+    "productionMs": 0,
     "oracleMs": 0,
     "status": "exhaustive"
    },
@@ -2915,8 +2915,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 1,
+    "productionMs": 1,
+    "oracleMs": 0,
     "status": "exhaustive"
    },
    {
@@ -2941,8 +2941,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 11,
+    "productionMs": 6,
+    "oracleMs": 2,
     "status": "proven-infeasible"
    },
    {
@@ -2979,8 +2979,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 5,
+    "productionMs": 4,
+    "oracleMs": 2,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3018,8 +3018,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 2,
-    "oracleMs": 3,
+    "productionMs": 1,
+    "oracleMs": 4,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3057,8 +3057,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 6,
+    "productionMs": 1,
+    "oracleMs": 5,
     "status": "exhaustive",
     "inspectionClass": "inspection-helps"
    },
@@ -3096,7 +3096,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
+    "productionMs": 0,
     "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
@@ -3174,8 +3174,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 2,
-    "oracleMs": 4,
+    "productionMs": 1,
+    "oracleMs": 3,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3214,7 +3214,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 0,
+    "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3253,7 +3253,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 158,
+    "oracleMs": 195,
     "status": "exhaustive",
     "inspectionClass": "inspection-helps"
    },
@@ -3292,7 +3292,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 1,
+    "oracleMs": 3,
     "status": "exhaustive",
     "inspectionClass": "inspection-helps"
    },
@@ -3330,8 +3330,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 4,
+    "productionMs": 1,
+    "oracleMs": 5,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3369,7 +3369,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
+    "productionMs": 2,
     "oracleMs": 2,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
@@ -3409,7 +3409,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 7,
+    "oracleMs": 8,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3525,8 +3525,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 6,
-    "oracleMs": 8,
+    "productionMs": 1,
+    "oracleMs": 5,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3565,7 +3565,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 38,
+    "oracleMs": 41,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3603,8 +3603,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 3,
-    "oracleMs": 1734,
+    "productionMs": 4,
+    "oracleMs": 2067,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3642,8 +3642,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 3,
+    "productionMs": 0,
+    "oracleMs": 4,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3682,7 +3682,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 32,
+    "oracleMs": 34,
     "status": "exhaustive",
     "inspectionClass": "inspection-helps"
    },
@@ -3720,8 +3720,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 1,
+    "productionMs": 1,
+    "oracleMs": 0,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3759,8 +3759,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 3,
-    "oracleMs": 75,
+    "productionMs": 4,
+    "oracleMs": 84,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3799,7 +3799,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 3,
+    "oracleMs": 4,
     "status": "exhaustive",
     "inspectionClass": "inspection-helps"
    },
@@ -3838,7 +3838,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 0,
+    "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-unreachable"
    },
@@ -3876,7 +3876,7 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
+    "productionMs": 1,
     "oracleMs": 1,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
@@ -3916,7 +3916,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 74,
+    "oracleMs": 148,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3955,7 +3955,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 7,
+    "oracleMs": 15,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -3994,7 +3994,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 63,
+    "oracleMs": 107,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4032,8 +4032,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 0,
+    "productionMs": 2,
+    "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4071,8 +4071,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 12,
+    "productionMs": 2,
+    "oracleMs": 23,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4110,8 +4110,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 4,
+    "productionMs": 2,
+    "oracleMs": 7,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4150,7 +4150,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 2,
-    "oracleMs": 30,
+    "oracleMs": 57,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4227,8 +4227,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 0,
-    "oracleMs": 1,
+    "productionMs": 1,
+    "oracleMs": 2,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4306,7 +4306,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 0,
+    "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4344,8 +4344,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 1,
-    "oracleMs": 4,
+    "productionMs": 2,
+    "oracleMs": 6,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4422,8 +4422,8 @@
     },
     "agree": true,
     "valid": true,
-    "productionMs": 2,
-    "oracleMs": 14,
+    "productionMs": 3,
+    "oracleMs": 27,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4501,7 +4501,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 0,
+    "oracleMs": 1,
     "status": "exhaustive",
     "inspectionClass": "inspection-wastes-time"
    },
@@ -4540,7 +4540,7 @@
     "agree": true,
     "valid": true,
     "productionMs": 1,
-    "oracleMs": 0,
+    "oracleMs": 1,
     "status": "proven-infeasible",
     "inspectionClass": "inspection-helps"
    }
@@ -4588,7 +4588,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 3,
+    "elapsedMs": 5,
     "optimality": "exhaustive within declared scope; not independently enumerated",
     "tasks": "repair-fan-3"
    },
@@ -4602,7 +4602,7 @@
     "baseline": 20,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 2,
+    "elapsedMs": 4,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4616,7 +4616,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 3,
+    "elapsedMs": 4,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "repair-fan-3 > open-gate-b > escort-A"
    },
@@ -4630,7 +4630,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 2,
+    "elapsedMs": 4,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A > repair-fan-3"
    },
@@ -4644,7 +4644,7 @@
     "baseline": 20,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 7,
+    "elapsedMs": 10,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4658,7 +4658,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 2,
+    "elapsedMs": 5,
     "optimality": "exhaustive within declared scope; not independently enumerated",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4672,7 +4672,7 @@
     "baseline": 0,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 6,
+    "elapsedMs": 12,
     "optimality": "exhaustive within declared scope; not independently enumerated",
     "tasks": "open-gate-b > escort-A > repair-fan-3"
    },
@@ -4686,7 +4686,7 @@
     "baseline": 20,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 6,
+    "elapsedMs": 9,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4700,7 +4700,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 5,
+    "elapsedMs": 8,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "repair-fan-3 > open-gate-b > escort-A"
    },
@@ -4714,7 +4714,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 4,
+    "elapsedMs": 6,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A > repair-fan-3"
    },
@@ -4728,7 +4728,7 @@
     "baseline": 20,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 5,
+    "elapsedMs": 7,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4742,7 +4742,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 3,
+    "elapsedMs": 4,
     "optimality": "exhaustive within declared scope; not independently enumerated",
     "tasks": "open-gate-b > escort-A"
    },
@@ -4756,7 +4756,7 @@
     "baseline": 12,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 5,
+    "elapsedMs": 7,
     "optimality": "exhaustive within declared scope; not independently enumerated",
     "tasks": "repair-fan-3"
    },
@@ -4770,7 +4770,7 @@
     "baseline": 20,
     "valid": true,
     "status": "exhaustive",
-    "elapsedMs": 5,
+    "elapsedMs": 8,
     "optimality": "criterion 1 optimal by bound (all residents)",
     "tasks": "open-gate-b > escort-A"
    }
