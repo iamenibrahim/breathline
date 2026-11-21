@@ -1,6 +1,6 @@
 # Breathline
 
-**Simulation — illustrative conditions and assumptions.**
+**Simulation: illustrative conditions and assumptions.**
 
 Breathline helps one underground neighborhood in the Hollow use one crew, one tool kit and a few batteries to get more residents to shelter. It decides **what to repair, whom to escort, and whether checking an uncertain passage is worth the crew time it costs**. Recommendations become physical, minute-by-minute journeys, and Breathline executes them on one clock and compares them with doing nothing from the same starting state.
 
