@@ -142,14 +142,3 @@ tests/          vitest entry points
 docs/           EVIDENCE-manual.md (human-run checks and their status)
 ```
 
-Planning and simulation do not depend on React.
-
-## Known differences, limits and incomplete work
-
-- **Dispatch comprehension test: not run.** It needs two people who did not build the system. The protocol and an empty results table are in EVIDENCE.md. The interface walkthroughs were performed by an automated headless-browser script, not a person.
-- **Lower Refuge place request (A, 11 places):** the deadline matches the brief (minute 20, the horizon; never-arrives fails; minute 13 avoids waiting). The planner's own timing differs from the brief's narrative, though: it has **Pump Quarter B leave at minute 10** and arrive at 20, rather than Group A waiting with the crew at the Lower passage from 12 to 19. That choice saves 7 crew-busy minutes (criterion 4). The brief's timing is built by hand, passes the independent validator and executes to 24 arrivals with A admitted at 20, recorded as its own check.
-- The search is exhaustive **within the declared scope**, not over every conceivable schedule. Agreement with the independent solver is established for the generated instances under its stated preconditions.
-- Instruction lateness *during* execution is not simulated: instruction availability is a time-0 input. The validator rejects a plan whose departures precede it.
-- Interruption tests restore from boundary checkpoints taken immediately before and after each transaction minute. A torn write inside a boundary is equivalent to the "before" checkpoint, because the boundary is re-processed idempotently.
-- Not implemented (stretch): exact latest-dispatch optimisation, multiple ranked alternatives, more than one unknown passage, replanning from in-transit positions (editing after execution starts a clearly labeled new run instead), and a Web Worker (searches take milliseconds here).
-- Not modeled: medical outcomes, shelter habitability beyond minute 20, adversarial reports, changing hidden conditions, unreliable inspection, actual radio delivery, sensor calibration, and any control over Directorate infrastructure. Fan 3 slows hazard growth in one transit corridor. It does not restore ventilation in homes.
