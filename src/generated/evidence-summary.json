@@ -1,6 +1,6 @@
 {
  "buildId": "breathline-1.0.0+src.460330e68b373b1f",
- "generatedAt": "2026-11-21T04:08:06.808Z",
+ "generatedAt": "2026-11-21T04:11:04.046Z",
  "command": "npm run evidence",
  "summary": {
   "passed": 114,
@@ -137,7 +137,7 @@
      "id": "req-B-instr",
      "name": "Resource request: B-instr",
      "status": "passed",
-     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 56 ms)",
      "expected": "instructions to RB by minute 1"
     },
     {
@@ -185,7 +185,7 @@
      "id": "engine-tests",
      "name": "Engine test suite (npm test)",
      "status": "passed",
-     "observed": "16/16 tests passed in 2 files",
+     "observed": "21/21 tests passed in 3 files",
      "expected": "all tests pass"
     },
     {
@@ -780,7 +780,7 @@
      "id": "seeded-variations",
      "name": "15 seeded perturbations of A–C (seed 4242)",
      "status": "passed",
-     "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 2 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12",
+     "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 5 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 4 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12",
      "expected": ">= 12 cases; every schedule independently valid and at least the seeded baseline"
     },
     {
@@ -815,7 +815,7 @@
      "id": "benchmarks",
      "name": "Search-time benchmarks on this machine (median of 3)",
      "status": "passed",
-     "observed": "A: median 3.4 ms (8 plans, exhaustive); B: median 3.0 ms (7 plans, exhaustive); C: median 3.0 ms (8 plans, exhaustive); D: median 16.5 ms (80 plans, exhaustive); E: median 2.3 ms (5 plans, exhaustive)",
+     "observed": "A: median 6.9 ms (8 plans, exhaustive); B: median 2.5 ms (7 plans, exhaustive); C: median 5.5 ms (8 plans, exhaustive); D: median 20.3 ms (80 plans, exhaustive); E: median 2.0 ms (5 plans, exhaustive)",
      "expected": "recorded"
     },
     {
@@ -968,7 +968,7 @@
      "id": "req-B-instr",
      "name": "Resource request: B-instr",
      "status": "passed",
-     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 56 ms)",
      "expected": "instructions to RB by minute 1"
     },
     {
