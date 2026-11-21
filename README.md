@@ -142,3 +142,10 @@ tests/          vitest entry points
 docs/           EVIDENCE-manual.md (human-run checks and their status)
 ```
 
+
+## Team
+
+- [@iamenibrahim](https://github.com/iamenibrahim)
+- [Ahmed Osman (@ahmedsati)](https://github.com/ahmedsati)
+- [@elmi4f](https://github.com/elmi4f)
+- [Sami (@sahassan321)](https://github.com/sahassan321)
