@@ -1,0 +1,1163 @@
+{
+ "buildId": "breathline-1.0.0+src.a1409d284c9e585d",
+ "generatedAt": "2026-11-21T02:08:24.113Z",
+ "command": "npm run evidence",
+ "summary": {
+  "passed": 114,
+  "failed": 0,
+  "notRun": 0,
+  "total": 114
+ },
+ "note": "final",
+ "criteria": [
+  {
+   "criterion": "Survival impact and usefulness",
+   "weight": 25,
+   "checks": [
+    {
+     "id": "ref-A",
+     "name": "A: repair, open, escort serves 24; baseline 12; executed arrivals",
+     "status": "passed",
+     "observed": "assigned 24 (repair-fan-3 > open-gate-b > escort-A); baseline 12; executed arrivals 24 vs 12; +12",
+     "expected": "24 assigned (fan > gate > escort), baseline 12; executed 24 vs 12"
+    },
+    {
+     "id": "ref-C",
+     "name": "C: stable ventilation — fan repair excluded; batteries preserved",
+     "status": "passed",
+     "observed": "assigned 24 (open-gate-b > escort-A); consumed 0; preserved 4; baseline 20",
+     "expected": "24 without fan; 4 batteries preserved after execution"
+    },
+    {
+     "id": "ref-E",
+     "name": "E: fan then ventilation; 20 assigned; A protected 20 vs 14 (+6/person, +24 person-minutes); 6 batteries",
+     "status": "passed",
+     "observed": "assigned 20 (repair-fan-3 > ventilate-RA); executed arrivals 20; A protected 20 vs fan-only 14 vs none 14; vent-only 12 assigned / 20 min; +6/person, +24 person-minutes; batteries consumed 6; A status unresolved",
+     "expected": "20; protected 20 (none) vs 14 (fan only); 6 consumed exactly once"
+    },
+    {
+     "id": "ref-E-order",
+     "name": "E: ventilation-first is rejected because it loses B (evacuation outranks protection)",
+     "status": "passed",
+     "observed": "ventilation-first best: 12 assigned, A protected 20",
+     "expected": "ventilation-first best = 12 assigned"
+    },
+    {
+     "id": "edit-A-bat3",
+     "name": "A: batteries 4 → 3",
+     "status": "passed",
+     "observed": "16 (AC; open-gate-b > escort-A). B: Repair Fan 3 needs 4 batteries; 3 are available. Vent corridor (J3) reaches 100 at minute 9, when the group would arrive there (occupancy requires below 100).",
+     "expected": "repair unavailable; 16"
+    },
+    {
+     "id": "edit-A-L11",
+     "name": "A: Lower Refuge 12 → 11 places",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3). A: No open step-free route in this plan: RA-G blocked (Open Gate B would open it; not in this plan); RA-X3 blocked; no available action opens it. Needs a continuous escort; in this plan the crew is committed to other work. Lower Refuge has 11 places; B (8) is assigned there; A",
+     "expected": "20 through B and C"
+    },
+    {
+     "id": "edit-B-instr2",
+     "name": "B: B instructions at minute 2",
+     "status": "passed",
+     "observed": "16 (AC; open-gate-b > escort-A). B: Instructions are available at minute 2; the shortest journey takes 19 minutes, so arrival would be minute 21, after the 20-minute horizon.",
+     "expected": "24 infeasible; B arrival would be 21"
+    },
+    {
+     "id": "edit-A-noaccess",
+     "name": "A: Lower Refuge accessible entry confirmed absent",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3). A: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival.",
+     "expected": "20 through B and C; unsuitable shelter"
+    },
+    {
+     "id": "edit-E-bat4",
+     "name": "E: batteries 6 → 4",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3; A protected 14). A: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
+     "expected": "fan kept; 20; A protected 14"
+    },
+    {
+     "id": "explain-A",
+     "name": "A: explanation connects the work to the residents it enables, from computed checks",
+     "status": "passed",
+     "observed": "24 of 24 residents have a feasible shelter journey (+12 versus no intervention). Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refug",
+     "expected": "names the J3 hazard 68 vs 100 for B and the escort for A"
+    },
+    {
+     "id": "benefit-A-E",
+     "name": "Per-group benefit from executed baseline and response runs (A and E)",
+     "status": "passed",
+     "observed": "A: Accessible assistance: Gate B opened and a continuous escort to Lower Refuge [Unresolved — location reached the threshold → Arrived (minute 13)] | B: A traversable corridor: Repair Fan 3 keeps Vent corridor below threshold at arrival [Unresolved → Arrived (minute 10)] | C: Retained shelter access",
+     "expected": "A: A and B newly arrive, C unchanged; E: A +6 min/person, +24 person-minutes, not evacuated"
+    },
+    {
+     "id": "f-protected-time",
+     "name": "Protected minutes count elapsed intervals (max 20, never 21); a crossed threshold cannot be undone",
+     "status": "passed",
+     "observed": "none 14; ventilated at 13 20; ventilated at 15 (after crossing at 14) 14",
+     "expected": "14 without ventilation, 20 with it; ventilation after crossing gains nothing"
+    },
+    {
+     "id": "f-suitability",
+     "name": "Suitability: absent accessible entry or assistance removes the shelter for A only; absent ventilation removes it for every group; unconfirmed items block approval",
+     "status": "passed",
+     "observed": "assistance absent → BC; ventilation absent → C; accessible entry unconfirmed → planned 24, approval: unconfirmed essential input: Lower Refuge: accessible entry (Lower Refuge steward)",
+     "expected": "A-only exclusion; all-group exclusion; approval blocked"
+    },
+    {
+     "id": "neg-confirm-change",
+     "name": "Changed steward confirmation (Lower Refuge 11 places) makes the plan stale; recomputation returns 20 (B, C), names the lost group and the request",
+     "status": "passed",
+     "observed": "stale true; recompute 20 (BC); lost A; request: Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the dead",
+     "expected": "stale; recompute 20; A lost; request: 1 place at Lower Refuge by 20"
+    },
+    {
+     "id": "neg-unconfirmed",
+     "name": "Unconfirmed essential inputs (places, instructions, delivery) block approval and are listed",
+     "status": "passed",
+     "observed": "planned 24; unconfirmed essential input: Upper Refuge: 12 places (Upper Refuge steward) | unconfirmed essential input: Departure instructions for Pump Quarter B available by minute 0 (resident representative)",
+     "expected": "approval blocked with reasons; residents not dropped"
+    },
+    {
+     "id": "req-D-blocked",
+     "name": "Resource request: D-blocked",
+     "status": "passed",
+     "observed": "Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A (4 residents, including the wheelchair user) with escort. Delivery at 15 is too late. If it arrives by minute 7, nobody waits for it (time that avoids waiting); the deadline 14 relies on safe waiting. [deadline valida",
+     "expected": "4 batteries to G by 14; 15 too late"
+    },
+    {
+     "id": "req-A-L11",
+     "name": "Resource request: A-L11",
+     "status": "passed",
+     "observed": "Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting. [deadline valida",
+     "expected": "1 place at L by 20 (horizon); never-arrives fails; avoids waiting by 13"
+    },
+    {
+     "id": "req-B-instr",
+     "name": "Resource request: B-instr",
+     "status": "passed",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "expected": "instructions to RB by minute 1"
+    },
+    {
+     "id": "req-A-bat3",
+     "name": "Resource request: A-bat3",
+     "status": "passed",
+     "observed": "Deliver 1 battery to Fan 3 workshop (F) by minute 3 to serve Pump Quarter B (8 residents). Delivery at 4 is too late. If it arrives by minute 0, nobody waits for it (time that avoids waiting); the deadline 3 relies on safe waiting. [deadline validated true; next minute/never fails true] (38 planner ",
+     "expected": "1 battery at F by 3"
+    },
+    {
+     "id": "req-E",
+     "name": "Resource request: E",
+     "status": "passed",
+     "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
+     "expected": "no tested change; A still needs an accessible route"
+    },
+    {
+     "id": "req-A-noaccess",
+     "name": "Resource request: A-noaccess",
+     "status": "passed",
+     "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistanc",
+     "expected": "no tested change; binding: unsuitable shelter"
+    },
+    {
+     "id": "future-D-batteries",
+     "name": "D: record 4 batteries at G by 14 as a confirmed expected delivery; plan, validate, approve, execute agree; 15 is rejected and pauses playback",
+     "status": "passed",
+     "observed": "approve true; arrivals open/blocked 24/24; late plan: [open] Open Gate B: starts at 14 but delivery req-G arrives at 15 (pending batteries cannot satisfy a work start); playback: Cannot start Open Gate B: batteries from delivery req-G are still pending at G. Crew holds at G; dependent tasks wait. St",
+     "expected": "all four accept; 24 arrive; late delivery rejected by validator and pauses at gate start"
+    },
+    {
+     "id": "future-A-place",
+     "name": "A (11 places): record 1 place at Lower Refuge at 20; plan/validate/approve/execute agree (24 arrive); a place that never arrives leaves A unserved in planning and pauses playback at admission",
+     "status": "passed",
+     "observed": "approve true; executed 24 (planner timing: A 10→13, B 10→20, C 0→3); never-arrives planning 20 (BC); playback: Admission of B at L blocked: places not available (delivery req-L still pending). Residents held at the entrance; stop and report.",
+     "expected": "24 arrive; never-arrives: planning 20, playback pauses at 20"
+    }
+   ]
+  },
+  {
+   "criterion": "Technical execution",
+   "weight": 25,
+   "checks": [
+    {
+     "id": "engine-tests",
+     "name": "Engine test suite (npm test)",
+     "status": "passed",
+     "observed": "16/16 tests passed in 2 files",
+     "expected": "all tests pass"
+    },
+    {
+     "id": "ref-D-exec",
+     "name": "D: execute both hidden states (policy) and the confirmed-route response from the same snapshot",
+     "status": "passed",
+     "observed": "policy 24/20; confirmed-route 20/20",
+     "expected": "policy open 24 / blocked 20 arrivals; confirmed-route 20 / 20"
+    },
+    {
+     "id": "ref-D-truth-invariance",
+     "name": "D: changing only hidden truth leaves the pre-observation policy unchanged",
+     "status": "passed",
+     "observed": "identical (the planner signature has no truth parameter; truth is only passed to the simulator)",
+     "expected": "identical policy JSON for open and blocked truths"
+    },
+    {
+     "id": "ref-label-invariance",
+     "name": "Scenario labels and group display names do not change the objective",
+     "status": "passed",
+     "observed": "identical objectives (D and A)",
+     "expected": "identical objective after relabelling"
+    },
+    {
+     "id": "edit-A-bat3",
+     "name": "A: batteries 4 → 3",
+     "status": "passed",
+     "observed": "16 (AC; open-gate-b > escort-A). B: Repair Fan 3 needs 4 batteries; 3 are available. Vent corridor (J3) reaches 100 at minute 9, when the group would arrive there (occupancy requires below 100).",
+     "expected": "repair unavailable; 16"
+    },
+    {
+     "id": "edit-A-L11",
+     "name": "A: Lower Refuge 12 → 11 places",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3). A: No open step-free route in this plan: RA-G blocked (Open Gate B would open it; not in this plan); RA-X3 blocked; no available action opens it. Needs a continuous escort; in this plan the crew is committed to other work. Lower Refuge has 11 places; B (8) is assigned there; A",
+     "expected": "20 through B and C"
+    },
+    {
+     "id": "edit-B-instr2",
+     "name": "B: B instructions at minute 2",
+     "status": "passed",
+     "observed": "16 (AC; open-gate-b > escort-A). B: Instructions are available at minute 2; the shortest journey takes 19 minutes, so arrival would be minute 21, after the 20-minute horizon.",
+     "expected": "24 infeasible; B arrival would be 21"
+    },
+    {
+     "id": "edit-A-noaccess",
+     "name": "A: Lower Refuge accessible entry confirmed absent",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3). A: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival.",
+     "expected": "20 through B and C; unsuitable shelter"
+    },
+    {
+     "id": "edit-E-bat4",
+     "name": "E: batteries 6 → 4",
+     "status": "passed",
+     "observed": "20 (BC; repair-fan-3; A protected 14). A: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
+     "expected": "fan kept; 20; A protected 14"
+    },
+    {
+     "id": "validator-all",
+     "name": "Independent validator accepts every reference plan and recomputes the same objective",
+     "status": "passed",
+     "observed": "A selected: valid; A baseline: valid; B selected: valid; B baseline: valid; C selected: valid; C baseline: valid; E selected: valid; E baseline: valid; D1 policy: valid; D7 policy: valid; D8 policy: valid",
+     "expected": "all valid"
+    },
+    {
+     "id": "f-threshold",
+     "name": "Strict threshold: hazard 100 is unsafe, 99.x is safe; repair preserves accumulated hazard",
+     "status": "passed",
+     "observed": "J3(9)=100 unrepaired, 68 repaired at 5 (J3(5)=60); RA(20) with protection at 13 = 93",
+     "expected": "J3 = 100 at 9 unrepaired (unsafe); 68 with repair at 5; RA 93 then held"
+    },
+    {
+     "id": "f-protected-time",
+     "name": "Protected minutes count elapsed intervals (max 20, never 21); a crossed threshold cannot be undone",
+     "status": "passed",
+     "observed": "none 14; ventilated at 13 20; ventilated at 15 (after crossing at 14) 14",
+     "expected": "14 without ventilation, 20 with it; ventilation after crossing gains nothing"
+    },
+    {
+     "id": "f-exposure",
+     "name": "Exposure integrates waiting before departure (left endpoint) and travel",
+     "status": "passed",
+     "observed": "A exposure 335 (waiting 335, travel 0); unresolved A over 20 minutes 1370",
+     "expected": "A in A: waiting 0–9 = 335; B 0; unresolved A over horizon = 1370"
+    },
+    {
+     "id": "f-instructions",
+     "name": "Instruction availability: departure before instructionsAvailableAt is rejected",
+     "status": "passed",
+     "observed": "group C: departs at 0 before instructions are available at 1",
+     "expected": "validator rejects (…before instructions…)"
+    },
+    {
+     "id": "f-stairs",
+     "name": "Wheelchair access: an escort over the stairs is rejected",
+     "status": "passed",
+     "observed": "crew escort A: RA-ST is not step-free",
+     "expected": "validator rejects (…not step-free…)"
+    },
+    {
+     "id": "f-escort",
+     "name": "Continuous escort: a group moving without the crew alongside is rejected",
+     "status": "passed",
+     "observed": "group A: escort covers 10-13, journey is 11-14",
+     "expected": "validator rejects (…escort covers…)"
+    },
+    {
+     "id": "f-crew-conflict",
+     "name": "Crew conflicts: overlapping activities are rejected",
+     "status": "passed",
+     "observed": "crew travel: overlaps the previous activity (starts 4, previous ends 5)",
+     "expected": "validator rejects (…overlaps…)"
+    },
+    {
+     "id": "f-toolkit",
+     "name": "Equipment: work without the tool kit is rejected",
+     "status": "passed",
+     "observed": "Repair Fan 3 needs the tool kit",
+     "expected": "validator rejects (…tool kit…)"
+    },
+    {
+     "id": "f-batteries",
+     "name": "Batteries: work beyond the pack is rejected",
+     "status": "passed",
+     "observed": "Repair Fan 3: crew pack exhausted at minute 0",
+     "expected": "validator rejects (…pack exhausted…)"
+    },
+    {
+     "id": "f-shelter-transit",
+     "name": "No shelter transit: a resident route through a shelter is rejected",
+     "status": "passed",
+     "observed": "group C: destination X2 is not a shelter",
+     "expected": "validator rejects (…shelter…)"
+    },
+    {
+     "id": "f-capacity",
+     "name": "Joint indivisible assignment: over-filling a shelter is rejected",
+     "status": "passed",
+     "observed": "L: 12 places needed at minute 13, 11 available",
+     "expected": "validator rejects (…places needed…)"
+    },
+    {
+     "id": "f-threshold-arrival",
+     "name": "Threshold at arrival: B through unrepaired J3 at minute 9 is rejected",
+     "status": "passed",
+     "observed": "group B: reaches J3 at 9 with hazard 100 (must be < 100)",
+     "expected": "validator rejects (…hazard…)"
+    },
+    {
+     "id": "f-corridor",
+     "name": "Shared corridor capacity: overlapping and opposite-direction intervals conflict; adjacent intervals do not",
+     "status": "passed",
+     "observed": "overlap blocked true; adjacent allowed true; same-direction staggered [1,3) [3,5); opposite M→N [1,3) N→M [3,5); forced overlap rejected: corridor M-N carries 6 residents at minute 1 (capacity 3)",
+     "expected": "overlap blocked; adjacent allowed; opposite shares the pool; planner staggers groups"
+    },
+    {
+     "id": "f-reservation-conversion",
+     "name": "Reservation-to-occupant conversion: each arrival converts exactly one reservation",
+     "status": "passed",
+     "observed": "L: occupants B,A / reservations A,B; U: occupants C / reservations C",
+     "expected": "occupants equal reservations at the horizon, no duplicates"
+    },
+    {
+     "id": "f-joint-alt-shelter",
+     "name": "Tiny alternative-shelter graph: joint assignment serves 4 where greedy first-route commitment serves 2",
+     "status": "passed",
+     "observed": "production {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; oracle {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; flexible group → S2; greedy 2",
+     "expected": "production 4 = oracle 4; greedy 2"
+    },
+    {
+     "id": "f-tiny-policy",
+     "name": "Tiny two-state graph: independent policy enumeration agrees with production (inspection helps at 1 min, omitted at 3 min)",
+     "status": "passed",
+     "observed": "d=1: agree 5/3 inspection used (2398 inspection policies enumerated); d=3: agree 3/3 inspection omitted (199 inspection policies enumerated)",
+     "expected": "complete policy objective identical at both durations"
+    },
+    {
+     "id": "generated-batch",
+     "name": "Generated tiny-case batch (seed 20871120): complete lexicographic objective vs independent exhaustive solver",
+     "status": "passed",
+     "observed": "81 cases (40 confirmed-state, 41 two-state); agree 81; valid 81; inspection-helps 8; inspection-wastes-time 30; failures none",
+     "expected": "every case agrees on every objective component and validates; both inspection kinds present (>= 8 each)"
+    },
+    {
+     "id": "neg-stale",
+     "name": "Stale approval is rejected",
+     "status": "passed",
+     "observed": "Stale plan: computed for input revision 0, current revision is 1. Recompute before approval. | same revision approves: true",
+     "expected": "plan computed at revision 0 cannot be approved at revision 1"
+    },
+    {
+     "id": "neg-duplicate",
+     "name": "Duplicate completion/boundary processing does not duplicate consumption, occupancy or arrivals",
+     "status": "passed",
+     "observed": "minute 5 identical; minute 13 identical",
+     "expected": "identical state after re-processing minute 5 (fan completion) and 13 (admission)"
+    },
+    {
+     "id": "neg-corrupt",
+     "name": "A deliberately corrupted event (teleport into a shelter) pauses playback naming the invariant",
+     "status": "passed",
+     "observed": "paused at 5: Invariant violated: valid arrivals — B jumped from J2 to L, which are not adjacent (event corrupt:05:05)",
+     "expected": "paused; invariant \"valid arrivals\""
+    },
+    {
+     "id": "neg-unknown-edge",
+     "name": "Unknown-edge traversal before inspection is rejected (validator) and cannot execute (simulator)",
+     "status": "passed",
+     "observed": "validator: [open] uses the unknown connection without inspection; simulator: Invariant violated: shelter capacity — Lower Refuge: reservations need 16 places at minute 17, profile has 12",
+     "expected": "validator error; simulator pauses"
+    },
+    {
+     "id": "neg-confirm-change",
+     "name": "Changed steward confirmation (Lower Refuge 11 places) makes the plan stale; recomputation returns 20 (B, C), names the lost group and the request",
+     "status": "passed",
+     "observed": "stale true; recompute 20 (BC); lost A; request: Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the dead",
+     "expected": "stale; recompute 20; A lost; request: 1 place at Lower Refuge by 20"
+    },
+    {
+     "id": "neg-unconfirmed",
+     "name": "Unconfirmed essential inputs (places, instructions, delivery) block approval and are listed",
+     "status": "passed",
+     "observed": "planned 24; unconfirmed essential input: Upper Refuge: 12 places (Upper Refuge steward) | unconfirmed essential input: Departure instructions for Pump Quarter B available by minute 0 (resident representative)",
+     "expected": "approval blocked with reasons; residents not dropped"
+    },
+    {
+     "id": "int-A-5",
+     "name": "Reload before/after transactions: A fan completion",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (battery consumption exactly once)"
+    },
+    {
+     "id": "int-A-3-10-13",
+     "name": "Reload before/after transactions: A admissions (C 3, B 10, A 13)",
+     "status": "passed",
+     "observed": "before minute 3: ok; after minute 3: ok; before minute 10: ok; after minute 10: ok; before minute 13: ok; after minute 13: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (shelter admission exactly once)"
+    },
+    {
+     "id": "int-D-5-10-14-17",
+     "name": "Reload before/after transactions: D fan completion + inspection (open)",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 14: ok; after minute 14: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)"
+    },
+    {
+     "id": "int-D-5-10-17",
+     "name": "Reload before/after transactions: D fan completion + inspection (blocked)",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 20",
+     "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)"
+    },
+    {
+     "id": "int-D-14-16-20",
+     "name": "Reload before/after transactions: D battery-request run: delivery at 14 and Gate B completion at 16",
+     "status": "passed",
+     "observed": "before minute 14: ok; after minute 14: ok; before minute 16: ok; after minute 16: ok; before minute 20: ok; after minute 20: ok; consumed 8; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (delivery and consumption exactly once)"
+    },
+    {
+     "id": "int-E-5-13",
+     "name": "Reload before/after transactions: E fan (5) and ventilation (13) completion",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 13: ok; after minute 13: ok; consumed 6; protection effects 2; A protected 20",
+     "expected": "resumed runs identical to the uninterrupted run (battery consumption and protection effect exactly once)"
+    },
+    {
+     "id": "int-A-19-20",
+     "name": "Reload before/after transactions: A Lower Refuge place delivery at 20",
+     "status": "passed",
+     "observed": "before minute 19: ok; after minute 19: ok; before minute 20: ok; after minute 20: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (place delivery and admission exactly once)"
+    },
+    {
+     "id": "export-A response",
+     "name": "Export → JSON → re-execute and replay: A response",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-A baseline",
+     "name": "Export → JSON → re-execute and replay: A baseline",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-B response",
+     "name": "Export → JSON → re-execute and replay: B response",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-B baseline",
+     "name": "Export → JSON → re-execute and replay: B baseline",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-C response",
+     "name": "Export → JSON → re-execute and replay: C response",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-C baseline",
+     "name": "Export → JSON → re-execute and replay: C baseline",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-A fan only",
+     "name": "Export → JSON → re-execute and replay: A fan only",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-A gate+escort",
+     "name": "Export → JSON → re-execute and replay: A gate+escort",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D1 policy, open",
+     "name": "Export → JSON → re-execute and replay: D1 policy, open",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D1 policy, blocked",
+     "name": "Export → JSON → re-execute and replay: D1 policy, blocked",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D8 policy, open",
+     "name": "Export → JSON → re-execute and replay: D8 policy, open",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D8 policy, blocked",
+     "name": "Export → JSON → re-execute and replay: D8 policy, blocked",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D confirmed-route, open",
+     "name": "Export → JSON → re-execute and replay: D confirmed-route, open",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D confirmed-route, blocked",
+     "name": "Export → JSON → re-execute and replay: D confirmed-route, blocked",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-E response",
+     "name": "Export → JSON → re-execute and replay: E response",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-E baseline",
+     "name": "Export → JSON → re-execute and replay: E baseline",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-E fan only",
+     "name": "Export → JSON → re-execute and replay: E fan only",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-A + Lower Refuge place at 20",
+     "name": "Export → JSON → re-execute and replay: A + Lower Refuge place at 20",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D + 4 batteries at G by 14, open",
+     "name": "Export → JSON → re-execute and replay: D + 4 batteries at G by 14, open",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "export-D + 4 batteries at G by 14, blocked",
+     "name": "Export → JSON → re-execute and replay: D + 4 batteries at G by 14, blocked",
+     "status": "passed",
+     "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+     "expected": "input hash, events, arrivals and consumption reconcile"
+    },
+    {
+     "id": "agree-A response",
+     "name": "Agreement gate: A response",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-A baseline",
+     "name": "Agreement gate: A baseline",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-B response",
+     "name": "Agreement gate: B response",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-B baseline",
+     "name": "Agreement gate: B baseline",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-C response",
+     "name": "Agreement gate: C response",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-C baseline",
+     "name": "Agreement gate: C baseline",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-A fan only",
+     "name": "Agreement gate: A fan only",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-A gate+escort",
+     "name": "Agreement gate: A gate+escort",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D1 policy, open",
+     "name": "Agreement gate: D1 policy, open",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4; branch open)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D1 policy, blocked",
+     "name": "Agreement gate: D1 policy, blocked",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4; branch blocked)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D8 policy, open",
+     "name": "Agreement gate: D8 policy, open",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D8 policy, blocked",
+     "name": "Agreement gate: D8 policy, blocked",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D confirmed-route, open",
+     "name": "Agreement gate: D confirmed-route, open",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D confirmed-route, blocked",
+     "name": "Agreement gate: D confirmed-route, blocked",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-E response",
+     "name": "Agreement gate: E response",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 6)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-E baseline",
+     "name": "Agreement gate: E baseline",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-E fan only",
+     "name": "Agreement gate: E fan only",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-A + Lower Refuge place at 20",
+     "name": "Agreement gate: A + Lower Refuge place at 20",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D + 4 batteries at G by 14, open",
+     "name": "Agreement gate: D + 4 batteries at G by 14, open",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "agree-D + 4 batteries at G by 14, blocked",
+     "name": "Agreement gate: D + 4 batteries at G by 14, blocked",
+     "status": "passed",
+     "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
+     "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption"
+    },
+    {
+     "id": "invariants-summary",
+     "name": "Execution invariants over every agreement run",
+     "status": "passed",
+     "observed": "420 boundaries checked, 0 violations",
+     "expected": "0 violations"
+    },
+    {
+     "id": "future-D-batteries",
+     "name": "D: record 4 batteries at G by 14 as a confirmed expected delivery; plan, validate, approve, execute agree; 15 is rejected and pauses playback",
+     "status": "passed",
+     "observed": "approve true; arrivals open/blocked 24/24; late plan: [open] Open Gate B: starts at 14 but delivery req-G arrives at 15 (pending batteries cannot satisfy a work start); playback: Cannot start Open Gate B: batteries from delivery req-G are still pending at G. Crew holds at G; dependent tasks wait. St",
+     "expected": "all four accept; 24 arrive; late delivery rejected by validator and pauses at gate start"
+    },
+    {
+     "id": "future-A-place",
+     "name": "A (11 places): record 1 place at Lower Refuge at 20; plan/validate/approve/execute agree (24 arrive); a place that never arrives leaves A unserved in planning and pauses playback at admission",
+     "status": "passed",
+     "observed": "approve true; executed 24 (planner timing: A 10→13, B 10→20, C 0→3); never-arrives planning 20 (BC); playback: Admission of B at L blocked: places not available (delivery req-L still pending). Residents held at the entrance; stop and report.",
+     "expected": "24 arrive; never-arrives: planning 20, playback pauses at 20"
+    },
+    {
+     "id": "future-A-place-reference",
+     "name": "Spec reference timing for the Lower Refuge place: A waits with the crew at P 12–19, P→L 19–20, admitted at 20 — validated and executed to 24",
+     "status": "passed",
+     "observed": "validator valid; executed 24; A admitted at 20; the planner itself prefers B departing at 10 (crew busy 13 vs 20, criterion 4)",
+     "expected": "valid; 24 arrive; A admitted at 20"
+    },
+    {
+     "id": "future-B-instr",
+     "name": "B: instructions confirmed for minute 1 → plan/validate/approve/execute 24; minute 2 makes the same plan invalid",
+     "status": "passed",
+     "observed": "approve true; executed 24; with instructions at 2: group B: departs at 1 before instructions are available at 2",
+     "expected": "24 arrive; late instructions rejected"
+    },
+    {
+     "id": "seeded-variations",
+     "name": "15 seeded perturbations of A–C (seed 4242)",
+     "status": "passed",
+     "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 3 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12",
+     "expected": ">= 12 cases; every schedule independently valid and at least the seeded baseline"
+    },
+    {
+     "id": "stress-A",
+     "name": "A: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 12; +4min x1.0: 12; +4min x1.2: 12",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "stress-B",
+     "name": "B: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 16; +1min x1.0: 16; +1min x1.2: 16; +3min x1.0: 16; +3min x1.2: 16; +4min x1.0: 12; +4min x1.2: 12",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "stress-C",
+     "name": "C: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 24; +4min x1.0: 24; +4min x1.2: 24",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "stress-recompute",
+     "name": "B: recompute under +1 min repair delay from the same perturbed snapshot (reported separately)",
+     "status": "passed",
+     "observed": "recomputed: 20 (repair-fan-3), exhaustive; A remains reachable only without the fan, B only with it",
+     "expected": "selected plan fails for B; recomputation reports its own result and search status"
+    },
+    {
+     "id": "benchmarks",
+     "name": "Search-time benchmarks on this machine (median of 3)",
+     "status": "passed",
+     "observed": "A: median 2.8 ms (8 plans, exhaustive); B: median 2.6 ms (7 plans, exhaustive); C: median 3.0 ms (8 plans, exhaustive); D: median 14.2 ms (80 plans, exhaustive); E: median 2.7 ms (5 plans, exhaustive)",
+     "expected": "recorded"
+    },
+    {
+     "id": "replay-command",
+     "name": "Documented replay command reconciles exported runs (npm run replay -- <file>)",
+     "status": "passed",
+     "observed": "OK   evidence/runs/A-response.json: response — arrived 24/24 (saved 24) | OK   evidence/runs/D1-policy-blocked.json: response — arrived 20/24 (saved 20), branch blocked, observations 10:blocked | OK   evidence/runs/E-response.json: response — arrived 20/24 (saved 20)",
+     "expected": "exit 0, all reconciled"
+    },
+    {
+     "id": "build",
+     "name": "Production build (tsc + vite single-file)",
+     "status": "passed",
+     "observed": "dist/index.html 525 KiB",
+     "expected": "build succeeds"
+    },
+    {
+     "id": "offline-browser",
+     "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
+     "status": "passed",
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
+     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+    }
+   ]
+  },
+  {
+   "criterion": "Fit with the Hollow",
+   "weight": 20,
+   "checks": [
+    {
+     "id": "ref-A",
+     "name": "A: repair, open, escort serves 24; baseline 12; executed arrivals",
+     "status": "passed",
+     "observed": "assigned 24 (repair-fan-3 > open-gate-b > escort-A); baseline 12; executed arrivals 24 vs 12; +12",
+     "expected": "24 assigned (fan > gate > escort), baseline 12; executed 24 vs 12"
+    },
+    {
+     "id": "ref-B",
+     "name": "B: rescue first; fan-first cannot serve 24",
+     "status": "passed",
+     "observed": "selected 24 (open-gate-b > escort-A > repair-fan-3); fan-first best 20; none 12; gate+escort 16",
+     "expected": "selected gate > escort > fan = 24; fan-first best 20; no intervention 12; gate+escort 16"
+    },
+    {
+     "id": "ref-B-margin",
+     "name": "B: one-minute repair delay makes J3 unsafe at B’s arrival (selected plan)",
+     "status": "passed",
+     "observed": "B fails: group B: reaches J3 at 18 with hazard 100 (must be < 100)",
+     "expected": "B fails at +1 minute (J3 = 100 at minute 18)"
+    },
+    {
+     "id": "ref-D1",
+     "name": "D, inspection 1 min: policy 24/20 with inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "24/20; inspection 9–10; confirmed routes 20/20;",
+     "expected": "24/20; inspection included; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-D7",
+     "name": "D, inspection 7 min: policy 24/20 with inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "24/20; inspection 9–16; confirmed routes 20/20; open-branch A arrival 20",
+     "expected": "24/20; inspection included; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-D8",
+     "name": "D, inspection 8 min: policy 20/20, no inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "20/20; inspection omitted; confirmed routes 20/20;",
+     "expected": "20/20; inspection omitted; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-E",
+     "name": "E: fan then ventilation; 20 assigned; A protected 20 vs 14 (+6/person, +24 person-minutes); 6 batteries",
+     "status": "passed",
+     "observed": "assigned 20 (repair-fan-3 > ventilate-RA); executed arrivals 20; A protected 20 vs fan-only 14 vs none 14; vent-only 12 assigned / 20 min; +6/person, +24 person-minutes; batteries consumed 6; A status unresolved",
+     "expected": "20; protected 20 (none) vs 14 (fan only); 6 consumed exactly once"
+    },
+    {
+     "id": "f-suitability",
+     "name": "Suitability: absent accessible entry or assistance removes the shelter for A only; absent ventilation removes it for every group; unconfirmed items block approval",
+     "status": "passed",
+     "observed": "assistance absent → BC; ventilation absent → C; accessible entry unconfirmed → planned 24, approval: unconfirmed essential input: Lower Refuge: accessible entry (Lower Refuge steward)",
+     "expected": "A-only exclusion; all-group exclusion; approval blocked"
+    },
+    {
+     "id": "int-A-5",
+     "name": "Reload before/after transactions: A fan completion",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (battery consumption exactly once)"
+    },
+    {
+     "id": "int-A-3-10-13",
+     "name": "Reload before/after transactions: A admissions (C 3, B 10, A 13)",
+     "status": "passed",
+     "observed": "before minute 3: ok; after minute 3: ok; before minute 10: ok; after minute 10: ok; before minute 13: ok; after minute 13: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (shelter admission exactly once)"
+    },
+    {
+     "id": "int-D-5-10-14-17",
+     "name": "Reload before/after transactions: D fan completion + inspection (open)",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 14: ok; after minute 14: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)"
+    },
+    {
+     "id": "int-D-5-10-17",
+     "name": "Reload before/after transactions: D fan completion + inspection (blocked)",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 20",
+     "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)"
+    },
+    {
+     "id": "int-D-14-16-20",
+     "name": "Reload before/after transactions: D battery-request run: delivery at 14 and Gate B completion at 16",
+     "status": "passed",
+     "observed": "before minute 14: ok; after minute 14: ok; before minute 16: ok; after minute 16: ok; before minute 20: ok; after minute 20: ok; consumed 8; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (delivery and consumption exactly once)"
+    },
+    {
+     "id": "int-E-5-13",
+     "name": "Reload before/after transactions: E fan (5) and ventilation (13) completion",
+     "status": "passed",
+     "observed": "before minute 5: ok; after minute 5: ok; before minute 13: ok; after minute 13: ok; consumed 6; protection effects 2; A protected 20",
+     "expected": "resumed runs identical to the uninterrupted run (battery consumption and protection effect exactly once)"
+    },
+    {
+     "id": "int-A-19-20",
+     "name": "Reload before/after transactions: A Lower Refuge place delivery at 20",
+     "status": "passed",
+     "observed": "before minute 19: ok; after minute 19: ok; before minute 20: ok; after minute 20: ok; consumed 4; arrivals 24",
+     "expected": "resumed runs identical to the uninterrupted run (place delivery and admission exactly once)"
+    },
+    {
+     "id": "req-D-blocked",
+     "name": "Resource request: D-blocked",
+     "status": "passed",
+     "observed": "Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A (4 residents, including the wheelchair user) with escort. Delivery at 15 is too late. If it arrives by minute 7, nobody waits for it (time that avoids waiting); the deadline 14 relies on safe waiting. [deadline valida",
+     "expected": "4 batteries to G by 14; 15 too late"
+    },
+    {
+     "id": "req-A-L11",
+     "name": "Resource request: A-L11",
+     "status": "passed",
+     "observed": "Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting. [deadline valida",
+     "expected": "1 place at L by 20 (horizon); never-arrives fails; avoids waiting by 13"
+    },
+    {
+     "id": "req-B-instr",
+     "name": "Resource request: B-instr",
+     "status": "passed",
+     "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+     "expected": "instructions to RB by minute 1"
+    },
+    {
+     "id": "req-A-bat3",
+     "name": "Resource request: A-bat3",
+     "status": "passed",
+     "observed": "Deliver 1 battery to Fan 3 workshop (F) by minute 3 to serve Pump Quarter B (8 residents). Delivery at 4 is too late. If it arrives by minute 0, nobody waits for it (time that avoids waiting); the deadline 3 relies on safe waiting. [deadline validated true; next minute/never fails true] (38 planner ",
+     "expected": "1 battery at F by 3"
+    },
+    {
+     "id": "req-E",
+     "name": "Resource request: E",
+     "status": "passed",
+     "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
+     "expected": "no tested change; A still needs an accessible route"
+    },
+    {
+     "id": "req-A-noaccess",
+     "name": "Resource request: A-noaccess",
+     "status": "passed",
+     "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistanc",
+     "expected": "no tested change; binding: unsuitable shelter"
+    },
+    {
+     "id": "stress-A",
+     "name": "A: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 12; +4min x1.0: 12; +4min x1.2: 12",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "stress-B",
+     "name": "B: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 16; +1min x1.0: 16; +1min x1.2: 16; +3min x1.0: 16; +3min x1.2: 16; +4min x1.0: 12; +4min x1.2: 12",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "stress-C",
+     "name": "C: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+     "status": "passed",
+     "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 24; +4min x1.0: 24; +4min x1.2: 24",
+     "expected": "8 rows evaluated with propagation, revalidated"
+    },
+    {
+     "id": "offline-browser",
+     "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
+     "status": "passed",
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
+     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+    }
+   ]
+  },
+  {
+   "criterion": "Connected problem-solving",
+   "weight": 10,
+   "checks": [
+    {
+     "id": "ref-A",
+     "name": "A: repair, open, escort serves 24; baseline 12; executed arrivals",
+     "status": "passed",
+     "observed": "assigned 24 (repair-fan-3 > open-gate-b > escort-A); baseline 12; executed arrivals 24 vs 12; +12",
+     "expected": "24 assigned (fan > gate > escort), baseline 12; executed 24 vs 12"
+    },
+    {
+     "id": "ref-A-components",
+     "name": "A component removal: none 12, fan only 20, gate+escort 16, all 24",
+     "status": "passed",
+     "observed": "12 (C) / 20 (BC) / 16 (AC) / 24 (ABC)",
+     "expected": "12 / 20 / 16 / 24"
+    },
+    {
+     "id": "ref-B",
+     "name": "B: rescue first; fan-first cannot serve 24",
+     "status": "passed",
+     "observed": "selected 24 (open-gate-b > escort-A > repair-fan-3); fan-first best 20; none 12; gate+escort 16",
+     "expected": "selected gate > escort > fan = 24; fan-first best 20; no intervention 12; gate+escort 16"
+    },
+    {
+     "id": "ref-C",
+     "name": "C: stable ventilation — fan repair excluded; batteries preserved",
+     "status": "passed",
+     "observed": "assigned 24 (open-gate-b > escort-A); consumed 0; preserved 4; baseline 20",
+     "expected": "24 without fan; 4 batteries preserved after execution"
+    },
+    {
+     "id": "ref-E-order",
+     "name": "E: ventilation-first is rejected because it loses B (evacuation outranks protection)",
+     "status": "passed",
+     "observed": "ventilation-first best: 12 assigned, A protected 20",
+     "expected": "ventilation-first best = 12 assigned"
+    },
+    {
+     "id": "f-joint-alt-shelter",
+     "name": "Tiny alternative-shelter graph: joint assignment serves 4 where greedy first-route commitment serves 2",
+     "status": "passed",
+     "observed": "production {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; oracle {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; flexible group → S2; greedy 2",
+     "expected": "production 4 = oracle 4; greedy 2"
+    }
+   ]
+  },
+  {
+   "criterion": "Originality and ingenuity",
+   "weight": 10,
+   "checks": [
+    {
+     "id": "ref-D1",
+     "name": "D, inspection 1 min: policy 24/20 with inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "24/20; inspection 9–10; confirmed routes 20/20;",
+     "expected": "24/20; inspection included; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-D7",
+     "name": "D, inspection 7 min: policy 24/20 with inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "24/20; inspection 9–16; confirmed routes 20/20; open-branch A arrival 20",
+     "expected": "24/20; inspection included; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-D8",
+     "name": "D, inspection 8 min: policy 20/20, no inspection; confirmed-route response 20/20",
+     "status": "passed",
+     "observed": "20/20; inspection omitted; confirmed routes 20/20;",
+     "expected": "20/20; inspection omitted; confirmed routes 20/20"
+    },
+    {
+     "id": "ref-D-exec",
+     "name": "D: execute both hidden states (policy) and the confirmed-route response from the same snapshot",
+     "status": "passed",
+     "observed": "policy 24/20; confirmed-route 20/20",
+     "expected": "policy open 24 / blocked 20 arrivals; confirmed-route 20 / 20"
+    },
+    {
+     "id": "ref-D-truth-invariance",
+     "name": "D: changing only hidden truth leaves the pre-observation policy unchanged",
+     "status": "passed",
+     "observed": "identical (the planner signature has no truth parameter; truth is only passed to the simulator)",
+     "expected": "identical policy JSON for open and blocked truths"
+    },
+    {
+     "id": "f-tiny-policy",
+     "name": "Tiny two-state graph: independent policy enumeration agrees with production (inspection helps at 1 min, omitted at 3 min)",
+     "status": "passed",
+     "observed": "d=1: agree 5/3 inspection used (2398 inspection policies enumerated); d=3: agree 3/3 inspection omitted (199 inspection policies enumerated)",
+     "expected": "complete policy objective identical at both durations"
+    },
+    {
+     "id": "generated-batch",
+     "name": "Generated tiny-case batch (seed 20871120): complete lexicographic objective vs independent exhaustive solver",
+     "status": "passed",
+     "observed": "81 cases (40 confirmed-state, 41 two-state); agree 81; valid 81; inspection-helps 8; inspection-wastes-time 30; failures none",
+     "expected": "every case agrees on every objective component and validates; both inspection kinds present (>= 8 each)"
+    },
+    {
+     "id": "neg-unknown-edge",
+     "name": "Unknown-edge traversal before inspection is rejected (validator) and cannot execute (simulator)",
+     "status": "passed",
+     "observed": "validator: [open] uses the unknown connection without inspection; simulator: Invariant violated: shelter capacity — Lower Refuge: reservations need 16 places at minute 17, profile has 12",
+     "expected": "validator error; simulator pauses"
+    },
+    {
+     "id": "stress-D",
+     "name": "D: selected policies executed in both states at inspection 1 and 8, plus the 7-minute boundary",
+     "status": "passed",
+     "observed": "d1: open 24, blocked 20; d7: open 24 (A at 20), blocked 20; d8: open 20, blocked 20",
+     "expected": "d1 24/20, d7 24 (A at 20)/20, d8 20/20 executed"
+    }
+   ]
+  },
+  {
+   "criterion": "Demo and communication",
+   "weight": 10,
+   "checks": [
+    {
+     "id": "explain-A",
+     "name": "A: explanation connects the work to the residents it enables, from computed checks",
+     "status": "passed",
+     "observed": "24 of 24 residents have a feasible shelter journey (+12 versus no intervention). Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refug",
+     "expected": "names the J3 hazard 68 vs 100 for B and the escort for A"
+    },
+    {
+     "id": "offline-browser",
+     "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
+     "status": "passed",
+     "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
+     "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E"
+    }
+   ]
+  }
+ ]
+}

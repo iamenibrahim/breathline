@@ -1,0 +1,5 @@
+node_modules/
+dist/
+evidence/vitest.json
+.DS_Store
+*.log

@@ -1,0 +1,144 @@
+# Breathline
+
+**Simulation — illustrative conditions and assumptions.**
+
+Breathline helps one underground neighborhood in the Hollow use one crew, one tool kit and a few batteries to get more residents to shelter. It decides **what to repair, whom to escort, and whether checking an uncertain passage is worth the crew time it costs**. Recommendations become physical, minute-by-minute journeys, and Breathline executes them on one clock and compares them with doing nothing from the same starting state.
+
+A shelter helps only if people can reach it. In the reference neighborhood, a wheelchair user in Deep Homes needs a step-free route, a crew member beside her the whole way and assistance on arrival. Eight residents in Pump Quarter need a vent corridor that stays below the hazard threshold. Twelve residents in Upper Homes can walk to Upper Refuge. Breathline finds the order of work that serves all three, or shows who stays stranded, why, and what outside help would change that by when.
+
+Built for the **Life Underground** track. It runs entirely on one laptop: no accounts, no API keys, no network.
+
+---
+
+## Quick start
+
+```bash
+npm install            # once (needs network)
+npm run dev            # http://localhost:5173
+npm test               # engine test suite (vitest), ~6 s
+npm run evidence       # one-command evidence report → EVIDENCE.md, evidence/report.json
+npm run build          # → dist/index.html (single self-contained file)
+```
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Development server |
+| `npm run build` | Type-check and build `dist/index.html`, one self-contained file with scripts, styles and fonts inlined |
+| `npm run preview` | Serve the production build at http://localhost:4173 |
+| `npm test` | Engine tests: reference conditions, edits, focused checks, validator, negative cases, interruptions, agreement gate, export/replay, requests, generated batch, seeded variations, stress |
+| `npm run evidence` | Everything above **in order**, plus the replay command, the production build and a network-disabled browser run. Writes `EVIDENCE.md`, `evidence/report.json`, `evidence/batch.json`, `evidence/runs/*.json`. Exits **non-zero** if any required check fails or did not run |
+| `npm run replay -- <export.json> [...]` | Import a run exported from the app (or `evidence/runs/*.json`), re-execute it from its initial snapshot, independently replay its event history and reconcile the final counts with the saved result |
+| `npm run batch -- 20871120` | Reproduce the generated tiny-case batch from its seed |
+| `npm run offline-check` | Network-disabled browser check of `dist/index.html` (needs Chrome or Chromium; set `CHROME_PATH` if it is not found) |
+
+`EVIDENCE_SKIP_BROWSER=1 npm run evidence` skips the browser check. The skipped check is reported as **not run** and the command exits 1, as the brief requires.
+
+## Offline route (exact)
+
+1. Run `npm install && npm run build` once with network access.
+2. `dist/index.html` is now fully self-contained: React, the engine, the CSS and the IBM Plex fonts (bundled from `@fontsource`, Latin subset) are inlined. The build makes no network requests.
+3. Disable the network and open `dist/index.html` directly from disk (`file://…/dist/index.html`). `npm run preview` also works offline, since it serves from localhost.
+4. The session (scenario edits, input revision, plan, approval, and a run checkpoint after every clock boundary) is kept in `localStorage` under the versioned key `breathline.session.v2`. On reload the run restores **paused at its last completed boundary** and waits for an explicit **Resume**. No time passes during the interruption, and no battery, delivery, protection effect, admission or inspection is applied twice.
+
+`npm run offline-check` verifies this route in headless Chrome. DevTools offline mode is on and every non-`file:` request is refused and counted. The check computes and plays A to 24 arrivals, reloads mid-run, confirms the paused restore, resumes to 24, edits a constraint and recomputes, runs D in both hidden states, and runs E. This checks browser interruption recovery. It does not show uninterrupted service through a real power loss.
+
+## Using it (the coordinator's workflow)
+
+1. **Who needs assistance** (left): 24 residents in three indivisible groups, their needs, instruction minute and status. These are *unresolved, conditional, assigned, traveling, arrived*, plus an *unsafe* flag.
+2. **Compute response** (right): one recommendation plus the executed-from-the-same-snapshot no-intervention baseline. The explanation names the people helped and the barriers removed, using computed numbers, for example: *"Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refuge."*
+3. **Confirmations this plan depends on**: shelter places, the suitability items each assigned group needs, instruction acknowledgements and relied-on deliveries. Anything unconfirmed blocks approval and is listed as the reason. **Approve and reserve** revalidates against the current input revision. A stale plan cannot be approved.
+4. **Play / Step 1 minute**: the response, the baseline and, where relevant, a comparison run (D: *confirmed routes only*; E: *without temporary ventilation*) execute in lockstep, each with its own ledger. Crew travel takes time. Repairs change hazard growth at completion. Gates open at completion. Residents arrive only when their journeys finish.
+5. **Counters**: arrived (executed), assigned-not-yet-arrived, conditional, unresolved, the baseline's arrivals and the additional arrivals once both runs finish. **"Still waiting — conditions improved"** shows protected person-minutes separately and never adds them to arrivals.
+6. **Unresolved needs and what could still help**: blockers from actual constraint checks, plus a validated **resource request** for each stranded group: what, how much, where, by when and for whom, with the binding reason. Example: *"Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A … Delivery at 15 is too late."*
+7. **Panels**: outcome and per-group benefit from executed runs, setup edits, reports and steward confirmations, the test controller for hidden truth and late deliveries, the stress check with *Recompute under these conditions*, exposure detail, the event log, search diagnostics, the evidence panel, assumptions, and the dispatch preview. **Print dispatch** prints the crew sheet and the resident instructions. **Export JSON** saves a reproducible run.
+
+Keyboard focus is visible, `prefers-reduced-motion` turns off marker animation, and below 1150 px wide the layout becomes a single column.
+
+## The model
+
+- **Neighborhood:** 15 locations, 16 bidirectional connections, two shelters (12 places each), a 20-minute horizon, one crew starting at the fan workshop with one tool kit and 4 batteries (6 in E). Fixtures A–E are data overrides of one topology (`src/engine/scenarios.ts`).
+- **Hazards:** `h(t) = initial + rate·min(t, r) + repairedRate·max(0, t − r)`, generalised to several ordered changes. A repair keeps the hazard already accumulated and cannot erase a crossing. Occupancy requires hazard **strictly below 100**. Safety is checked at every boundary for every node a resident or the crew occupies, including waits, work, rendezvous, departures and arrivals.
+- **Exposure:** left-endpoint integration of hazard-index minutes per person, including waiting before departure, reported group by group.
+- **Protected minutes:** elapsed one-minute intervals that begin before the location first reaches the threshold (20 at most, never 21). They count only for unresolved residents and are never shown as arrivals.
+- **Capacity:** corridor occupancy is reserved on [departure, arrival) as one pool shared by both directions. Locations hold 24 residents. Shelters use a time-indexed place profile. Residents may not pass through a shelter. The crew may.
+- **Access:** stairs are unusable for step-free groups. The escort occupies the crew from the joint departure through admission. Shelter suitability (accessible entry, assistance on arrival, ventilation operating) excludes a shelter when an item is confirmed absent and blocks approval when it is unconfirmed.
+- **Instructions:** each group's `instructionsAvailableAt`; departure ≥ that minute. This is a declared delay. It does not show that a message was delivered.
+
+## The planner
+
+The confirmed-state planner (`src/engine/planner.ts`) runs a bounded enumeration seeded with the no-intervention baseline and optimises lexicographically:
+
+1. residents assigned feasible shelter journeys
+2. protected person-minutes for residents left without one
+3. worst per-person exposure among assigned groups
+4. crew busy minutes (travel + work + inspection + escort)
+5. batteries consumed
+6. final arrival
+7. remaining ties: earlier arrivals overall, then stable IDs
+
+**Declared search scope** (also shown in the app):
+- every subset and order of offered interventions and escorts, each target at most once
+- the crew starts each task as soon as it arrives by the earliest safe route and the task's batteries are on hand; it waits only for on-hand batteries or a group's departure
+- work and escorts complete within the horizon
+- escort candidates: the earliest admission at each suitable shelter, plus the earliest admission at or after each confirmed place-delivery minute
+- resident candidates: one minimum-exposure trajectory per (shelter, admission minute) from a time-expanded search over (location, minute) with waiting; corridor or location conflicts trigger a residual-capacity re-search
+- joint assignment over every subset of servable groups, so a greedy first route never blocks another group (the tiny alternative-shelter test shows greedy serving 2 where joint assignment serves 4)
+
+**Status** is reported as *exhaustive within the declared scope*, *best feasible found before limit*, *proven infeasible within the declared model*, or *no feasible assignment found before limit*. A timeout is never reported as impossibility. Budget: 20,000 plans or 8 s per search.
+
+**Performance on the tested machine** (Intel Xeon 2.1 GHz, 2 cores, Node 22; median of 3): A 3.0 ms (8 plans), B 2.6 ms, C 3.1 ms, D 17 ms (80 policies), E 2.4 ms. Every reference search was exhaustive. A full set of resource requests takes about 0.1–0.5 s.
+
+### Inspection as a decision (D): bounded two-state policies
+
+`src/engine/policy.ts` takes the **knowledge snapshot** only: one connection declared unknown with possible states *open | blocked*. A policy is a shared action prefix, at most one inspection, and two mutually exclusive suffixes chosen only by the observed result. Resident departures before the observation are identical in both states, and their candidates come from a two-state search that must be valid in both. The policy objective is: min(n_open, n_blocked); then n_open + n_blocked; [protection min/sum when the fallback action is offered]; worst exposure over both states; crew busy max then sum; batteries max then sum; latest arrival. The second criterion is an explicit preference across two possibilities. It is not a probability or "expected lives".
+
+**Knowledge and truth are separate.** The planner's signature has no truth parameter. Truth lives in a `Truth` object that only the simulator reads, and the hidden-state invariance check confirms that the policy is identical whichever truth the test controller sets. An observation outside the declared states pauses the run, and no third branch is invented.
+
+### Shared resource ledger and future commitments
+
+`src/engine/ledger.ts` is the single source of rules for batteries (pack + delivery points; available / reserved / consumed / pending unreserved / pending reserved) and shelter place profiles. The planner, validator, approval check, simulator and invariant checker all call it. A request becomes usable only once it is recorded as a **confirmed expected delivery**. Work starts only when its batteries are reserved **and on hand** at the work location. A late or missing delivery pauses playback, names the delivery and the blocked task, and never starts work early or admits a group anyway.
+
+## Validation
+
+- **Independent validator** (`src/engine/validator.ts`): rebuilds hazard changes from completed work (not from the planner's effect list), re-walks every primitive leg, re-integrates exposure, re-checks every capacity, the suitability checklist and the battery sources, and recomputes the objective.
+- **Execution invariants** (`src/engine/invariants.ts`), checked at every boundary of every executed run: crew continuity, continuous escorting, shelter capacity and reservation conversion, battery accounting, no work on pending resources, suitable destinations, protection is not evacuation, valid arrivals. A deliberately corrupted event pauses playback and names the invariant.
+- **Agreement gate** (`src/engine/agreement.ts`): for every reference run, five views agree boundary by boundary: planner forecast, validator, live execution, replay of the exported events, and resumption from every checkpoint.
+- **Independent exhaustive solver** (`src/oracle/exhaustive.ts`): a minute-by-minute crew and resident enumeration with its own hazard function that imports only data types. It is compared with production on two hand-built tiny graphs and on a seeded batch of generated tiny neighborhoods (80+ cases, both *inspection-helps* and *inspection-wastes-time* kinds), using the **complete** lexicographic objective. Preconditions: no deliveries, and corridor/location capacities that never bind (corridor capacity has its own tests).
+- **Stress**: the selected A–C plans under 8 declared variants (repair +0/1/3/4 min × original growth ×1.0/1.2), propagated without re-optimising and revalidated, plus on-demand recomputation. D is executed in both states at inspection durations 1, 7 and 8.
+- **Seeded variations**: 15 perturbations of A–C (battery shortage, shelter capacity, repair time, connection time, instructions, hazard growth), each validated and compared with its baseline.
+
+See **EVIDENCE.md** for the recorded results, commands, build identifier, input hashes, times and limitations.
+
+## Reproducing a reported run
+
+Export JSON from the app (or use `evidence/runs/*.json`). Each export contains the initial snapshot, the input revision and hash, the knowledge snapshot and, separately, the simulator truth; reports; confirmed deliveries and their actual delivery events; shelter confirmations; the resource ledger; fallback protection and protected minutes; assumptions; search budget and status; the selected schedule or policy with branch reservations and objective components; observation history; the activated branch; and the full event history. Then run:
+
+```bash
+npm run replay -- path/to/export.json
+```
+
+## Project layout
+
+```
+src/engine/     types, scenarios (A–E), world (hazards), ledger, reservations, routing, crew,
+                assign, planner, policy, explain, validator, approval, simulate, invariants,
+                timeline, replay, agreement, stress, requests, benefit, exportRun
+src/oracle/     exhaustive.ts (independent solver), tiny.ts (hand-built graphs + seeded generator)
+src/checks/     suites.ts (evidence checks shared by npm test and npm run evidence)
+src/ui/         React interface (session, map, panels, printable dispatch)
+scripts/        evidence.ts, replay.ts, batch.ts, offline-check.ts
+tests/          vitest entry points
+docs/           EVIDENCE-manual.md (human-run checks and their status)
+```
+
+Planning and simulation do not depend on React.
+
+## Known differences, limits and incomplete work
+
+- **Dispatch comprehension test: not run.** It needs two people who did not build the system. The protocol and an empty results table are in EVIDENCE.md. The interface walkthroughs were performed by an automated headless-browser script, not a person.
+- **Lower Refuge place request (A, 11 places):** the deadline matches the brief (minute 20, the horizon; never-arrives fails; minute 13 avoids waiting). The planner's own timing differs from the brief's narrative, though: it has **Pump Quarter B leave at minute 10** and arrive at 20, rather than Group A waiting with the crew at the Lower passage from 12 to 19. That choice saves 7 crew-busy minutes (criterion 4). The brief's timing is built by hand, passes the independent validator and executes to 24 arrivals with A admitted at 20, recorded as its own check.
+- The search is exhaustive **within the declared scope**, not over every conceivable schedule. Agreement with the independent solver is established for the generated instances under its stated preconditions.
+- Instruction lateness *during* execution is not simulated: instruction availability is a time-0 input. The validator rejects a plan whose departures precede it.
+- Interruption tests restore from boundary checkpoints taken immediately before and after each transaction minute. A torn write inside a boundary is equivalent to the "before" checkpoint, because the boundary is re-processed idempotently.
+- Not implemented (stretch): exact latest-dispatch optimisation, multiple ranked alternatives, more than one unknown passage, replanning from in-transit positions (editing after execution starts a clearly labeled new run instead), and a Web Worker (searches take milliseconds here).
+- Not modeled: medical outcomes, shelter habitability beyond minute 20, adversarial reports, changing hidden conditions, unreliable inspection, actual radio delivery, sensor calibration, and any control over Directorate infrastructure. Fan 3 slows hazard growth in one transit corridor. It does not restore ventilation in homes.

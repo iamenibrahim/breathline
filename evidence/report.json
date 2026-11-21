@@ -1,0 +1,4991 @@
+{
+ "command": "npm run evidence",
+ "buildId": "breathline-1.0.0+src.a1409d284c9e585d",
+ "generatedAt": "2026-11-21T02:08:25.807Z",
+ "elapsedMs": 35549,
+ "env": {
+  "node": "v22.23.5",
+  "platform": "linux 6.18.44-fc-v726",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "cores": 2
+ },
+ "summary": {
+  "passed": 114,
+  "failed": 0,
+  "notRun": 0,
+  "total": 114
+ },
+ "exitStatus": 0,
+ "checks": [
+  {
+   "id": "engine-tests",
+   "name": "Engine test suite (npm test)",
+   "category": "engine-tests",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "all tests pass",
+   "observed": "16/16 tests passed in 2 files",
+   "elapsedMs": 6438
+  },
+  {
+   "id": "ref-A",
+   "name": "A: repair, open, escort serves 24; baseline 12; executed arrivals",
+   "category": "reference",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Connected problem-solving",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24 assigned (fan > gate > escort), baseline 12; executed 24 vs 12",
+   "observed": "assigned 24 (repair-fan-3 > open-gate-b > escort-A); baseline 12; executed arrivals 24 vs 12; +12",
+   "elapsedMs": 31,
+   "inputHash": "872501e9f46075a8",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-A-components",
+   "name": "A component removal: none 12, fan only 20, gate+escort 16, all 24",
+   "category": "reference",
+   "criteria": [
+    "Connected problem-solving"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "12 / 20 / 16 / 24",
+   "observed": "12 (C) / 20 (BC) / 16 (AC) / 24 (ABC)",
+   "elapsedMs": 16,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "ref-B",
+   "name": "B: rescue first; fan-first cannot serve 24",
+   "category": "reference",
+   "criteria": [
+    "Fit with the Hollow",
+    "Connected problem-solving"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "selected gate > escort > fan = 24; fan-first best 20; no intervention 12; gate+escort 16",
+   "observed": "selected 24 (open-gate-b > escort-A > repair-fan-3); fan-first best 20; none 12; gate+escort 16",
+   "elapsedMs": 15,
+   "inputHash": "b4331e630766b360",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-B-margin",
+   "name": "B: one-minute repair delay makes J3 unsafe at B’s arrival (selected plan)",
+   "category": "stress",
+   "criteria": [
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "B fails at +1 minute (J3 = 100 at minute 18)",
+   "observed": "B fails: group B: reaches J3 at 18 with hazard 100 (must be < 100)",
+   "elapsedMs": 16
+  },
+  {
+   "id": "ref-C",
+   "name": "C: stable ventilation — fan repair excluded; batteries preserved",
+   "category": "reference",
+   "criteria": [
+    "Connected problem-solving",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24 without fan; 4 batteries preserved after execution",
+   "observed": "assigned 24 (open-gate-b > escort-A); consumed 0; preserved 4; baseline 20",
+   "elapsedMs": 27,
+   "inputHash": "a32c586a6fa88537",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-D1",
+   "name": "D, inspection 1 min: policy 24/20 with inspection; confirmed-route response 20/20",
+   "category": "reference",
+   "criteria": [
+    "Originality and ingenuity",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24/20; inspection included; confirmed routes 20/20",
+   "observed": "24/20; inspection 9–10; confirmed routes 20/20;",
+   "elapsedMs": 60,
+   "inputHash": "74d0fd2d2af53f48",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-D7",
+   "name": "D, inspection 7 min: policy 24/20 with inspection; confirmed-route response 20/20",
+   "category": "reference",
+   "criteria": [
+    "Originality and ingenuity",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24/20; inspection included; confirmed routes 20/20",
+   "observed": "24/20; inspection 9–16; confirmed routes 20/20; open-branch A arrival 20",
+   "elapsedMs": 25,
+   "inputHash": "34fcce97986065d6",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-D8",
+   "name": "D, inspection 8 min: policy 20/20, no inspection; confirmed-route response 20/20",
+   "category": "reference",
+   "criteria": [
+    "Originality and ingenuity",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "20/20; inspection omitted; confirmed routes 20/20",
+   "observed": "20/20; inspection omitted; confirmed routes 20/20;",
+   "elapsedMs": 16,
+   "inputHash": "7f3d3b9440884221",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-D-exec",
+   "name": "D: execute both hidden states (policy) and the confirmed-route response from the same snapshot",
+   "category": "reference",
+   "criteria": [
+    "Originality and ingenuity",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "policy open 24 / blocked 20 arrivals; confirmed-route 20 / 20",
+   "observed": "policy 24/20; confirmed-route 20/20",
+   "elapsedMs": 28
+  },
+  {
+   "id": "ref-D-truth-invariance",
+   "name": "D: changing only hidden truth leaves the pre-observation policy unchanged",
+   "category": "reference",
+   "criteria": [
+    "Originality and ingenuity",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "identical policy JSON for open and blocked truths",
+   "observed": "identical (the planner signature has no truth parameter; truth is only passed to the simulator)",
+   "elapsedMs": 53
+  },
+  {
+   "id": "ref-label-invariance",
+   "name": "Scenario labels and group display names do not change the objective",
+   "category": "reference",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "identical objective after relabelling",
+   "observed": "identical objectives (D and A)",
+   "elapsedMs": 80
+  },
+  {
+   "id": "ref-E",
+   "name": "E: fan then ventilation; 20 assigned; A protected 20 vs 14 (+6/person, +24 person-minutes); 6 batteries",
+   "category": "reference",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "20; protected 20 (none) vs 14 (fan only); 6 consumed exactly once",
+   "observed": "assigned 20 (repair-fan-3 > ventilate-RA); executed arrivals 20; A protected 20 vs fan-only 14 vs none 14; vent-only 12 assigned / 20 min; +6/person, +24 person-minutes; batteries consumed 6; A status unresolved",
+   "elapsedMs": 13,
+   "inputHash": "5c5c4eab6f7cddf2",
+   "validator": "valid"
+  },
+  {
+   "id": "ref-E-order",
+   "name": "E: ventilation-first is rejected because it loses B (evacuation outranks protection)",
+   "category": "reference",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Connected problem-solving"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "ventilation-first best = 12 assigned",
+   "observed": "ventilation-first best: 12 assigned, A protected 20",
+   "elapsedMs": 2
+  },
+  {
+   "id": "edit-A-bat3",
+   "name": "A: batteries 4 → 3",
+   "category": "edits",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "repair unavailable; 16",
+   "observed": "16 (AC; open-gate-b > escort-A). B: Repair Fan 3 needs 4 batteries; 3 are available. Vent corridor (J3) reaches 100 at minute 9, when the group would arrive there (occupancy requires below 100).",
+   "elapsedMs": 3,
+   "inputHash": "1e84930654d4198f",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "edit-A-L11",
+   "name": "A: Lower Refuge 12 → 11 places",
+   "category": "edits",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "20 through B and C",
+   "observed": "20 (BC; repair-fan-3). A: No open step-free route in this plan: RA-G blocked (Open Gate B would open it; not in this plan); RA-X3 blocked; no available action opens it. Needs a continuous escort; in this plan the crew is committed to other work. Lower Refuge has 11 places; B (8) is assigned there; A needs 4.",
+   "elapsedMs": 10,
+   "inputHash": "dc798e08970e53af",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "edit-B-instr2",
+   "name": "B: B instructions at minute 2",
+   "category": "edits",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24 infeasible; B arrival would be 21",
+   "observed": "16 (AC; open-gate-b > escort-A). B: Instructions are available at minute 2; the shortest journey takes 19 minutes, so arrival would be minute 21, after the 20-minute horizon.",
+   "elapsedMs": 7,
+   "inputHash": "1a807a7529f9faea",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "edit-A-noaccess",
+   "name": "A: Lower Refuge accessible entry confirmed absent",
+   "category": "edits",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "20 through B and C; unsuitable shelter",
+   "observed": "20 (BC; repair-fan-3). A: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival.",
+   "elapsedMs": 4,
+   "inputHash": "baf2d9178e3de604",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "edit-E-bat4",
+   "name": "E: batteries 6 → 4",
+   "category": "edits",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "fan kept; 20; A protected 14",
+   "observed": "20 (BC; repair-fan-3; A protected 14). A: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it.",
+   "elapsedMs": 3,
+   "inputHash": "74ba21b1176325a0",
+   "searchStatus": "exhaustive",
+   "validator": "valid"
+  },
+  {
+   "id": "explain-A",
+   "name": "A: explanation connects the work to the residents it enables, from computed checks",
+   "category": "reference",
+   "criteria": [
+    "Demo and communication",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "names the J3 hazard 68 vs 100 for B and the escort for A",
+   "observed": "24 of 24 residents have a feasible shelter journey (+12 versus no intervention). Repair Fan 3 (0–5) so Pump Quarter B (8) can pass the vent corridor at minute 9 (hazard 68 instead of 100); then open Gate B (7–9); then escort the 4 Deep Homes A residents, including the wheelchair user, to Lower Refuge (arriving at minute 13).",
+   "elapsedMs": 19
+  },
+  {
+   "id": "benefit-A-E",
+   "name": "Per-group benefit from executed baseline and response runs (A and E)",
+   "category": "reference",
+   "criteria": [
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "A: A and B newly arrive, C unchanged; E: A +6 min/person, +24 person-minutes, not evacuated",
+   "observed": "A: Accessible assistance: Gate B opened and a continuous escort to Lower Refuge [Unresolved — location reached the threshold → Arrived (minute 13)] | B: A traversable corridor: Repair Fan 3 keeps Vent corridor below threshold at arrival [Unresolved → Arrived (minute 10)] | C: Retained shelter access: its existing route and Upper Refuge places stay reserved (outcome unchanged — not credited to the intervention) [Arrived (minute 3) → Arrived (minute 3)] | A: Temporary ventilation at Deep Homes A — not evacuated; below threshold until the horizon at minute 20 instead of reaching it at minute 14 (+6 minutes per person, 24 person-minutes) [Unresolved — location reached the threshold → Unresolved] | B: A traversable corridor: Repair Fan 3 keeps Vent corridor below threshold at arrival [Unresolved → Arrived (minute 10)] | C: Retained shelter access: its existing route and Upper Refuge places stay reserved (outcome unchanged — not credited to the intervention) [Arrived (minute 3) → Arrived (minute 3)]",
+   "elapsedMs": 16
+  },
+  {
+   "id": "validator-all",
+   "name": "Independent validator accepts every reference plan and recomputes the same objective",
+   "category": "validator",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "all valid",
+   "observed": "A selected: valid; A baseline: valid; B selected: valid; B baseline: valid; C selected: valid; C baseline: valid; E selected: valid; E baseline: valid; D1 policy: valid; D7 policy: valid; D8 policy: valid",
+   "elapsedMs": 59
+  },
+  {
+   "id": "f-threshold",
+   "name": "Strict threshold: hazard 100 is unsafe, 99.x is safe; repair preserves accumulated hazard",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "J3 = 100 at 9 unrepaired (unsafe); 68 with repair at 5; RA 93 then held",
+   "observed": "J3(9)=100 unrepaired, 68 repaired at 5 (J3(5)=60); RA(20) with protection at 13 = 93",
+   "elapsedMs": 0
+  },
+  {
+   "id": "f-protected-time",
+   "name": "Protected minutes count elapsed intervals (max 20, never 21); a crossed threshold cannot be undone",
+   "category": "focused",
+   "criteria": [
+    "Technical execution",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "14 without ventilation, 20 with it; ventilation after crossing gains nothing",
+   "observed": "none 14; ventilated at 13 20; ventilated at 15 (after crossing at 14) 14",
+   "elapsedMs": 0
+  },
+  {
+   "id": "f-exposure",
+   "name": "Exposure integrates waiting before departure (left endpoint) and travel",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "A in A: waiting 0–9 = 335; B 0; unresolved A over horizon = 1370",
+   "observed": "A exposure 335 (waiting 335, travel 0); unresolved A over 20 minutes 1370",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-instructions",
+   "name": "Instruction availability: departure before instructionsAvailableAt is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…before instructions…)",
+   "observed": "group C: departs at 0 before instructions are available at 1",
+   "elapsedMs": 4
+  },
+  {
+   "id": "f-stairs",
+   "name": "Wheelchair access: an escort over the stairs is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…not step-free…)",
+   "observed": "crew escort A: RA-ST is not step-free",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-escort",
+   "name": "Continuous escort: a group moving without the crew alongside is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…escort covers…)",
+   "observed": "group A: escort covers 10-13, journey is 11-14",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-crew-conflict",
+   "name": "Crew conflicts: overlapping activities are rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…overlaps…)",
+   "observed": "crew travel: overlaps the previous activity (starts 4, previous ends 5)",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-toolkit",
+   "name": "Equipment: work without the tool kit is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…tool kit…)",
+   "observed": "Repair Fan 3 needs the tool kit",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-batteries",
+   "name": "Batteries: work beyond the pack is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…pack exhausted…)",
+   "observed": "Repair Fan 3: crew pack exhausted at minute 0",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-shelter-transit",
+   "name": "No shelter transit: a resident route through a shelter is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…shelter…)",
+   "observed": "group C: destination X2 is not a shelter",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-capacity",
+   "name": "Joint indivisible assignment: over-filling a shelter is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…places needed…)",
+   "observed": "L: 12 places needed at minute 13, 11 available",
+   "elapsedMs": 4
+  },
+  {
+   "id": "f-threshold-arrival",
+   "name": "Threshold at arrival: B through unrepaired J3 at minute 9 is rejected",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator rejects (…hazard…)",
+   "observed": "group B: reaches J3 at 9 with hazard 100 (must be < 100)",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-corridor",
+   "name": "Shared corridor capacity: overlapping and opposite-direction intervals conflict; adjacent intervals do not",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "overlap blocked; adjacent allowed; opposite shares the pool; planner staggers groups",
+   "observed": "overlap blocked true; adjacent allowed true; same-direction staggered [1,3) [3,5); opposite M→N [1,3) N→M [3,5); forced overlap rejected: corridor M-N carries 6 residents at minute 1 (capacity 3)",
+   "elapsedMs": 3
+  },
+  {
+   "id": "f-reservation-conversion",
+   "name": "Reservation-to-occupant conversion: each arrival converts exactly one reservation",
+   "category": "focused",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "occupants equal reservations at the horizon, no duplicates",
+   "observed": "L: occupants B,A / reservations A,B; U: occupants C / reservations C",
+   "elapsedMs": 5
+  },
+  {
+   "id": "f-suitability",
+   "name": "Suitability: absent accessible entry or assistance removes the shelter for A only; absent ventilation removes it for every group; unconfirmed items block approval",
+   "category": "suitability",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "A-only exclusion; all-group exclusion; approval blocked",
+   "observed": "assistance absent → BC; ventilation absent → C; accessible entry unconfirmed → planned 24, approval: unconfirmed essential input: Lower Refuge: accessible entry (Lower Refuge steward)",
+   "elapsedMs": 11
+  },
+  {
+   "id": "f-joint-alt-shelter",
+   "name": "Tiny alternative-shelter graph: joint assignment serves 4 where greedy first-route commitment serves 2",
+   "category": "oracle-tiny",
+   "criteria": [
+    "Technical execution",
+    "Connected problem-solving"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "production 4 = oracle 4; greedy 2",
+   "observed": "production {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; oracle {\"batteries\":0,\"busy\":0,\"finalArrival\":2,\"maxExposure\":0,\"protectedPM\":0,\"served\":4}; flexible group → S2; greedy 2",
+   "elapsedMs": 6,
+   "validator": "valid"
+  },
+  {
+   "id": "f-tiny-policy",
+   "name": "Tiny two-state graph: independent policy enumeration agrees with production (inspection helps at 1 min, omitted at 3 min)",
+   "category": "oracle-tiny",
+   "criteria": [
+    "Originality and ingenuity",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "complete policy objective identical at both durations",
+   "observed": "d=1: agree 5/3 inspection used (2398 inspection policies enumerated); d=3: agree 3/3 inspection omitted (199 inspection policies enumerated)",
+   "elapsedMs": 319
+  },
+  {
+   "id": "generated-batch",
+   "name": "Generated tiny-case batch (seed 20871120): complete lexicographic objective vs independent exhaustive solver",
+   "category": "generated-batch",
+   "criteria": [
+    "Technical execution",
+    "Originality and ingenuity"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "every case agrees on every objective component and validates; both inspection kinds present (>= 8 each)",
+   "observed": "81 cases (40 confirmed-state, 41 two-state); agree 81; valid 81; inspection-helps 8; inspection-wastes-time 30; failures none",
+   "elapsedMs": 2407,
+   "limitations": "Agreement establishes correctness for these generated instances only. Generator bounds: corridor/location capacities not varied and no deliveries (oracle preconditions)."
+  },
+  {
+   "id": "neg-stale",
+   "name": "Stale approval is rejected",
+   "category": "negative",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "plan computed at revision 0 cannot be approved at revision 1",
+   "observed": "Stale plan: computed for input revision 0, current revision is 1. Recompute before approval. | same revision approves: true",
+   "elapsedMs": 6
+  },
+  {
+   "id": "neg-duplicate",
+   "name": "Duplicate completion/boundary processing does not duplicate consumption, occupancy or arrivals",
+   "category": "negative",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "identical state after re-processing minute 5 (fan completion) and 13 (admission)",
+   "observed": "minute 5 identical; minute 13 identical",
+   "elapsedMs": 10
+  },
+  {
+   "id": "neg-corrupt",
+   "name": "A deliberately corrupted event (teleport into a shelter) pauses playback naming the invariant",
+   "category": "negative",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "paused; invariant \"valid arrivals\"",
+   "observed": "paused at 5: Invariant violated: valid arrivals — B jumped from J2 to L, which are not adjacent (event corrupt:05:05)",
+   "elapsedMs": 7
+  },
+  {
+   "id": "neg-unknown-edge",
+   "name": "Unknown-edge traversal before inspection is rejected (validator) and cannot execute (simulator)",
+   "category": "negative",
+   "criteria": [
+    "Originality and ingenuity",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "validator error; simulator pauses",
+   "observed": "validator: [open] uses the unknown connection without inspection; simulator: Invariant violated: shelter capacity — Lower Refuge: reservations need 16 places at minute 17, profile has 12",
+   "elapsedMs": 27
+  },
+  {
+   "id": "neg-confirm-change",
+   "name": "Changed steward confirmation (Lower Refuge 11 places) makes the plan stale; recomputation returns 20 (B, C), names the lost group and the request",
+   "category": "negative",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "stale; recompute 20; A lost; request: 1 place at Lower Refuge by 20",
+   "observed": "stale true; recompute 20 (BC); lost A; request: Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting.",
+   "elapsedMs": 191
+  },
+  {
+   "id": "neg-unconfirmed",
+   "name": "Unconfirmed essential inputs (places, instructions, delivery) block approval and are listed",
+   "category": "negative",
+   "criteria": [
+    "Technical execution",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "approval blocked with reasons; residents not dropped",
+   "observed": "planned 24; unconfirmed essential input: Upper Refuge: 12 places (Upper Refuge steward) | unconfirmed essential input: Departure instructions for Pump Quarter B available by minute 0 (resident representative)",
+   "elapsedMs": 3
+  },
+  {
+   "id": "int-A-5",
+   "name": "Reload before/after transactions: A fan completion",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (battery consumption exactly once)",
+   "observed": "before minute 5: ok; after minute 5: ok; consumed 4; arrivals 24",
+   "elapsedMs": 11
+  },
+  {
+   "id": "int-A-3-10-13",
+   "name": "Reload before/after transactions: A admissions (C 3, B 10, A 13)",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (shelter admission exactly once)",
+   "observed": "before minute 3: ok; after minute 3: ok; before minute 10: ok; after minute 10: ok; before minute 13: ok; after minute 13: ok; consumed 4; arrivals 24",
+   "elapsedMs": 15
+  },
+  {
+   "id": "int-D-5-10-14-17",
+   "name": "Reload before/after transactions: D fan completion + inspection (open)",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)",
+   "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 14: ok; after minute 14: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 24",
+   "elapsedMs": 31
+  },
+  {
+   "id": "int-D-5-10-17",
+   "name": "Reload before/after transactions: D fan completion + inspection (blocked)",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (consumption, observation, admission exactly once)",
+   "observed": "before minute 5: ok; after minute 5: ok; before minute 10: ok; after minute 10: ok; before minute 17: ok; after minute 17: ok; consumed 4; arrivals 20",
+   "elapsedMs": 25
+  },
+  {
+   "id": "int-D-14-16-20",
+   "name": "Reload before/after transactions: D battery-request run: delivery at 14 and Gate B completion at 16",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (delivery and consumption exactly once)",
+   "observed": "before minute 14: ok; after minute 14: ok; before minute 16: ok; after minute 16: ok; before minute 20: ok; after minute 20: ok; consumed 8; arrivals 24",
+   "elapsedMs": 41
+  },
+  {
+   "id": "int-E-5-13",
+   "name": "Reload before/after transactions: E fan (5) and ventilation (13) completion",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (battery consumption and protection effect exactly once)",
+   "observed": "before minute 5: ok; after minute 5: ok; before minute 13: ok; after minute 13: ok; consumed 6; protection effects 2; A protected 20",
+   "elapsedMs": 9
+  },
+  {
+   "id": "int-A-19-20",
+   "name": "Reload before/after transactions: A Lower Refuge place delivery at 20",
+   "category": "interruption",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "resumed runs identical to the uninterrupted run (place delivery and admission exactly once)",
+   "observed": "before minute 19: ok; after minute 19: ok; before minute 20: ok; after minute 20: ok; consumed 4; arrivals 24",
+   "elapsedMs": 36
+  },
+  {
+   "id": "export-A response",
+   "name": "Export → JSON → re-execute and replay: A response",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 5,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "export-A baseline",
+   "name": "Export → JSON → re-execute and replay: A baseline",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 4,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "export-B response",
+   "name": "Export → JSON → re-execute and replay: B response",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 3,
+   "inputHash": "b4331e630766b360"
+  },
+  {
+   "id": "export-B baseline",
+   "name": "Export → JSON → re-execute and replay: B baseline",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 2,
+   "inputHash": "b4331e630766b360"
+  },
+  {
+   "id": "export-C response",
+   "name": "Export → JSON → re-execute and replay: C response",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 4,
+   "inputHash": "a32c586a6fa88537"
+  },
+  {
+   "id": "export-C baseline",
+   "name": "Export → JSON → re-execute and replay: C baseline",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 2,
+   "inputHash": "a32c586a6fa88537"
+  },
+  {
+   "id": "export-A fan only",
+   "name": "Export → JSON → re-execute and replay: A fan only",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 5,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "export-A gate+escort",
+   "name": "Export → JSON → re-execute and replay: A gate+escort",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 2,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "export-D1 policy, open",
+   "name": "Export → JSON → re-execute and replay: D1 policy, open",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 10,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "export-D1 policy, blocked",
+   "name": "Export → JSON → re-execute and replay: D1 policy, blocked",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 3,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "export-D8 policy, open",
+   "name": "Export → JSON → re-execute and replay: D8 policy, open",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 10,
+   "inputHash": "7f3d3b9440884221"
+  },
+  {
+   "id": "export-D8 policy, blocked",
+   "name": "Export → JSON → re-execute and replay: D8 policy, blocked",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 2,
+   "inputHash": "7f3d3b9440884221"
+  },
+  {
+   "id": "export-D confirmed-route, open",
+   "name": "Export → JSON → re-execute and replay: D confirmed-route, open",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 7,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "export-D confirmed-route, blocked",
+   "name": "Export → JSON → re-execute and replay: D confirmed-route, blocked",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 5,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "export-E response",
+   "name": "Export → JSON → re-execute and replay: E response",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 9,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "export-E baseline",
+   "name": "Export → JSON → re-execute and replay: E baseline",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 2,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "export-E fan only",
+   "name": "Export → JSON → re-execute and replay: E fan only",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 3,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "export-A + Lower Refuge place at 20",
+   "name": "Export → JSON → re-execute and replay: A + Lower Refuge place at 20",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 3,
+   "inputHash": "af393ff4a2fe6607"
+  },
+  {
+   "id": "export-D + 4 batteries at G by 14, open",
+   "name": "Export → JSON → re-execute and replay: D + 4 batteries at G by 14, open",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 6,
+   "inputHash": "e808f29d312bb37e"
+  },
+  {
+   "id": "export-D + 4 batteries at G by 14, blocked",
+   "name": "Export → JSON → re-execute and replay: D + 4 batteries at G by 14, blocked",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "input hash, events, arrivals and consumption reconcile",
+   "observed": "input hash: ok; re-executed event history: ok; re-executed arrivals: ok; event-history arrivals reconcile with saved result: ok; event-history consumption reconciles: ok; independent replay matches re-execution boundary by boundary: ok",
+   "elapsedMs": 3,
+   "inputHash": "e808f29d312bb37e"
+  },
+  {
+   "id": "agree-A response",
+   "name": "Agreement gate: A response",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+   "elapsedMs": 41,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "agree-A baseline",
+   "name": "Agreement gate: A baseline",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+   "elapsedMs": 21,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "agree-B response",
+   "name": "Agreement gate: B response",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+   "elapsedMs": 21,
+   "inputHash": "b4331e630766b360"
+  },
+  {
+   "id": "agree-B baseline",
+   "name": "Agreement gate: B baseline",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+   "elapsedMs": 11,
+   "inputHash": "b4331e630766b360"
+  },
+  {
+   "id": "agree-C response",
+   "name": "Agreement gate: C response",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 0)",
+   "elapsedMs": 18,
+   "inputHash": "a32c586a6fa88537"
+  },
+  {
+   "id": "agree-C baseline",
+   "name": "Agreement gate: C baseline",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 0)",
+   "elapsedMs": 13,
+   "inputHash": "a32c586a6fa88537"
+  },
+  {
+   "id": "agree-A fan only",
+   "name": "Agreement gate: A fan only",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 30,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "agree-A gate+escort",
+   "name": "Agreement gate: A gate+escort",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,C; consumed 0)",
+   "elapsedMs": 33,
+   "inputHash": "872501e9f46075a8"
+  },
+  {
+   "id": "agree-D1 policy, open",
+   "name": "Agreement gate: D1 policy, open",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4; branch open)",
+   "elapsedMs": 28,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "agree-D1 policy, blocked",
+   "name": "Agreement gate: D1 policy, blocked",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4; branch blocked)",
+   "elapsedMs": 16,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "agree-D8 policy, open",
+   "name": "Agreement gate: D8 policy, open",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 18,
+   "inputHash": "7f3d3b9440884221"
+  },
+  {
+   "id": "agree-D8 policy, blocked",
+   "name": "Agreement gate: D8 policy, blocked",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 16,
+   "inputHash": "7f3d3b9440884221"
+  },
+  {
+   "id": "agree-D confirmed-route, open",
+   "name": "Agreement gate: D confirmed-route, open",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 11,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "agree-D confirmed-route, blocked",
+   "name": "Agreement gate: D confirmed-route, blocked",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 14,
+   "inputHash": "74d0fd2d2af53f48"
+  },
+  {
+   "id": "agree-E response",
+   "name": "Agreement gate: E response",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 6)",
+   "elapsedMs": 16,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "agree-E baseline",
+   "name": "Agreement gate: E baseline",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived C; consumed 0)",
+   "elapsedMs": 10,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "agree-E fan only",
+   "name": "Agreement gate: E fan only",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived B,C; consumed 4)",
+   "elapsedMs": 12,
+   "inputHash": "5c5c4eab6f7cddf2"
+  },
+  {
+   "id": "agree-A + Lower Refuge place at 20",
+   "name": "Agreement gate: A + Lower Refuge place at 20",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 4)",
+   "elapsedMs": 18,
+   "inputHash": "af393ff4a2fe6607"
+  },
+  {
+   "id": "agree-D + 4 batteries at G by 14, open",
+   "name": "Agreement gate: D + 4 batteries at G by 14, open",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
+   "elapsedMs": 19,
+   "inputHash": "e808f29d312bb37e"
+  },
+  {
+   "id": "agree-D + 4 batteries at G by 14, blocked",
+   "name": "Agreement gate: D + 4 batteries at G by 14, blocked",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "forecast = validator = live (invariants) = replay = every checkpoint resumption",
+   "observed": "all five views agree (21 boundaries, 22 checkpoints, 21 invariant checks, 0 violations; arrived A,B,C; consumed 8)",
+   "elapsedMs": 20,
+   "inputHash": "e808f29d312bb37e"
+  },
+  {
+   "id": "invariants-summary",
+   "name": "Execution invariants over every agreement run",
+   "category": "agreement",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "0 violations",
+   "observed": "420 boundaries checked, 0 violations",
+   "elapsedMs": 0
+  },
+  {
+   "id": "req-D-blocked",
+   "name": "Resource request: D-blocked",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "4 batteries to G by 14; 15 too late",
+   "observed": "Deliver 4 batteries to Gate B work point (G) by minute 14 to evacuate Deep Homes A (4 residents, including the wheelchair user) with escort. Delivery at 15 is too late. If it arrives by minute 7, nobody waits for it (time that avoids waiting); the deadline 14 relies on safe waiting. [deadline validated true; next minute/never fails true] (54 planner runs, 179 ms)",
+   "elapsedMs": 194
+  },
+  {
+   "id": "req-A-L11",
+   "name": "Resource request: A-L11",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "1 place at L by 20 (horizon); never-arrives fails; avoids waiting by 13",
+   "observed": "Confirm 1 more place at Lower Refuge, available by minute 20, so Deep Homes A (4 residents, including the wheelchair user) can be admitted and all 24 residents arrive. If it arrives by minute 13, nobody waits for it (time that avoids waiting); the deadline 20 relies on safe waiting. [deadline validated true; next minute/never fails true] (27 planner runs, 116 ms)",
+   "elapsedMs": 121
+  },
+  {
+   "id": "req-B-instr",
+   "name": "Resource request: B-instr",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "instructions to RB by minute 1",
+   "observed": "Deliver departure instructions to Pump Quarter B (RB) by minute 1 so Pump Quarter B (8 residents) can reach Lower Refuge by minute 20. [deadline validated true; next minute/never fails true] (23 planner runs, 59 ms)",
+   "elapsedMs": 62
+  },
+  {
+   "id": "req-A-bat3",
+   "name": "Resource request: A-bat3",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "1 battery at F by 3",
+   "observed": "Deliver 1 battery to Fan 3 workshop (F) by minute 3 to serve Pump Quarter B (8 residents). Delivery at 4 is too late. If it arrives by minute 0, nobody waits for it (time that avoids waiting); the deadline 3 relies on safe waiting. [deadline validated true; next minute/never fails true] (38 planner runs, 72 ms)",
+   "elapsedMs": 73
+  },
+  {
+   "id": "req-E",
+   "name": "Resource request: E",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "no tested change; A still needs an accessible route",
+   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No step-free route to a suitable shelter: RA-G blocked; no available action opens it; RA-X3 blocked; no available action opens it. Temporary ventilation keeps RA below threshold to minute 20; Deep Homes A still needs an accessible route. (8 planner runs, 17 ms)",
+   "elapsedMs": 19
+  },
+  {
+   "id": "req-A-noaccess",
+   "name": "Resource request: A-noaccess",
+   "category": "requests",
+   "criteria": [
+    "Survival impact and usefulness",
+    "Fit with the Hollow"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "no tested change; binding: unsuitable shelter",
+   "observed": "No tested resource change (up to 4 batteries at a work location, up to 4 shelter places, earlier instructions) gives Deep Homes A a feasible journey. Binding constraint: No suitable shelter: Lower Refuge has places but no confirmed accessible entry; Upper Refuge has places but no confirmed assistance on arrival. (4 planner runs, 8 ms)",
+   "elapsedMs": 12
+  },
+  {
+   "id": "future-D-batteries",
+   "name": "D: record 4 batteries at G by 14 as a confirmed expected delivery; plan, validate, approve, execute agree; 15 is rejected and pauses playback",
+   "category": "future-commitments",
+   "criteria": [
+    "Technical execution",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "all four accept; 24 arrive; late delivery rejected by validator and pauses at gate start",
+   "observed": "approve true; arrivals open/blocked 24/24; late plan: [open] Open Gate B: starts at 14 but delivery req-G arrives at 15 (pending batteries cannot satisfy a work start); playback: Cannot start Open Gate B: batteries from delivery req-G are still pending at G. Crew holds at G; dependent tasks wait. Stop and report the missing delivery.",
+   "elapsedMs": 29
+  },
+  {
+   "id": "future-A-place",
+   "name": "A (11 places): record 1 place at Lower Refuge at 20; plan/validate/approve/execute agree (24 arrive); a place that never arrives leaves A unserved in planning and pauses playback at admission",
+   "category": "future-commitments",
+   "criteria": [
+    "Technical execution",
+    "Survival impact and usefulness"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24 arrive; never-arrives: planning 20, playback pauses at 20",
+   "observed": "approve true; executed 24 (planner timing: A 10→13, B 10→20, C 0→3); never-arrives planning 20 (BC); playback: Admission of B at L blocked: places not available (delivery req-L still pending). Residents held at the entrance; stop and report.",
+   "elapsedMs": 20
+  },
+  {
+   "id": "future-A-place-reference",
+   "name": "Spec reference timing for the Lower Refuge place: A waits with the crew at P 12–19, P→L 19–20, admitted at 20 — validated and executed to 24",
+   "category": "future-commitments",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "valid; 24 arrive; A admitted at 20",
+   "observed": "validator valid; executed 24; A admitted at 20; the planner itself prefers B departing at 10 (crew busy 13 vs 20, criterion 4)",
+   "elapsedMs": 10,
+   "limitations": "Hand-constructed schedule from the specification, checked by the same validator and simulator; not the planner’s selected timing."
+  },
+  {
+   "id": "future-B-instr",
+   "name": "B: instructions confirmed for minute 1 → plan/validate/approve/execute 24; minute 2 makes the same plan invalid",
+   "category": "future-commitments",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "24 arrive; late instructions rejected",
+   "observed": "approve true; executed 24; with instructions at 2: group B: departs at 1 before instructions are available at 2",
+   "elapsedMs": 4
+  },
+  {
+   "id": "seeded-variations",
+   "name": "15 seeded perturbations of A–C (seed 4242)",
+   "category": "seeded-variations",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": ">= 12 cases; every schedule independently valid and at least the seeded baseline",
+   "observed": "#0 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 2 ms); #1 B lower shelter capacity: L places 11 → 20 (baseline 12, valid, exhaustive, 3 ms); #2 C longer repair: fan repair 7 min → 24 (baseline 20, valid, exhaustive, 3 ms); #3 A slower connection: U-X2 3 min → 24 (baseline 12, valid, exhaustive, 3 ms); #4 B later instructions: A instructions at 2 → 24 (baseline 12, valid, exhaustive, 2 ms); #5 C faster hazard: RA growth 8.9 → 24 (baseline 20, valid, exhaustive, 12 ms); #6 A battery shortage: batteries 2 → 16 (baseline 12, valid, exhaustive, 4 ms); #7 B lower shelter capacity: U places 10 → 12 (baseline 0, valid, exhaustive, 14 ms); #8 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 5 ms); #9 A slower connection: RB-J2 6 min → 24 (baseline 12, valid, exhaustive, 5 ms); #10 B later instructions: C instructions at 1 → 24 (baseline 12, valid, exhaustive, 10 ms); #11 C faster hazard: J3 growth 0 → 24 (baseline 20, valid, exhaustive, 4 ms); #12 A battery shortage: batteries 3 → 16 (baseline 12, valid, exhaustive, 3 ms); #13 B lower shelter capacity: L places 8 → 20 (baseline 12, valid, exhaustive, 8 ms); #14 C longer repair: fan repair 8 min → 24 (baseline 20, valid, exhaustive, 4 ms)",
+   "elapsedMs": 116,
+   "limitations": "Validity is established for these instances; optimality only where the all-residents bound is met."
+  },
+  {
+   "id": "stress-A",
+   "name": "A: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+   "category": "stress",
+   "criteria": [
+    "Fit with the Hollow",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "8 rows evaluated with propagation, revalidated",
+   "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 12; +4min x1.0: 12; +4min x1.2: 12",
+   "elapsedMs": 5,
+   "limitations": "Eight-case result describes those eight cases only; not a failure probability."
+  },
+  {
+   "id": "stress-B",
+   "name": "B: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+   "category": "stress",
+   "criteria": [
+    "Fit with the Hollow",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "8 rows evaluated with propagation, revalidated",
+   "observed": "+0min x1.0: 24; +0min x1.2: 16; +1min x1.0: 16; +1min x1.2: 16; +3min x1.0: 16; +3min x1.2: 16; +4min x1.0: 12; +4min x1.2: 12",
+   "elapsedMs": 6,
+   "limitations": "Eight-case result describes those eight cases only; not a failure probability."
+  },
+  {
+   "id": "stress-C",
+   "name": "C: selected plan under 8 declared variants (repair +0/1/3/4 × growth ×1.0/1.2)",
+   "category": "stress",
+   "criteria": [
+    "Fit with the Hollow",
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "8 rows evaluated with propagation, revalidated",
+   "observed": "+0min x1.0: 24; +0min x1.2: 24; +1min x1.0: 24; +1min x1.2: 24; +3min x1.0: 24; +3min x1.2: 24; +4min x1.0: 24; +4min x1.2: 24",
+   "elapsedMs": 4,
+   "limitations": "Eight-case result describes those eight cases only; not a failure probability."
+  },
+  {
+   "id": "stress-recompute",
+   "name": "B: recompute under +1 min repair delay from the same perturbed snapshot (reported separately)",
+   "category": "stress",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "selected plan fails for B; recomputation reports its own result and search status",
+   "observed": "recomputed: 20 (repair-fan-3), exhaustive; A remains reachable only without the fan, B only with it",
+   "elapsedMs": 6
+  },
+  {
+   "id": "stress-D",
+   "name": "D: selected policies executed in both states at inspection 1 and 8, plus the 7-minute boundary",
+   "category": "stress",
+   "criteria": [
+    "Originality and ingenuity"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "d1 24/20, d7 24 (A at 20)/20, d8 20/20 executed",
+   "observed": "d1: open 24, blocked 20; d7: open 24 (A at 20), blocked 20; d8: open 20, blocked 20",
+   "elapsedMs": 44
+  },
+  {
+   "id": "benchmarks",
+   "name": "Search-time benchmarks on this machine (median of 3)",
+   "category": "benchmarks",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "recorded",
+   "observed": "A: median 2.8 ms (8 plans, exhaustive); B: median 2.6 ms (7 plans, exhaustive); C: median 3.0 ms (8 plans, exhaustive); D: median 14.2 ms (80 plans, exhaustive); E: median 2.7 ms (5 plans, exhaustive)",
+   "elapsedMs": 0,
+   "data": {
+    "A": {
+     "medianMs": 2.8,
+     "explored": 8,
+     "status": "exhaustive"
+    },
+    "B": {
+     "medianMs": 2.6,
+     "explored": 7,
+     "status": "exhaustive"
+    },
+    "C": {
+     "medianMs": 3,
+     "explored": 8,
+     "status": "exhaustive"
+    },
+    "D": {
+     "medianMs": 14.2,
+     "explored": 80,
+     "status": "exhaustive"
+    },
+    "E": {
+     "medianMs": 2.7,
+     "explored": 5,
+     "status": "exhaustive"
+    }
+   },
+   "limitations": "Times depend on the machine; budget 20,000 plans / 8 s per search."
+  },
+  {
+   "id": "replay-command",
+   "name": "Documented replay command reconciles exported runs (npm run replay -- <file>)",
+   "category": "replay-export",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "exit 0, all reconciled",
+   "observed": "OK   evidence/runs/A-response.json: response — arrived 24/24 (saved 24) | OK   evidence/runs/D1-policy-blocked.json: response — arrived 20/24 (saved 20), branch blocked, observations 10:blocked | OK   evidence/runs/E-response.json: response — arrived 20/24 (saved 20)",
+   "elapsedMs": 0
+  },
+  {
+   "id": "build",
+   "name": "Production build (tsc + vite single-file)",
+   "category": "build",
+   "criteria": [
+    "Technical execution"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "build succeeds",
+   "observed": "dist/index.html 525 KiB",
+   "elapsedMs": 6415
+  },
+  {
+   "id": "offline-browser",
+   "name": "Network-disabled browser run (reload, checkpoint restore, full workflow)",
+   "category": "offline",
+   "criteria": [
+    "Technical execution",
+    "Fit with the Hollow",
+    "Demo and communication"
+   ],
+   "required": true,
+   "status": "passed",
+   "expected": "no network requests; compute, approve, play to 24 arrivals; reload restores paused at the checkpoint; edit + recompute; D both branches; E",
+   "observed": "offline (DevTools offline + all non-file requests refused: 0 attempted); A 24/24; reload restored paused and resumed to 24; edit → recompute 16; D blocked 20 / open 24; E 20 with +24 protected person-minutes",
+   "detail": "loaded offline | A: \"24 of 24 residents have a feasible shelter journey (+12 versus no intervention).\" → executed 24/24 arrived | reload at minute 6: restored at minute 6, paused (true) | resumed to 24/24; Event log (45 events; 21 invariant checks; 0 violations) | edit batteries 4→3: stale shown true; recomputed \"16 of 24 residents have a feasible shelter journey (+4 versus no intervention).\" | D hidden blocked: 20/24 arrived; branch card If blocked\n20/24 | D hidden open: 24/24 arrived; branch card If open\n24/24 | E: 20/24 arrived; +24 Still waiting — conditions improved: protected person-minutes (A: +6 min × 4). Not arrivals. | printable dispatch present: true",
+   "elapsedMs": 15009
+  }
+ ],
+ "agreement": {
+  "boundaries": 420,
+  "violations": 0,
+  "runs": [
+   {
+    "run": "A response",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "A baseline",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "B response",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "B baseline",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "C response",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "C baseline",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "A fan only",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "A gate+escort",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D1 policy, open",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D1 policy, blocked",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D8 policy, open",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D8 policy, blocked",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D confirmed-route, open",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D confirmed-route, blocked",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "E response",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "E baseline",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "E fan only",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "A + Lower Refuge place at 20",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D + 4 batteries at G by 14, open",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   },
+   {
+    "run": "D + 4 batteries at G by 14, blocked",
+    "passed": true,
+    "views": {
+     "forecast": true,
+     "validator": true,
+     "live": true,
+     "replay": true,
+     "checkpoints": true
+    },
+    "diffs": []
+   }
+  ]
+ },
+ "batch": {
+  "seed": 20871120,
+  "rows": [
+   {
+    "seed": 749050031,
+    "kind": "confirmed",
+    "inputHash": "8c6438e9f70643c6",
+    "production": {
+     "served": 3,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 3,
+     "batteries": 2,
+     "finalArrival": 5
+    },
+    "oracle": {
+     "served": 3,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 3,
+     "batteries": 2,
+     "finalArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 6,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 481995706,
+    "kind": "confirmed",
+    "inputHash": "b633bb57148e0d66",
+    "production": {
+     "served": 3,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "oracle": {
+     "served": 3,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 6,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 482725029,
+    "kind": "confirmed",
+    "inputHash": "3e40e21e5355bb69",
+    "production": {
+     "served": 0,
+     "protectedPM": 12,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 12,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 926206033,
+    "kind": "confirmed",
+    "inputHash": "02a08d35ac39eccc",
+    "production": {
+     "served": 1,
+     "protectedPM": 0,
+     "maxExposure": 19,
+     "busy": 3,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "oracle": {
+     "served": 1,
+     "protectedPM": 0,
+     "maxExposure": 19,
+     "busy": 3,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 8,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 186450375,
+    "kind": "confirmed",
+    "inputHash": "29747899e68dfd06",
+    "production": {
+     "served": 0,
+     "protectedPM": 30,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 30,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 659340993,
+    "kind": "confirmed",
+    "inputHash": "5a39ed951b971f30",
+    "production": {
+     "served": 0,
+     "protectedPM": 14,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 14,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 824474020,
+    "kind": "confirmed",
+    "inputHash": "91daaf076bc73dce",
+    "production": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 33,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 158356474,
+    "kind": "confirmed",
+    "inputHash": "d59acbc7ede6243e",
+    "production": {
+     "served": 0,
+     "protectedPM": 36,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 36,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 13,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 729238048,
+    "kind": "confirmed",
+    "inputHash": "03da4e4dadb41a1a",
+    "production": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "oracle": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 7,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 561354832,
+    "kind": "confirmed",
+    "inputHash": "caa696d19a6c3414",
+    "production": {
+     "served": 0,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 6,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 975338045,
+    "kind": "confirmed",
+    "inputHash": "320c550e00f22367",
+    "production": {
+     "served": 6,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "oracle": {
+     "served": 6,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 12,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 887205418,
+    "kind": "confirmed",
+    "inputHash": "03c9b55681141ca7",
+    "production": {
+     "served": 4,
+     "protectedPM": 12,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 12,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 3,
+    "oracleMs": 2,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 344928262,
+    "kind": "confirmed",
+    "inputHash": "5a8c603857fd08e5",
+    "production": {
+     "served": 0,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 522720605,
+    "kind": "confirmed",
+    "inputHash": "20e1960c3d9e1b41",
+    "production": {
+     "served": 5,
+     "protectedPM": 0,
+     "maxExposure": 45,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 0,
+     "maxExposure": 45,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 2,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 85870514,
+    "kind": "confirmed",
+    "inputHash": "3f199e49cee5423a",
+    "production": {
+     "served": 5,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 17,
+    "oracleMs": 6,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 797031675,
+    "kind": "confirmed",
+    "inputHash": "ef4b5f5f5b17dba8",
+    "production": {
+     "served": 5,
+     "protectedPM": 7,
+     "maxExposure": 18,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 7,
+     "maxExposure": 18,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 344253567,
+    "kind": "confirmed",
+    "inputHash": "710b74add091bc10",
+    "production": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 53622481,
+    "kind": "confirmed",
+    "inputHash": "cd779e6c31a3b2b7",
+    "production": {
+     "served": 0,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 934375415,
+    "kind": "confirmed",
+    "inputHash": "66b0ebc18fcdfa5e",
+    "production": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 7,
+     "busy": 5,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "oracle": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 7,
+     "busy": 5,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 829009958,
+    "kind": "confirmed",
+    "inputHash": "9ecc0ac7a72bc818",
+    "production": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "oracle": {
+     "served": 2,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 835354341,
+    "kind": "confirmed",
+    "inputHash": "618c8b07e25f4860",
+    "production": {
+     "served": 4,
+     "protectedPM": 28,
+     "maxExposure": 8,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 28,
+     "maxExposure": 8,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 790706532,
+    "kind": "confirmed",
+    "inputHash": "04c08bd99dae48c4",
+    "production": {
+     "served": 1,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "oracle": {
+     "served": 1,
+     "protectedPM": 0,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 785787163,
+    "kind": "confirmed",
+    "inputHash": "ca059308ae5d88d3",
+    "production": {
+     "served": 0,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 462707640,
+    "kind": "confirmed",
+    "inputHash": "eec1604f5fc29af8",
+    "production": {
+     "served": 5,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 3,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 511662856,
+    "kind": "confirmed",
+    "inputHash": "076cf51b6e0cf860",
+    "production": {
+     "served": 0,
+     "protectedPM": 40,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 40,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 550013916,
+    "kind": "confirmed",
+    "inputHash": "075ffc68c2cb4085",
+    "production": {
+     "served": 0,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 523175912,
+    "kind": "confirmed",
+    "inputHash": "5f3f715805062c33",
+    "production": {
+     "served": 1,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "oracle": {
+     "served": 1,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 882779009,
+    "kind": "confirmed",
+    "inputHash": "e8fa1b8e08b2b8bb",
+    "production": {
+     "served": 5,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 18,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 2
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 2,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 233267308,
+    "kind": "confirmed",
+    "inputHash": "820d3fb54332730a",
+    "production": {
+     "served": 6,
+     "protectedPM": 0,
+     "maxExposure": 9,
+     "busy": 4,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "oracle": {
+     "served": 6,
+     "protectedPM": 0,
+     "maxExposure": 9,
+     "busy": 4,
+     "batteries": 0,
+     "finalArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 437516889,
+    "kind": "confirmed",
+    "inputHash": "12e3d5a6bc31e69b",
+    "production": {
+     "served": 0,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 28,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 762255314,
+    "kind": "confirmed",
+    "inputHash": "c095ed4c6d5187b5",
+    "production": {
+     "served": 0,
+     "protectedPM": 75,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 75,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 92417094,
+    "kind": "confirmed",
+    "inputHash": "3e13c0bfabcb3228",
+    "production": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 60,
+     "busy": 7,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 0,
+     "maxExposure": 60,
+     "busy": 7,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 3,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 210093253,
+    "kind": "confirmed",
+    "inputHash": "9a250847743f5696",
+    "production": {
+     "served": 0,
+     "protectedPM": 35,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 35,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 852372383,
+    "kind": "confirmed",
+    "inputHash": "d6ee553444e16cc9",
+    "production": {
+     "served": 0,
+     "protectedPM": 32,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 32,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 809319430,
+    "kind": "confirmed",
+    "inputHash": "8ffd27275fedbb28",
+    "production": {
+     "served": 5,
+     "protectedPM": 0,
+     "maxExposure": 16,
+     "busy": 3,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "oracle": {
+     "served": 5,
+     "protectedPM": 0,
+     "maxExposure": 16,
+     "busy": 3,
+     "batteries": 0,
+     "finalArrival": 3
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 975148944,
+    "kind": "confirmed",
+    "inputHash": "e4e8046d1807e4ee",
+    "production": {
+     "served": 0,
+     "protectedPM": 7,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 7,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 117418179,
+    "kind": "confirmed",
+    "inputHash": "abc48e6ee8dfe8a5",
+    "production": {
+     "served": 4,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "oracle": {
+     "served": 4,
+     "protectedPM": 21,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 7,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 706019128,
+    "kind": "confirmed",
+    "inputHash": "ae3870df1e2c145c",
+    "production": {
+     "served": 2,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "oracle": {
+     "served": 2,
+     "protectedPM": 24,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 200464925,
+    "kind": "confirmed",
+    "inputHash": "8664cebe0f3a9851",
+    "production": {
+     "served": 7,
+     "protectedPM": 0,
+     "maxExposure": 16,
+     "busy": 7,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "oracle": {
+     "served": 7,
+     "protectedPM": 0,
+     "maxExposure": 16,
+     "busy": 7,
+     "batteries": 0,
+     "finalArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "exhaustive"
+   },
+   {
+    "seed": 98367384,
+    "kind": "confirmed",
+    "inputHash": "349c278e19775607",
+    "production": {
+     "served": 0,
+     "protectedPM": 42,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "oracle": {
+     "served": 0,
+     "protectedPM": 42,
+     "maxExposure": 0,
+     "busy": 0,
+     "batteries": 0,
+     "finalArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 2,
+    "status": "proven-infeasible"
+   },
+   {
+    "seed": 417989857,
+    "kind": "two-state",
+    "inputHash": "95186c0a1b510d77",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 2,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 279797956,
+    "kind": "two-state",
+    "inputHash": "19550c6534e744a8",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 2
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 2
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 4,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 235922257,
+    "kind": "two-state",
+    "inputHash": "c157d67830774247",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 5,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 84,
+     "busyMax": 6,
+     "busySum": 7,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 5,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 84,
+     "busyMax": 6,
+     "busySum": 7,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 6,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 84185699,
+    "kind": "two-state",
+    "inputHash": "28fd043d2baab6b6",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 24,
+     "protSum": 48,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 24,
+     "protSum": 48,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 467523101,
+    "kind": "two-state",
+    "inputHash": "1a03be639f0554f4",
+    "production": {
+     "nOpen": 5,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 5,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 74,
+     "busyMax": 7,
+     "busySum": 9,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "oracle": {
+     "nOpen": 5,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 5,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 74,
+     "busyMax": 7,
+     "busySum": 9,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 676059864,
+    "kind": "two-state",
+    "inputHash": "a296ad880e4d87a9",
+    "production": {
+     "nOpen": 2,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 4,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "oracle": {
+     "nOpen": 2,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 4,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 3,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 465664411,
+    "kind": "two-state",
+    "inputHash": "5d55e186cffeab41",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 0,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 930828753,
+    "kind": "two-state",
+    "inputHash": "6bd9da8d4c9d5556",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 22,
+     "busyMax": 2,
+     "busySum": 4,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 22,
+     "busyMax": 2,
+     "busySum": 4,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 146,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 276593789,
+    "kind": "two-state",
+    "inputHash": "499802b76894c1f4",
+    "production": {
+     "nOpen": 2,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 30,
+     "busyMax": 3,
+     "busySum": 6,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 2,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 30,
+     "busyMax": 3,
+     "busySum": 6,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 3,
+    "oracleMs": 1,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 781754046,
+    "kind": "two-state",
+    "inputHash": "ab7bb68ee3c266cf",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 35,
+     "protSum": 70,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 35,
+     "protSum": 70,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 4,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 410941733,
+    "kind": "two-state",
+    "inputHash": "0e07711e14bd6e2f",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 12,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 2
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 12,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 2
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 2,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 564380948,
+    "kind": "two-state",
+    "inputHash": "bcd627cba28d2b80",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 5,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 134265780,
+    "kind": "two-state",
+    "inputHash": "421e06a67704f243",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 3,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-unreachable"
+   },
+   {
+    "seed": 803967089,
+    "kind": "two-state",
+    "inputHash": "a935cec463a7093b",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 6,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 417555350,
+    "kind": "two-state",
+    "inputHash": "8a4b40d102c60efe",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 32,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 32,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 9,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 124153010,
+    "kind": "two-state",
+    "inputHash": "6c71437b79b874fc",
+    "production": {
+     "nOpen": 4,
+     "nBlocked": 4,
+     "min": 4,
+     "sum": 8,
+     "protMin": 6,
+     "protSum": 12,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 3
+    },
+    "oracle": {
+     "nOpen": 4,
+     "nBlocked": 4,
+     "min": 4,
+     "sum": 8,
+     "protMin": 6,
+     "protSum": 12,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 3
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 33,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 850144040,
+    "kind": "two-state",
+    "inputHash": "3093a1225ad34245",
+    "production": {
+     "nOpen": 7,
+     "nBlocked": 7,
+     "min": 7,
+     "sum": 14,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 37,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 7,
+     "nBlocked": 7,
+     "min": 7,
+     "sum": 14,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 37,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 6,
+    "oracleMs": 1550,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 644994448,
+    "kind": "two-state",
+    "inputHash": "2c765f19fc8d27ae",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 3,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 614131751,
+    "kind": "two-state",
+    "inputHash": "ca7ed8c67e05b0f7",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 12,
+     "busyMax": 3,
+     "busySum": 5,
+     "batMax": 1,
+     "batSum": 1,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 12,
+     "busyMax": 3,
+     "busySum": 5,
+     "batMax": 1,
+     "batSum": 1,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 31,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 579154435,
+    "kind": "two-state",
+    "inputHash": "748fe95a7ecaafa1",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 964129376,
+    "kind": "two-state",
+    "inputHash": "d09e11e1f67c478c",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 56,
+     "protSum": 112,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 56,
+     "protSum": 112,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 4,
+    "oracleMs": 74,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 436356654,
+    "kind": "two-state",
+    "inputHash": "e83febcb6d3dcef4",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": 0,
+     "protSum": 7,
+     "worstExposure": 54,
+     "busyMax": 7,
+     "busySum": 9,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": 0,
+     "protSum": 7,
+     "worstExposure": 54,
+     "busyMax": 7,
+     "busySum": 9,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 4,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 732881975,
+    "kind": "two-state",
+    "inputHash": "09ea19c1cfbb7cae",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-unreachable"
+   },
+   {
+    "seed": 703433662,
+    "kind": "two-state",
+    "inputHash": "f30742ce9c7f3957",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 205,
+     "busyMax": 7,
+     "busySum": 14,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 205,
+     "busyMax": 7,
+     "busySum": 14,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 7
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 178758055,
+    "kind": "two-state",
+    "inputHash": "bb1b56a191bdf600",
+    "production": {
+     "nOpen": 4,
+     "nBlocked": 4,
+     "min": 4,
+     "sum": 8,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 25,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 3
+    },
+    "oracle": {
+     "nOpen": 4,
+     "nBlocked": 4,
+     "min": 4,
+     "sum": 8,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 25,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 3
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 77,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 157042008,
+    "kind": "two-state",
+    "inputHash": "7240a5a95fe4f168",
+    "production": {
+     "nOpen": 9,
+     "nBlocked": 9,
+     "min": 9,
+     "sum": 18,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 12,
+     "busyMax": 4,
+     "busySum": 8,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 9,
+     "nBlocked": 9,
+     "min": 9,
+     "sum": 18,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 12,
+     "busyMax": 4,
+     "busySum": 8,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 9,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 475590590,
+    "kind": "two-state",
+    "inputHash": "474dad179416c632",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": 0,
+     "protSum": 0,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 62,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 252858740,
+    "kind": "two-state",
+    "inputHash": "866dc36f542fd8ca",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 21,
+     "protSum": 42,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 21,
+     "protSum": 42,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 199791274,
+    "kind": "two-state",
+    "inputHash": "b76ee170d7265249",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 30,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 30,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 13,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 847298118,
+    "kind": "two-state",
+    "inputHash": "f829ac64e38c8d67",
+    "production": {
+     "nOpen": 2,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 4,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 2,
+     "nBlocked": 2,
+     "min": 2,
+     "sum": 4,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 4,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 935210411,
+    "kind": "two-state",
+    "inputHash": "3303a2d457c80669",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": 21,
+     "protSum": 42,
+     "worstExposure": 7,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": 21,
+     "protSum": 42,
+     "worstExposure": 7,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 50,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 875116420,
+    "kind": "two-state",
+    "inputHash": "ede241595d82fc56",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 96,
+     "busyMax": 5,
+     "busySum": 10,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 96,
+     "busyMax": 5,
+     "busySum": 10,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 0,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 598718207,
+    "kind": "two-state",
+    "inputHash": "f308ee59a07d9a16",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 189939758,
+    "kind": "two-state",
+    "inputHash": "e39355f8e108300b",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": 0,
+     "protSum": 6,
+     "worstExposure": 36,
+     "busyMax": 6,
+     "busySum": 7,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 1,
+     "protMin": 0,
+     "protSum": 6,
+     "worstExposure": 36,
+     "busyMax": 6,
+     "busySum": 7,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 6
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-helps"
+   },
+   {
+    "seed": 269006231,
+    "kind": "two-state",
+    "inputHash": "2b7d38537afe1aa4",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 30,
+     "protSum": 60,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 30,
+     "protSum": 60,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 515791620,
+    "kind": "two-state",
+    "inputHash": "e01e771a2a488de3",
+    "production": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "oracle": {
+     "nOpen": 3,
+     "nBlocked": 3,
+     "min": 3,
+     "sum": 6,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 4
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 6,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 886256519,
+    "kind": "two-state",
+    "inputHash": "1009661b5fb91c24",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 0,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 779851844,
+    "kind": "two-state",
+    "inputHash": "ea9b338b69fccd00",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": 30,
+     "protSum": 60,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": 30,
+     "protSum": 60,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 5
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 2,
+    "oracleMs": 17,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 427372855,
+    "kind": "two-state",
+    "inputHash": "76dcea320513c51d",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-unreachable"
+   },
+   {
+    "seed": 988611001,
+    "kind": "two-state",
+    "inputHash": "90e7c1b1322b3ccc",
+    "production": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "oracle": {
+     "nOpen": 1,
+     "nBlocked": 1,
+     "min": 1,
+     "sum": 2,
+     "protMin": null,
+     "protSum": null,
+     "worstExposure": 0,
+     "busyMax": 0,
+     "busySum": 0,
+     "batMax": 0,
+     "batSum": 0,
+     "latestArrival": 1
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 0,
+    "status": "exhaustive",
+    "inspectionClass": "inspection-wastes-time"
+   },
+   {
+    "seed": 393042331,
+    "kind": "two-state",
+    "inputHash": "16a054064749bc41",
+    "production": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 24,
+     "protSum": 52,
+     "worstExposure": 0,
+     "busyMax": 5,
+     "busySum": 7,
+     "batMax": 2,
+     "batSum": 2,
+     "latestArrival": 0
+    },
+    "oracle": {
+     "nOpen": 0,
+     "nBlocked": 0,
+     "min": 0,
+     "sum": 0,
+     "protMin": 24,
+     "protSum": 52,
+     "worstExposure": 0,
+     "busyMax": 5,
+     "busySum": 7,
+     "batMax": 2,
+     "batSum": 2,
+     "latestArrival": 0
+    },
+    "agree": true,
+    "valid": true,
+    "productionMs": 1,
+    "oracleMs": 1,
+    "status": "proven-infeasible",
+    "inspectionClass": "inspection-helps"
+   }
+  ],
+  "helps": 8,
+  "wastes": 30,
+  "bounds": {
+   "locations": "4–7",
+   "groups": "1–2 (1–5 residents)",
+   "shelters": "1–2 (1–8 places)",
+   "interventions": "at most 2 (open, repair, ventilate) plus one inspection in two-state cases",
+   "horizon": "6–8 minutes",
+   "durations": "1–3 minutes",
+   "hazards": "initial 0–40, growth 0–25 per minute",
+   "batteries": "0–4",
+   "costs": "0–3",
+   "capacities": "corridor and location capacities 99 (not varied; covered by dedicated corridor tests)",
+   "deliveries": "none"
+  }
+ },
+ "seeded": {
+  "seed": 4242,
+  "rows": [
+   {
+    "i": 0,
+    "seed": 4242,
+    "base": "A",
+    "change": "battery shortage: batteries 2",
+    "inputHash": "08d3fbff023fb73e",
+    "served": 16,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 2,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 1,
+    "seed": 4242,
+    "base": "B",
+    "change": "lower shelter capacity: L places 11",
+    "inputHash": "994571f6160b1d07",
+    "served": 20,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 3,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "repair-fan-3"
+   },
+   {
+    "i": 2,
+    "seed": 4242,
+    "base": "C",
+    "change": "longer repair: fan repair 7 min",
+    "inputHash": "92957474afe0e995",
+    "served": 24,
+    "baseline": 20,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 3,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 3,
+    "seed": 4242,
+    "base": "A",
+    "change": "slower connection: U-X2 3 min",
+    "inputHash": "1f53381e5c98a625",
+    "served": 24,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 3,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "repair-fan-3 > open-gate-b > escort-A"
+   },
+   {
+    "i": 4,
+    "seed": 4242,
+    "base": "B",
+    "change": "later instructions: A instructions at 2",
+    "inputHash": "ccec2199a7bef74a",
+    "served": 24,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 2,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A > repair-fan-3"
+   },
+   {
+    "i": 5,
+    "seed": 4242,
+    "base": "C",
+    "change": "faster hazard: RA growth 8.9",
+    "inputHash": "ebe7bd1ecaf0f447",
+    "served": 24,
+    "baseline": 20,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 12,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 6,
+    "seed": 4242,
+    "base": "A",
+    "change": "battery shortage: batteries 2",
+    "inputHash": "08d3fbff023fb73e",
+    "served": 16,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 4,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 7,
+    "seed": 4242,
+    "base": "B",
+    "change": "lower shelter capacity: U places 10",
+    "inputHash": "b312e70d0f93b16a",
+    "served": 12,
+    "baseline": 0,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 14,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "open-gate-b > escort-A > repair-fan-3"
+   },
+   {
+    "i": 8,
+    "seed": 4242,
+    "base": "C",
+    "change": "longer repair: fan repair 8 min",
+    "inputHash": "98a13803cdd7b59a",
+    "served": 24,
+    "baseline": 20,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 5,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 9,
+    "seed": 4242,
+    "base": "A",
+    "change": "slower connection: RB-J2 6 min",
+    "inputHash": "2c0f8dd799abf232",
+    "served": 24,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 5,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "repair-fan-3 > open-gate-b > escort-A"
+   },
+   {
+    "i": 10,
+    "seed": 4242,
+    "base": "B",
+    "change": "later instructions: C instructions at 1",
+    "inputHash": "28dba9943db692ad",
+    "served": 24,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 10,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A > repair-fan-3"
+   },
+   {
+    "i": 11,
+    "seed": 4242,
+    "base": "C",
+    "change": "faster hazard: J3 growth 0",
+    "inputHash": "a32c586a6fa88537",
+    "served": 24,
+    "baseline": 20,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 4,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 12,
+    "seed": 4242,
+    "base": "A",
+    "change": "battery shortage: batteries 3",
+    "inputHash": "1e84930654d4198f",
+    "served": 16,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 3,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "open-gate-b > escort-A"
+   },
+   {
+    "i": 13,
+    "seed": 4242,
+    "base": "B",
+    "change": "lower shelter capacity: L places 8",
+    "inputHash": "b453c8468d6c0b2b",
+    "served": 20,
+    "baseline": 12,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 8,
+    "optimality": "exhaustive within declared scope; not independently enumerated",
+    "tasks": "repair-fan-3"
+   },
+   {
+    "i": 14,
+    "seed": 4242,
+    "base": "C",
+    "change": "longer repair: fan repair 8 min",
+    "inputHash": "98a13803cdd7b59a",
+    "served": 24,
+    "baseline": 20,
+    "valid": true,
+    "status": "exhaustive",
+    "elapsedMs": 4,
+    "optimality": "criterion 1 optimal by bound (all residents)",
+    "tasks": "open-gate-b > escort-A"
+   }
+  ]
+ },
+ "stress": {
+  "A": [
+   {
+    "variant": "+0min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+0min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+1min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+1min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+3min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+3min x1.2",
+    "feasible": "C",
+    "residents": 12,
+    "failed": [
+     "A: group A: home RA unsafe at minute 12 before departure",
+     "B: group B: reaches J3 at 9 with hazard 108 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+4min x1.0",
+    "feasible": "C",
+    "residents": 12,
+    "failed": [
+     "A: group A: home RA unsafe at minute 14 before departure",
+     "B: group B: reaches J3 at 9 with hazard 100 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+4min x1.2",
+    "feasible": "C",
+    "residents": 12,
+    "failed": [
+     "A: group A: home RA unsafe at minute 12 before departure",
+     "B: group B: reaches J3 at 9 with hazard 118 (must be < 100)"
+    ]
+   }
+  ],
+  "B": [
+   {
+    "variant": "+0min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+0min x1.2",
+    "feasible": "AC",
+    "residents": 16,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 114 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+1min x1.0",
+    "feasible": "AC",
+    "residents": 16,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 100 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+1min x1.2",
+    "feasible": "AC",
+    "residents": 16,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 118 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+3min x1.0",
+    "feasible": "AC",
+    "residents": 16,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 100 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+3min x1.2",
+    "feasible": "AC",
+    "residents": 16,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 118 (must be < 100)"
+    ]
+   },
+   {
+    "variant": "+4min x1.0",
+    "feasible": "C",
+    "residents": 12,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 100 (must be < 100)",
+     "A: crew work repair-fan-3: ends after the horizon"
+    ]
+   },
+   {
+    "variant": "+4min x1.2",
+    "feasible": "C",
+    "residents": 12,
+    "failed": [
+     "B: group B: reaches J3 at 18 with hazard 118 (must be < 100)",
+     "A: crew work repair-fan-3: ends after the horizon"
+    ]
+   }
+  ],
+  "C": [
+   {
+    "variant": "+0min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+0min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+1min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+1min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+3min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+3min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+4min x1.0",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   },
+   {
+    "variant": "+4min x1.2",
+    "feasible": "ABC",
+    "residents": 24,
+    "failed": []
+   }
+  ],
+  "recompute": {
+   "variant": "+1min x1.0",
+   "served": 20,
+   "tasks": [
+    "repair-fan-3"
+   ],
+   "status": "exhaustive"
+  },
+  "D": [
+   "d1: open 24, blocked 20",
+   "d7: open 24 (A at 20), blocked 20",
+   "d8: open 20, blocked 20"
+  ]
+ },
+ "exportedRuns": [
+  "evidence/runs/A-response.json",
+  "evidence/runs/A-baseline.json",
+  "evidence/runs/B-response.json",
+  "evidence/runs/B-baseline.json",
+  "evidence/runs/C-response.json",
+  "evidence/runs/C-baseline.json",
+  "evidence/runs/A-fan-only.json",
+  "evidence/runs/A-gate-escort.json",
+  "evidence/runs/D1-policy-open.json",
+  "evidence/runs/D1-policy-blocked.json",
+  "evidence/runs/D8-policy-open.json",
+  "evidence/runs/D8-policy-blocked.json",
+  "evidence/runs/D-confirmed-route-open.json",
+  "evidence/runs/D-confirmed-route-blocked.json",
+  "evidence/runs/E-response.json",
+  "evidence/runs/E-baseline.json",
+  "evidence/runs/E-fan-only.json",
+  "evidence/runs/A-Lower-Refuge-place-at-20.json",
+  "evidence/runs/D-4-batteries-at-G-by-14-open.json",
+  "evidence/runs/D-4-batteries-at-G-by-14-blocked.json"
+ ]
+}
