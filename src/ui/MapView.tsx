@@ -8,7 +8,6 @@ import type { SimState } from '../engine/simulate';
 import { liveNodeHazard } from '../engine/simulate';
 import { baseWorld, nodeHazard, withEffects } from '../engine/world';
 import { groupName, passageName, placeName, type Plainstatus } from './plain';
-import terrain from './assets/terrain.png';
 
 export interface Camera { x: number; y: number; k: number }
 export interface Layers { routes: boolean; hazards: boolean; labels: boolean; times: boolean }
@@ -191,13 +190,9 @@ export function MapView({ s, plan, schedule, approved, run, t, statusOf, cam, se
         aria-label={`Neighborhood map${run ? ` at minute ${t}` : ''}. Drag or use the arrow keys to move, plus and minus to zoom, 0 to reset. ${s.groups.map((g) => `${groupName(g)}: ${g.count} residents, ${statusOf(g.id).replace('-', ' ')}`).join('. ')}.`}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp} onWheel={onWheel} onKeyDown={onKey}>
         <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-          <filter id="softglow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8" /></filter>
           <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="var(--amber)" strokeWidth="3" /></pattern>
-          <radialGradient id="orb" cx="35%" cy="35%" r="70%"><stop offset="0%" stopColor="#fff7ed" /><stop offset="40%" stopColor="#c4b5fd" /><stop offset="100%" stopColor="#5b21b6" /></radialGradient>
         </defs>
         <g className={`cam${dragging ? '' : ' smooth'}`} style={{ transform: `translate(${cam.x}px, ${cam.y}px) scale(${cam.k})` }}>
-          <image href={terrain} x={-500} y={-320} width={2000} height={1280} className="terrain" preserveAspectRatio="none" />
           {[{ y: 40, h: 110, label: 'Upper level' }, { y: 160, h: 220, label: 'Middle level' }, { y: 390, h: 230, label: 'Deep level' }].map((l) => (
             <g key={l.label} className="stratum"><rect x={10} y={l.y} width={980} height={l.h} rx={16} /><text x={978} y={l.y + l.h - 10} textAnchor="end" className="stratum-label">{l.label}</text></g>
           ))}

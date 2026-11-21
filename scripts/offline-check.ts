@@ -168,7 +168,7 @@ async function setNumber(page: Page, label: string, value: string) {
       await demo(page); await page.select('#truth-bypass', st); await ops(page);
       await findPlan(page);
       const br = await text(page, '.plan .branches');
-      const roster = await text(page, '.roster');
+      const roster = await raw(page, '.roster');
       const fc2 = await counter(page, 'Can reach shelter');
       must(br.includes('If the Deep Homes bypass is open') && br.includes('If the Deep Homes bypass is blocked') && roster.includes('Waiting for inspection') && fc2?.n === '20\u201324', `D plan: ${br} | ${fc2?.n}`);
       await click(page, 'Approve plan');

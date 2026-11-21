@@ -11,7 +11,6 @@ import type { SimState } from '../engine/simulate';
 import { liveNodeHazard } from '../engine/simulate';
 import { baseWorld, nodeHazard } from '../engine/world';
 import { focusOn, Legend, MapView, zoomAbout, type Camera, type Layers } from './MapView';
-import { Backdrop } from './Backdrop';
 import { DispatchSheet } from './Dispatch';
 import {
   activeSchedule, applyEdit, approve, clearSession, compute, computeAllRequests, discardApproval, isPlanStale, loadSession, newSession,
@@ -180,7 +179,6 @@ export default function App() {
   return (
     <div className={`app immersive${mobile ? ' is-mobile' : ''}${ops ? ' view-ops' : ' view-demo'}`} style={appStyle}>
       <div className="scene-layer">
-        <Backdrop />
         <MapView s={s} plan={stale ? null : plan} schedule={schedule} approved={!!sess.approved} run={run} t={t} statusOf={statusOf}
           cam={cam} setCam={setCam} layers={layers} insets={insets} selected={selected} onSelect={setSelected} />
         <MapTools cam={cam} setCam={setCam} layers={layers} setLayers={setLayers} showKey={showKey} setShowKey={setShowKey} />
@@ -189,7 +187,7 @@ export default function App() {
 
       <header className="topbar">
         <div className="brand">
-          <h1><span className="brand-ring" aria-hidden="true" /><span className="brand-name">Breathline</span></h1>
+          <h1><span className="brand-name">Breathline</span><span className="cursor" aria-hidden="true" /></h1>
           <span className="brand-sub">Rescue planner</span>
         </div>
         <div className="banner" role="note" title="Illustrative conditions and assumptions"><span className="dot" aria-hidden="true" /> Simulation<span className="sr-only"> — illustrative conditions and assumptions</span></div>
