@@ -1,3 +1,4 @@
+
 # Breathline — Evidence report
 
 **Simulation — illustrative conditions and assumptions.** Everything below is an observed output of the recorded command on the machine named; expectations come from the build brief and are listed separately from observations. Nothing here is a judging score.
