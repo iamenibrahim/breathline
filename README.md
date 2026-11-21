@@ -1,5 +1,8 @@
 # Breathline
 
+
+**Live demo:** https://iamenibrahim.github.io/breathline/ (the built single-file app in `docs/index.html`; rebuild with `npm run build && cp dist/index.html docs/index.html`).
+
 **Simulation: illustrative conditions and assumptions.**
 
 Breathline helps one underground neighborhood in the Hollow use one crew, one tool kit and a few batteries to get more residents to shelter. It decides **what to repair, whom to escort, and whether checking an uncertain passage is worth the crew time it costs**. Recommendations become physical, minute-by-minute journeys, and Breathline executes them on one clock and compares them with doing nothing from the same starting state.
